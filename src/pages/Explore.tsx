@@ -33,7 +33,7 @@ export default function Explore() {
 
 
 
-function PostListError() {
+export function PostListError() {
 	return(
 		<div role="alert" className="flex flex-col gap-4 p-4 bg-rose-100 rounded-lg">
 

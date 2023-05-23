@@ -4,6 +4,7 @@ import { AppContext } from "../App"
 import EditPost from "../modals/EditPost"
 import { PostCardProps } from "./PostCard"
 import Avatar from "./Avatar"
+import Icon from "./Icon"
 
 
 
@@ -26,34 +27,62 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     }
 
     return (
-        <div className="flex flex-col gap-2 w-full bg-sky-50 p-4 rounded-xl">
+        <div className="flex flex-col gap-4 w-full border-2 border-sky-50 p-4 rounded-xl shadow-md shadow-sky-50">
 
             <div className="flex justify-between">
 
                 <div className="flex items-center gap-2">
-                    <Avatar src={post?.user?.avatar} />
-                    {post?.user?.handle || '[deleted]' }
+
+                    <Link to={`/profile/${post?.userId}`}>
+                        <Avatar src={post?.user?.avatar} />
+                    </Link>
+
+                    <Link 
+                        to={`/profile/${post?.userId}`}
+                        className="inline-block px-2 text-md font-semibold bg-teal-50 hover:bg-orange-100 rounded-lg"
+                    >
+                        @{post?.user?.handle || '[deleted]' }
+                    </Link>
+
+                    <span className="text-sm">
+                        {post?.date?.toDate().toDateString()}
+                    </span>
                 </div>
 
                 {loggedInUserId === post?.userId &&
                     <button onClick={openEditModal}>
-                        Edit
+                        <Icon icon="more_vert" className="text-sky-500 hover:text-orange-500" />
                     </button>
                 }
 
             </div>
 
-            <div className="flex justify-between">
-                {post?.date?.seconds}
-            </div>
-
-            <div>{post?.body}</div>
+            <div className="mt-2 my-4">{post?.body}</div>
 
             {isShowingViewPostBtn &&
-                <div className="bg-sky-100 p-2 rounded-lg text-sm">
-                    <Link to={`/post/${post?.id}`}>View Post</Link>
+                <div className="bg-sky-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center">
+                    <Link to={`/post/${post?.id}`} className="block">View Post</Link>
                 </div>
             }
+
+            <div className="flex justify-between text-sky-300 text-base">
+                
+                <div className="flex items-center gap-2">
+                    <Icon icon="favorite" className=" text-lg" />
+                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Icon icon="chat_bubble" className=" text-lg" />
+                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Icon icon="sync" className=" text-lg" />
+                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
+                </div>
+
+            </div>
 
         </div>
     )

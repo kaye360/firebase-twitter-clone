@@ -1,12 +1,26 @@
 
-import { query, orderBy, onSnapshot } from 'firebase/firestore'
+import { query, orderBy, onSnapshot, DocumentData, Query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Post, postCollectionRef } from '../services/PostService'
 import { getUsers } from '../services/UserServices'
 
-export default function useGetPosts() : Post[] | null {
 
-    const q = query( postCollectionRef, orderBy("date", "desc"), )
+export interface UseGetPostsProps {
+    userId? : string
+}
+
+export default function useGetPosts( { userId } : UseGetPostsProps ) : Post[] | null {
+
+    let q: Query<DocumentData>
+
+    if( userId ) {
+
+        q = query( postCollectionRef, where('userId', '==', userId), orderBy("date", "desc") )
+
+    } else {
+        q = query( postCollectionRef, orderBy("date", "desc") )
+    }
+
 
     const [posts, setPosts] = useState<Post[] | null>(null)
 

@@ -7,20 +7,21 @@ interface AvatarProps {
 
 export default function Avatar({src} : AvatarProps) {
 
-    console.log(src)
+    function removeImg(e : SyntheticEvent) {
+        if( e.target instanceof Element) {
+            e.target.remove()
+        }
+    }
 
     return (
         <div className="rounded-full w-12 h-12 bg-slate-300 overflow-hidden">
             { src && 
                 <img
                     src={src}
+                    onError={removeImg}
                     className="w-full aspect-square object-cover"
+                    alt="User Avatar"
                     referrerPolicy="no-referrer"
-                    onError={(e : SyntheticEvent) => {  {
-                        if( e.target instanceof Element) {
-                            e.target.remove()
-                        }
-                    }}}
                 />
             }
         </div>

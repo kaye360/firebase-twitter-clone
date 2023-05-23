@@ -11,6 +11,7 @@ interface CreatePostProps {
 export default function CreatePost({closeModal} : CreatePostProps) {
 
     const appContext = useContext(AppContext)
+    const lorem = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores aliquid illum dicta excepturi labore amet, hic cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita magnam enim. Omnis, laborum beatae.'
 
     if( !appContext?.firebaseAuth ) {
         return(
@@ -43,7 +44,8 @@ export default function CreatePost({closeModal} : CreatePostProps) {
 
                 <p>Posting as {appContext.userHandle}</p>
 
-                <textarea 
+                <textarea
+                    value={body}
                     onChange={(e) => setBody(e.target.value)}
                     className="p-4 rounded-lg border w-full h-36"
                 ></textarea>
@@ -51,6 +53,10 @@ export default function CreatePost({closeModal} : CreatePostProps) {
                 <div className="flex items-center gap-4">
                     <button className="bg-sky-200 hover:bg-rose-200 px-8 py-4 rounded-lg">
                         Create
+                    </button>
+
+                    <button onClick={(e) => { e.preventDefault(); setBody(lorem) }}>
+                        Lorem
                     </button>
 
                     {message}

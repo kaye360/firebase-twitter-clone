@@ -4,6 +4,7 @@ import Feed from '../pages/Feed'
 import Explore from '../pages/Explore'
 import SinglePost from '../pages/SinglePost'
 import Notifications from '../pages/Notifications'
+import Profile from '../pages/Profile'
 
 export default function AppRouter() {
     return (
@@ -13,6 +14,7 @@ export default function AppRouter() {
             <Route path="/feed" element={<Feed />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/profile/:id" element={<Profile />} />
             <Route path="*" element={<div>Error</div>} />
         </Routes>
     )
