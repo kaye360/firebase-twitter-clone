@@ -1,14 +1,13 @@
 import { ReactElement, useContext } from "react"
 import { signInWithGoogle, signOutOfGoogle } from "../services/UserServices"
 import { AppContext } from "../App"
-import { NavLink } from "react-router-dom"
-import CreatePost from "../modals/CreatePost"
 import Modal from "../modals/Modal"
 import Avatar from "./Avatar"
 import { ErrorBoundary } from "react-error-boundary"
 import { UserCredential } from "firebase/auth/react-native"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "../../firebase-config"
+import NavLinks from "./NavLinks"
 
 interface LayoutProps {
     children: ReactElement
@@ -20,9 +19,9 @@ export default function Layout({children }: LayoutProps) {
 
     return (
         <>
-            <div className="grid grid-cols-[250px_1fr] gap-4 items-start  min-h-screen max-w-7xl mx-auto">
+            <div className="grid grid-cols-[300px_1fr] gap-12 items-start  min-h-screen max-w-5xl mx-auto">
 
-                <nav className="sticky top-0 p-4 flex flex-col h-screen">
+                <nav className="sticky top-0 p-4 flex flex-col h-screen bg-white bg-opacity-40">
 
                     <Logo />
 
@@ -38,7 +37,7 @@ export default function Layout({children }: LayoutProps) {
 
                 </nav>
 
-                <main className="p-4">
+                <main className="px-8 py-4 bg-white bg-opacity-70">
                     <ErrorBoundary fallback={<div>Something went wrong...</div>}>
                         {children}
                     </ErrorBoundary>
@@ -71,46 +70,6 @@ function Logo() : JSX.Element {
 
 
 
-function NavLinks() : JSX.Element {
-
-    const appContext = useContext(AppContext)
-    
-    return (
-        <ul className="flex flex-col gap-2">
-            <li>
-                <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-                <NavLink to="/feed">Feed</NavLink>
-            </li>
-            <li>
-                <NavLink to="/explore">Explore</NavLink>
-            </li>
-            <li>
-                <NavLink to="/notifications">Notifications</NavLink>
-            </li>
-            <li>
-                <NavLink to="/profile">Profile</NavLink>
-            </li>
-            <li>
-                <NavLink to="/about">About</NavLink>
-            </li>
-            <li>
-                <button 
-                    className="bg-sky-200 w-full p-4 rounded-3xl hover:bg-rose-200"
-                    onClick={ () => {
-                        appContext?.setModal(<CreatePost closeModal={appContext.closeModal} />)
-                    }}
-                >
-                    Add Post
-                </button>
-            </li>
-        </ul>
-    )
-}
-
-
-
 
 function UserAvatar() : JSX.Element {
 
@@ -126,7 +85,7 @@ function UserAvatar() : JSX.Element {
                 <Avatar src={appContext?.firebaseAuth?.photoURL} />
             }
 
-            <button onClick={signOutOfGoogle} className="border border-slate-400 rounded-xl px-2 py-2 w-full">
+            <button onClick={signOutOfGoogle} className="block w-full border border-sky-200 rounded-lg hover:border-sky-400">
                 Sign out
             </button>
         </div>

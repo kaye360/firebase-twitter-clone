@@ -22,6 +22,8 @@ export default function Profile() {
         loadUserData()
     }, [])
 
+    
+
     const loader = (
 		<>
 			<PostCardLoader />
@@ -38,12 +40,16 @@ export default function Profile() {
                 @{user?.handle}
             </h2>
 
-            <div>
-                Bio here. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam sint eos libero fugiat natus voluptatum?
-            </div>
+            <div className='flex flex-col gap-4 bg-gradient-to-r from-sky-100 via-sky-100 to-fuchsia-100 text-sky-800 p-8 rounded-xl'>
+                <div>
+                    Bio here. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam sint eos libero fugiat natus voluptatum?
+                </div>
 
-            <div className='flex items-center gap-2'>
-                <Icon icon="place" className='text-sky-600' /> BC, Canada
+                <div className='h-[1px] bg-sky-200'></div>
+
+                <div className='flex items-center gap-2'>
+                    <Icon icon="place" /> BC, Canada
+                </div>
             </div>
 
 			<ErrorBoundary fallback={<PostListError />}>

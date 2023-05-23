@@ -17,7 +17,7 @@ export interface Users {
 export const userCollectionRef = collection(db, "users")
 
 
-export async function signInWithGoogle() {
+export async function signInWithGoogle()  {
 	try {
 		let signIn = await signInWithPopup(auth, googleProvider)	
 		return signIn
@@ -48,7 +48,7 @@ export async function getUser(id: string | undefined) {
     }
 }
 
-export async function getUsers() {
+export async function getUsers() : Promise<Users | null> {
 	try {
 		const usersSnap = await getDocs( userCollectionRef )
 

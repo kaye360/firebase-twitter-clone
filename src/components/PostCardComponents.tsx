@@ -27,7 +27,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     }
 
     return (
-        <div className="flex flex-col gap-4 w-full border-2 border-sky-50 p-4 rounded-xl shadow-md shadow-sky-50">
+        <div className="flex flex-col gap-4 w-full border-2 border-sky-50 p-6 rounded-xl shadow-md shadow-sky-50">
 
             <div className="flex justify-between">
 
@@ -60,12 +60,15 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
             <div className="mt-2 my-4">{post?.body}</div>
 
             {isShowingViewPostBtn &&
-                <div className="bg-sky-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center">
-                    <Link to={`/post/${post?.id}`} className="block">View Post</Link>
-                </div>
+                <Link 
+                    to={`/post/${post?.id}`} 
+                    className="block bg-sky-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
+                >
+                    View Post
+                </Link>
             }
 
-            <div className="flex justify-between text-sky-300 text-base">
+            <div className="flex justify-between w-1/2 text-sky-400 text-base">
                 
                 <div className="flex items-center gap-2">
                     <Icon icon="favorite" className=" text-lg" />

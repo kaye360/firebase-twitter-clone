@@ -7,7 +7,7 @@ interface IconProps {
 
 export default function Icon({ className = '', icon } : IconProps) {
     return (
-        <span className={`material-icons-round ${className}`}>
+        <span className={`material-icons-outlined ${className}`}>
             {icon}
         </span>
     )
