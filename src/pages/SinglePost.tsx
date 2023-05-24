@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import useGetSinglePost from "../hooks/useGetSinglePost"
 import PostCard from "../components/PostCard"
 import Icon from "../components/Icon"
