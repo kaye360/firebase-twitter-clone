@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import { Post, postCollectionRef } from '../services/PostService'
 import { getUsers } from '../services/UserServices'
 
+/**
+ * If userId is passed in as a prop, only posts from that user will be fetched
+ */
 
 export interface UseGetPostsProps {
     userId? : string
@@ -14,19 +17,16 @@ export default function useGetPosts( { userId } : UseGetPostsProps ) : Post[] | 
     let q: Query<DocumentData>
 
     if( userId ) {
-
         q = query( postCollectionRef, where('userId', '==', userId), orderBy("date", "desc") )
 
     } else {
         q = query( postCollectionRef, orderBy("date", "desc") )
     }
 
-
     const [posts, setPosts] = useState<Post[] | null>(null)
 
     useEffect( () => {
-
-        async function getPostsWithUsers() {
+        ( async function getPostsWithUsers() {
             const users = await getUsers()
 
             onSnapshot( q, snap => 
@@ -38,9 +38,7 @@ export default function useGetPosts( { userId } : UseGetPostsProps ) : Post[] | 
                     } as Post )
                 }))
             )
-        }
-
-        getPostsWithUsers()
+        })()
     }, [])
 
     return posts

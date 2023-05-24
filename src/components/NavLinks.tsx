@@ -5,7 +5,8 @@ import CreatePost from "../modals/CreatePost"
 import Icon from "./Icon"
 
 
-export default function NavLinks() : JSX.Element {
+
+export default function NavLinks() {
 
     const appContext = useContext(AppContext)
     const profilePath = '/profile/' + appContext?.firebaseAuth?.uid
@@ -37,13 +38,13 @@ function NavWrapper({children} : {children : JSX.Element[]}) {
 
 
 interface NavLinkProps {
-    to : string,
-    icon : string,
+    to         : string,
+    icon       : string,
     className? : string,
-    children : string
+    children   : string
 }
 
-function NavLink({to, icon, className = '', children} :  NavLinkProps) : JSX.Element {
+function NavLink({to, icon, className = '', children} :  NavLinkProps) {
     return (
         <li>
             <RouterLink to={to} className={`flex items-center w-full px-4 py-4 gap-4 hover:bg-orange-100 rounded-xl ${className}`}>

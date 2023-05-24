@@ -15,11 +15,10 @@ export default function Profile() {
     const [user, setUser] = useState<User | null>(null)
 
     useEffect( () => {
-        const loadUserData = async () => {
+        ( async function loadUserData () {
             const userData = await getUser(id) as User
             setUser(userData)
-        }
-        loadUserData()
+        })()
     }, [])
 
     

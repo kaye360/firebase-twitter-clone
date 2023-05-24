@@ -16,7 +16,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
         throw 'Error getting post.'
     }
 
-    const appContext = useContext(AppContext)
+    const appContext     = useContext(AppContext)
     const loggedInUserId = appContext?.firebaseAuth?.uid
 
 
@@ -101,7 +101,7 @@ export interface SinglePostErrorProps {
     error: string
 }
 
-export function SinglePostError({ error }: SinglePostErrorProps): JSX.Element {
+export function SinglePostError({ error } : SinglePostErrorProps): JSX.Element {
 
     const navigate = useNavigate()
 

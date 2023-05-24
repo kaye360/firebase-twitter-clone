@@ -6,38 +6,32 @@ import { db } from '../../firebase-config'
 import { Users, getUsers } from '../services/UserServices'
 
 interface UseGetSinglePost {
-    post : Post | null,
+    post     : Post | null,
     isLoaded : boolean
 }
 
 export default function useGetSinglePost(postId : string) : UseGetSinglePost {
 
-    const postRef = doc(db, "posts", postId)
-    const [post, setPost] = useState<Post | null>(null)
+    const postRef                 = doc(db, "posts", postId)
+    const [post, setPost]         = useState<Post | null>(null)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     useEffect( () => {
-
-        async function getPostWithUser() {
+        ( async function getPostWithUser() {
             const users = await getUsers() as Users
 
             onSnapshot( postRef, snap => {
 
                 setPost( { 
                     ...snap.data(), 
-                    id: postId,
-                    user: users[snap?.data()?.userId]
+                    id   : postId,
+                    user : users[snap?.data()?.userId]
                 } as Post )
 
                 setIsLoaded(true)
-            }
-            )
-        }
-
-        getPostWithUser()
-    
+            })
+        })()
     }, [])
-
 
     return { post, isLoaded}
 }

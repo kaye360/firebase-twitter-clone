@@ -5,11 +5,11 @@ import { User } from "./UserServices"
 
 
 export interface Post {
-    body : string,
-    date : Timestamp,
+    body   : string,
+    date   : Timestamp,
     userId : string,
-    id : string | undefined,
-    user : User
+    id     : string | undefined,
+    user   : User
 }
 
 
@@ -25,27 +25,27 @@ export const postCollectionRef = collection(db, "posts")
  * 
  */
 export async function getPost(id: string | undefined) : Promise<Post | null> {
-
     try {
         if( !id ) return null
+
         const postRef = doc(db, "posts", id)
-        const post = await getDoc(postRef)
+        const post    = await getDoc(postRef)
     
         if( post.exists() ) {
             return post.data() as Post
-        }
+        } 
+
+        return null
         
     } catch (error) {
         return null
     }
-    return null
 
 }
 
 
 export async function createPost(body: string) : Promise<ResponseSuccess> {
     try {
-
         if( !body || body === '' || typeof body !== 'string' ) {
             throw 'Invalid post body'
         }
@@ -56,7 +56,7 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
 
         const post = await addDoc(postCollectionRef,  {
             body,
-            date: Timestamp.fromDate(new Date()),
+            date   : Timestamp.fromDate(new Date()),
             userId : auth.currentUser?.uid
         })
 

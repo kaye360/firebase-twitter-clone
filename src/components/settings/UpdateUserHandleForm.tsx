@@ -5,7 +5,6 @@ import Icon from "../Icon"
 
 export default function UpdateUserHandleForm() {
 
-    
     const userHandle = useUpdateUserHandle()
     
     return (
@@ -15,7 +14,8 @@ export default function UpdateUserHandleForm() {
                 <label htmlFor="user-handle" className="text-xl">@</label>
                 <input
                     type="text"
-                    value={ userHandle.userHandle } onChange={ userHandle.handleChange }
+                    value={ userHandle.userHandle } 
+                    onChange={ userHandle.handleChange }
                     className="border-sky-200 focus-visible:outline-sky-400"
                     id="user-handle"
                 />
@@ -55,23 +55,25 @@ export default function UpdateUserHandleForm() {
 
 
 interface UseUpdateUserHandle { 
-    handleUpdate : FormEventHandler<HTMLFormElement>, 
-    handleChange : ChangeEventHandler<HTMLInputElement>, 
-    handleReset : MouseEventHandler<HTMLButtonElement>, 
-    userHandle : string, 
-    isValidated : boolean, 
-    errorMessage : string, 
+    handleUpdate   : FormEventHandler<HTMLFormElement>, 
+    handleChange   : ChangeEventHandler<HTMLInputElement>, 
+    handleReset    : MouseEventHandler<HTMLButtonElement>, 
+    userHandle     : string, 
+    isValidated    : boolean, 
+    errorMessage   : string, 
     successMessage : string 
 }
 
 function useUpdateUserHandle() : UseUpdateUserHandle {
+
     const appContext = useContext(AppContext)
 
-    const [userHandle, setUserHandle] = useState<string>('')
-    const [errorMessage, setErrorMessage] = useState<string>('')
+    const [userHandle, setUserHandle]         = useState<string>('')
+    const [errorMessage, setErrorMessage]     = useState<string>('')
     const [successMessage, setSuccessMessage] = useState<string>('')
-    const [isValidated, setIsValidated] = useState<boolean>(true)
-    const [all, setAll] = useState<string[]>([''])
+    const [isValidated, setIsValidated]       = useState<boolean>(true)
+    const [all, setAll]                       = useState<string[]>([''])
+
     const regex = /^[a-zA-Z0-9._-]+$/
 
 
@@ -83,10 +85,10 @@ function useUpdateUserHandle() : UseUpdateUserHandle {
 
     useEffect( () => {
         ( function validate() {
-            const isEmpty = userHandle.length === 0
-            const isTooLong = userHandle.length > 15
+            const isEmpty                = userHandle.length === 0
+            const isTooLong              = userHandle.length > 15
             const hasForbiddenCharacters = !regex.test(userHandle)
-            const isTaken = all.includes(userHandle) && userHandle !== appContext?.userHandle
+            const isTaken                = all.includes(userHandle) && userHandle !== appContext?.userHandle
 
             setIsValidated(false)
 
@@ -131,7 +133,7 @@ function useUpdateUserHandle() : UseUpdateUserHandle {
         if( !isValidated ) return
 
         const update = await updateUser({
-            userId : appContext?.firebaseAuth?.uid as string,
+            userId   : appContext?.firebaseAuth?.uid as string,
             newField : { handle : userHandle }
         })
 
@@ -150,6 +152,6 @@ function useUpdateUserHandle() : UseUpdateUserHandle {
         setIsValidated(true)
     }
 
-    
+
     return { handleUpdate, handleChange, handleReset, userHandle, isValidated, errorMessage, successMessage }
 }

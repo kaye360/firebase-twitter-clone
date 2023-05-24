@@ -12,9 +12,7 @@ export default function Modal({content} : ModalProps) : JSX.Element {
     const appContext = useContext(AppContext)
 
     function handleModalBgClick(e : any ) {
-        if( e?.target?.id === 'modal') {
-            appContext?.closeModal()
-        }
+        if( e?.target?.id === 'modal') appContext?.closeModal(e)
     }
 
     if( content ) { 
@@ -33,7 +31,7 @@ export default function Modal({content} : ModalProps) : JSX.Element {
                         <div className="flex justify-end">
                             <button 
                                 className="text-sm leading-3 hover:underline"
-                                onClick={ () => appContext?.closeModal() }
+                                onClick={ appContext?.closeModal }
                             >
                                 <Icon icon="close" />
                             </button>
@@ -70,7 +68,7 @@ function ModalError({handleModalBgClick} : ModalErrorProps) {
                 <div className="flex justify-end">
                     <button 
                         className="text-sm leading-3 hover:underline"
-                        onClick={ () => appContext?.closeModal() }
+                        onClick={ appContext?.closeModal }
                     >
                         Close
                     </button>

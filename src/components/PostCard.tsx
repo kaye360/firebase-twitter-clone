@@ -8,9 +8,9 @@ const PostCardElement = lazy(() => import("./PostCardComponents"))
 
 
 export interface PostCardProps {
-    post: Post | null,
-    isLoaded : boolean,
-    isShowingViewPostBtn?: boolean
+    post                  : Post | null,
+    isLoaded              : boolean,
+    isShowingViewPostBtn? : boolean
 }
 
 

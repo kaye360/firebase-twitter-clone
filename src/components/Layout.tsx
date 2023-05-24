@@ -105,18 +105,18 @@ function GuestAvatar() : JSX.Element {
         if( !signIn ) return
 
         const username : string | undefined = signIn.user.email?.split('@')[0].substring(0,15)
-        const userId : string | null = signIn.user.uid
-        const avatar : string | null = signIn.user.photoURL
+        const userId : string | null        = signIn.user.uid
+        const avatar : string | null        = signIn.user.photoURL
     
-        const userRef = doc(db, "users", userId)
+        const userRef  = doc(db, "users", userId)
         const userSnap = await getDoc(userRef)
 
         if( !userSnap.exists() ) {
-            // Create a new user in users collection
             
+            // Create a new user in users collection
             await setDoc(userRef, {
-                handle : username,
-                avatar : avatar,
+                handle        : username,
+                avatar        : avatar,
                 notifications : []
             })
         }

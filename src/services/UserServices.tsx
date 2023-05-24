@@ -1,14 +1,15 @@
-import { signInWithPopup, signOut } from "firebase/auth"
+import { UserCredential, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../../firebase-config"
 import { doc, getDoc, updateDoc, collection, getDocs } from "firebase/firestore"
 import { ResponseSuccess } from "../utils/types"
 
 
 export interface User {
-	handle: string,
-	avatar: string,
+	handle		 : string,
+	avatar	     : string,
 	notifcations : object[]
 }
+
 
 export interface Users {
 	[key : string] : User
@@ -18,40 +19,44 @@ export interface Users {
 export const userCollectionRef = collection(db, "users")
 
 
-export async function signInWithGoogle()  {
+export async function signInWithGoogle() : Promise<UserCredential | null>  {
 	try {
 		let signIn = await signInWithPopup(auth, googleProvider)	
 		return signIn
+
 	} catch (error) {
-		console.log(error)
 		return null
 	}
 }
 
-export async function signOutOfGoogle() {
+
+export async function signOutOfGoogle() : Promise<void> {
 	try {
 		await signOut(auth)
+
 	} catch (error) {
-		console.log(error)
 	}
 }
 
-export async function getUser(id: string | undefined) {
 
+export async function getUser(id: string | undefined) : Promise<User | null> {
     try {
         if( !id ) return null
+
         const userRef = doc(db, "users", id)
-        const user = await getDoc(userRef)
-		return user.data()
+        const user 	  = await getDoc(userRef)
+
+		return user.data() as User | null
         
     } catch (error) {
         return null
     }
 }
 
+
 export async function getUsers() : Promise<Users | null> {
 	try {
-		const usersSnap = await getDocs( userCollectionRef )
+		const usersSnap   = await getDocs( userCollectionRef )
 		let users : Users = {}
 
 		usersSnap.forEach( doc => {
@@ -59,15 +64,16 @@ export async function getUsers() : Promise<Users | null> {
 		})
 
 		return users
+
 	} catch (error) {
-		console.log(error)
 		return null
 	}
 }
 
-export async function getAllUserHandles() {
+
+export async function getAllUserHandles() : Promise<string[] | null> {
 	try {
-		const usersSnap = await getDocs( userCollectionRef )
+		const usersSnap 	 = await getDocs( userCollectionRef )
 		let users : string[] = []
 
 		usersSnap.forEach( doc => {
@@ -81,17 +87,20 @@ export async function getAllUserHandles() {
 	}
 }
 
+
 export interface UpdateUserProps {
-	userId : string,
+	userId   : string,
 	newField : {
 		[key: string] : any
 	}
 }
-export async function updateUser({ userId, newField } : UpdateUserProps) {
+
+export async function updateUser({ userId, newField } : UpdateUserProps) : Promise<ResponseSuccess> {
 	try {
 		const docRef = doc(db, "users", userId)
 
 		await updateDoc(docRef, newField)
+		
 		return { success : true, message : 'Update successful' } as ResponseSuccess
 
 	} catch (error) {

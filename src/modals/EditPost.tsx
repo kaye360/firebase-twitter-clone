@@ -4,22 +4,24 @@ import { redirectTime } from "../utils/appConfig"
 
 
 interface EditPostProps {
-    postId : string | undefined,
+    postId     : string | undefined,
     closeModal : Function
 }
 
 export default function EditPost({postId, closeModal} : EditPostProps) {
 
-    const [_, setPost] = useState<Post | null>(null)
-    const [body, setBody] = useState<string>('')
-    const [message, setMessage] = useState<string>('')
-    const [deleteBtnText, setDeleteBtnText] = useState<string>('Delete')
+    const [_, setPost]                                = useState<Post | null>(null)
+    const [body, setBody]                             = useState<string>('')
+    const [message, setMessage]                       = useState<string>('')
+    const [deleteBtnText, setDeleteBtnText]           = useState<string>('Delete')
     const [hasConfirmedDelete, setHasConfirmedDelete] = useState<boolean>(false)
 
     useEffect( () => {
-        ( async () => {
+        ( async function loadCurrentPost() {
             const currentPost = await getPost(postId)
+
             setPost(currentPost)
+
             if(currentPost) setBody(currentPost.body)
         })()
     },[])
@@ -27,13 +29,12 @@ export default function EditPost({postId, closeModal} : EditPostProps) {
 
     async function handleEditPost(e: SyntheticEvent) : Promise<void> {
         e.preventDefault()
+
         const res = await updatePost(postId as string, body)
         setMessage(res.message)
         
         if( res.success) {
-            setTimeout( () => {
-                closeModal()
-            }, redirectTime)
+            setTimeout( closeModal, redirectTime)
         }
     }
 
@@ -55,9 +56,7 @@ export default function EditPost({postId, closeModal} : EditPostProps) {
         setMessage(res.message)
 
         if(res.success) {
-        setTimeout( () => {
-            closeModal()
-        }, redirectTime)
+            setTimeout( closeModal, redirectTime)
         }
     }
 
