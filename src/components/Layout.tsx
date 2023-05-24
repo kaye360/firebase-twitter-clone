@@ -19,7 +19,7 @@ export default function Layout({children }: LayoutProps) {
 
     return (
         <>
-            <div className="grid grid-cols-[300px_1fr] gap-12 items-start  min-h-screen max-w-5xl mx-auto">
+            <div className="grid grid-cols-[300px_1fr] gap-0 items-start  min-h-screen max-w-5xl mx-auto">
 
                 <nav className="sticky top-0 p-4 flex flex-col h-screen bg-white bg-opacity-40">
 
@@ -31,13 +31,13 @@ export default function Layout({children }: LayoutProps) {
                         {appContext?.firebaseAuth ? (
                             <UserAvatar />
                         ) : (
-                                <GuestAvatar />
+                            <GuestAvatar />
                         )}
                     </ErrorBoundary>
 
                 </nav>
 
-                <main className="px-8 py-4 bg-white bg-opacity-70">
+                <main className="min-h-screen px-8 py-4 bg-white bg-opacity-70">
                     <ErrorBoundary fallback={<div>Something went wrong...</div>}>
                         {children}
                     </ErrorBoundary>

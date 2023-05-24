@@ -36,11 +36,11 @@ export default function Profile() {
     return (
 		<div className="flex flex-col gap-8 rounded-xl p-4">
 
-			<h2 className='text-2xl border-b border-sky-100 text-sky-600'>
+			<h1>
                 @{user?.handle}
-            </h2>
+            </h1>
 
-            <div className='flex flex-col gap-4 bg-gradient-to-r from-sky-100 via-sky-100 to-fuchsia-100 text-sky-800 p-8 rounded-xl'>
+            <div className='flex flex-col gap-4 bg-gradient-to-r from-sky-100 via-sky-50 to-fuchsia-50 text-sky-800 p-8 rounded-xl'>
                 <div>
                     Bio here. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam sint eos libero fugiat natus voluptatum?
                 </div>

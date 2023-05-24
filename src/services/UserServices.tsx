@@ -1,6 +1,7 @@
 import { signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../../firebase-config"
-import { doc, getDoc, collection, getDocs } from "firebase/firestore"
+import { doc, getDoc, updateDoc, collection, getDocs } from "firebase/firestore"
+import { ResponseSuccess } from "../utils/types"
 
 
 export interface User {
@@ -51,7 +52,6 @@ export async function getUser(id: string | undefined) {
 export async function getUsers() : Promise<Users | null> {
 	try {
 		const usersSnap = await getDocs( userCollectionRef )
-
 		let users : Users = {}
 
 		usersSnap.forEach( doc => {
@@ -62,5 +62,39 @@ export async function getUsers() : Promise<Users | null> {
 	} catch (error) {
 		console.log(error)
 		return null
+	}
+}
+
+export async function getAllUserHandles() {
+	try {
+		const usersSnap = await getDocs( userCollectionRef )
+		let users : string[] = []
+
+		usersSnap.forEach( doc => {
+			users.push(doc.data().handle)
+		})
+
+		return users
+		
+	} catch (error) {
+		return null
+	}
+}
+
+export interface UpdateUserProps {
+	userId : string,
+	newField : {
+		[key: string] : any
+	}
+}
+export async function updateUser({ userId, newField } : UpdateUserProps) {
+	try {
+		const docRef = doc(db, "users", userId)
+
+		await updateDoc(docRef, newField)
+		return { success : true, message : 'Update successful' } as ResponseSuccess
+
+	} catch (error) {
+		return { success : false, message : 'Something went wrong...' } as ResponseSuccess
 	}
 }

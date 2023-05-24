@@ -4,13 +4,42 @@
 
 @layer base {
 
+    :root {
+        --sky-50  : rgb(240 249 255);
+        --sky-100 : rgb(224 242 254);
+        --sky-200 : rgb(186 230 253);
+        --sky-300 : rgb(125 211 252);
+        --sky-400 : rgb(56 189 248);
+        --sky-500 : rgb(14 165 233);
+        --sky-600 : rgb(2 132 199);
+        --sky-700 : rgb(14 165 233);
+        --sky-800 : rgb(7 89 133);
+        --sky-900 : rgb(12 74 110);
+    }
+
     html {
         scroll-behavior: smooth;
+    }
+    
+    h1 {
+        display : flex;
+        align-items: center;
+        gap : 0.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        border-bottom: 2px solid var(--sky-100);
+        color : var(--sky-600);
     }
 
     h2 {
         font-weight: 600;
     }
 
+    input {
+        padding : 0.5rem;
+        border : 1px solid var(--sky-300);
+        border-radius: 0.5rem;
+        width : 100%;
+    }
 
 }

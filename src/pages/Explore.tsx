@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Link } from "react-router-dom"
 import { PostCardLoader } from "../components/PostCardComponents"
+import Icon from "../components/Icon"
 
 const PostList = lazy( () => import("../components/PostList") )
 
@@ -19,7 +20,7 @@ export default function Explore() {
 	return (
 		<div className="flex flex-col gap-8 rounded-xl p-4">
 
-			<h2>Explore</h2>
+			<h1><Icon icon="explore" /> Explore</h1>
 
 			<ErrorBoundary fallback={<PostListError />}>
 				<Suspense fallback={loader}>
