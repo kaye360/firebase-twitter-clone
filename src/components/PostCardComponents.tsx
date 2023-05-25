@@ -5,6 +5,7 @@ import EditPost from "../modals/EditPost"
 import { PostCardProps } from "./PostCard"
 import Avatar from "./Avatar"
 import Icon from "./Icon"
+import { toggleLikePost } from "../services/PostService"
 
 
 
@@ -19,11 +20,27 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     const appContext     = useContext(AppContext)
     const loggedInUserId = appContext?.firebaseAuth?.uid
 
+    let isLikedByCurrentUser : boolean = 
+        Array.isArray( post?.likes ) && typeof appContext?.firebaseAuth?.uid === 'string' ? (
+            post?.likes?.includes(appContext?.firebaseAuth?.uid) as boolean
+        ) : (
+            false
+        )
+
+    const totalLikes : number = post && Array.isArray(post?.likes) ? post?.likes.length : 0
 
     function openEditModal() {
         appContext?.setModal(
             <EditPost postId={post?.id} closeModal={appContext.closeModal} />
         )
+    }
+
+
+    async function toggleLike() {
+        toggleLikePost({
+            postId: post?.id as string,
+            userId : appContext?.firebaseAuth?.uid as string
+        })
     }
 
     return (
@@ -68,22 +85,25 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
                 </Link>
             }
 
-            <div className="flex justify-between w-1/2 text-sky-400 text-base">
+            <div className="flex items-start gap-2 w-1/2 text-sky-400 text-base">
                 
-                <div className="flex items-center gap-2">
-                    <Icon icon="favorite" className=" text-lg" />
-                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
-                </div>
+                <button onClick={ toggleLike }>
+                    <Icon icon="favorite" className={isLikedByCurrentUser ? 'text-rose-400' : ''} />
+                </button>
 
-                <div className="flex items-center gap-2">
-                    <Icon icon="chat_bubble" className=" text-lg" />
-                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
-                </div>
+                <span className="mr-6">
+                    {totalLikes}
+                </span>
 
-                <div className="flex items-center gap-2">
-                    <Icon icon="sync" className=" text-lg" />
+                <Icon icon="chat_bubble" className="" />
+                <span className="mr-6">
                     {Math.floor(Math.random() * (99-1 + 1) + 1 )}
-                </div>
+                </span>
+
+                <Icon icon="sync" className="" />
+                <span className="mr-6">
+                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
+                </span>
 
             </div>
 

@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react"
-import { Post, deletePost, getPost, updatePost } from "../services/PostService"
+import { Post, deletePost, getPost, updatePostBody } from "../services/PostService"
 import { redirectTime } from "../utils/appConfig"
 
 
@@ -30,7 +30,7 @@ export default function EditPost({postId, closeModal} : EditPostProps) {
     async function handleEditPost(e: SyntheticEvent) : Promise<void> {
         e.preventDefault()
 
-        const res = await updatePost(postId as string, body)
+        const res = await updatePostBody(postId as string, body)
         setMessage(res.message)
         
         if( res.success) {

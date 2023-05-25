@@ -9,7 +9,8 @@ export interface Post {
     date   : Timestamp,
     userId : string,
     id     : string | undefined,
-    user   : User
+    user   : User,
+    likes  : string[]
 }
 
 
@@ -94,7 +95,7 @@ export async function deletePost(id : string) : Promise<ResponseSuccess> {
 }
 
 
-export async function updatePost(id : string, body : string) : Promise<ResponseSuccess> {
+export async function updatePostBody(id : string, body : string) : Promise<ResponseSuccess> {
 		
     try {
         if( !body || body === '' || typeof body !== 'string' ) {
@@ -105,8 +106,8 @@ export async function updatePost(id : string, body : string) : Promise<ResponseS
             throw 'You must be logged in to post'
         }
 
-        const postToEdit = doc(db, "posts", id)
-        await updateDoc(postToEdit, {body})
+        const postDocToEdit = doc(db, "posts", id)
+        await updateDoc(postDocToEdit, {body})
 
 
         return {
@@ -120,4 +121,31 @@ export async function updatePost(id : string, body : string) : Promise<ResponseS
             message : error.toString()
         }
     }
+}
+
+
+interface ToggleLikePostProps {
+    postId : string,
+    userId : string
+}
+
+export async function toggleLikePost({ postId, userId } : ToggleLikePostProps) : Promise<ResponseSuccess> {
+    try {
+        const post = await(getPost(postId)) as Post
+
+        const updatedLikes: string[] = post?.likes.includes(userId)
+            ? post.likes.filter( likedId => likedId != userId )
+            : [...post.likes, userId]
+
+        const postDocToEdit = doc(db, "posts", postId)
+        await updateDoc(postDocToEdit, {likes : updatedLikes})
+
+        return { success: true, message: '' } as ResponseSuccess
+        
+    } catch (error) {
+        console.log(error)
+        return { success: false, message: '' } as ResponseSuccess
+    }
+    
+
 }
