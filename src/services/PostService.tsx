@@ -58,12 +58,13 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
         const post = await addDoc(postCollectionRef,  {
             body,
             date   : Timestamp.fromDate(new Date()),
-            userId : auth.currentUser?.uid
+            userId : auth.currentUser?.uid,
+            likes  : []
         })
 
         return { 
             success : true, 
-            message : 'Post created!',
+            message : 'Post created! Redirecting...',
             content : post.id
         } as ResponseSuccess
 
@@ -75,6 +76,7 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
         } as ResponseSuccess
     }
 }
+
 
 export async function deletePost(id : string) : Promise<ResponseSuccess> {
     try {
@@ -132,8 +134,8 @@ interface ToggleLikePostProps {
 export async function toggleLikePost({ postId, userId } : ToggleLikePostProps) : Promise<ResponseSuccess> {
     try {
         const post = await(getPost(postId)) as Post
-
-        const updatedLikes: string[] = post?.likes.includes(userId)
+        
+        const updatedLikes: string[] = post?.likes?.includes(userId)
             ? post.likes.filter( likedId => likedId != userId )
             : [...post.likes, userId]
 

@@ -3,6 +3,7 @@ import { createPost } from "../services/PostService"
 import { redirectTime } from "../utils/appConfig"
 import { AppContext } from "../App"
 import Icon from "../components/Icon"
+import { useNavigate } from "react-router-dom"
 
 
 interface CreatePostProps {
@@ -12,6 +13,7 @@ interface CreatePostProps {
 export default function CreatePost({closeModal} : CreatePostProps) {
 
     const appContext = useContext(AppContext)
+    const navigate   = useNavigate()
     const lorem      = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores aliquid illum dicta excepturi labore amet, hic cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita magnam enim. Omnis, laborum beatae.'
 
     if( !appContext?.firebaseAuth ) {
@@ -34,7 +36,10 @@ export default function CreatePost({closeModal} : CreatePostProps) {
         setMessage(res.message)
         
         if( res.success && res.content) {
-            setTimeout( closeModal, redirectTime)
+            setTimeout( () => {
+                closeModal()
+                navigate('/post/' + res.content)
+            }, redirectTime)
         }
     }
 

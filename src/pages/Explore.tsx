@@ -1,7 +1,7 @@
 import { Suspense, lazy } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Link } from "react-router-dom"
-import { PostCardLoader } from "../components/PostCardComponents"
+import { PostCardLoader } from "../components/PostCard/PostCardLoader"
 import Icon from "../components/Icon"
 
 const PostList = lazy( () => import("../components/PostList") )
