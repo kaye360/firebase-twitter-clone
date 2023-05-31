@@ -21,6 +21,6 @@
 
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "src/components/Settings/.tsx"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }
