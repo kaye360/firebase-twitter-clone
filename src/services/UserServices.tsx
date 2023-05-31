@@ -7,7 +7,8 @@ import { ResponseSuccess } from "../utils/types"
 export interface User {
 	handle		 : string,
 	avatar	     : string,
-	notifcations : object[]
+	notifcations : object[],
+	bio			 : string
 }
 
 

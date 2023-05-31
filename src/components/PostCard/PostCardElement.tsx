@@ -35,7 +35,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     return (
         <div className="flex flex-col gap-4 w-full border-2 border-sky-50 p-6 rounded-xl shadow-md shadow-sky-50">
 
-            <PostCardHeader post={post as Post} />
+            <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 
             <div className="mt-2">
                 {post?.body}

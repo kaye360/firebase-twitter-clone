@@ -8,15 +8,12 @@ import Icon from "./Icon"
 
 export default function NavLinks() {
 
-    const appContext = useContext(AppContext)
-    const profilePath = '/profile/' + appContext?.firebaseAuth?.uid
-
     return (
         <NavWrapper>
             <NavLink to="/feed"            icon="view_agenda">   Feed         </NavLink>
             <NavLink to="/explore"         icon="explore">       Explore      </NavLink>
             <NavLink to="/notifications"   icon="notifications"> Notifications</NavLink>
-            <NavLink to={`${profilePath}`} icon="account_circle">Profile      </NavLink>
+            <NavLink to="/profile"         icon="account_circle">Profile      </NavLink>
             <NavLink to="/about"           icon="description">   About        </NavLink>
             <NavLink to="/settings"        icon="settings">      Settings     </NavLink>
             <CreatePostBtn />

@@ -7,14 +7,16 @@ import { AppContext } from '../../App'
 import EditPost from '../../modals/EditPost'
 
 interface PostCardHeaderProps {
-    post : Post,
+    post     : Post,
+    isLoaded : boolean
 }
 
-export default function PostCardHeader({post} : PostCardHeaderProps) {
+export default function PostCardHeader({post, isLoaded} : PostCardHeaderProps) {
 
 
     const appContext     = useContext(AppContext)
     const loggedInUserId = appContext?.firebaseAuth?.uid
+    const userHandle     = isLoaded && post?.user?.handle ? post.user.handle : 'deleted'
 
 
     function openEditModal() {
@@ -38,7 +40,7 @@ export default function PostCardHeader({post} : PostCardHeaderProps) {
                     to={`/profile/${post?.userId}`}
                     className="inline-block px-2 text-md font-semibold bg-teal-50 hover:bg-orange-100 rounded-lg"
                 >
-                    @{post?.user?.handle}
+                    @{ userHandle }
                 </Link>
 
                 <span className="text-sm">

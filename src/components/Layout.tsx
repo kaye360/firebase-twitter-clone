@@ -8,6 +8,7 @@ import { UserCredential } from "firebase/auth/react-native"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "../../firebase-config"
 import NavLinks from "./NavLinks"
+import Icon from "./Icon"
 
 interface LayoutProps {
     children: ReactElement
@@ -46,7 +47,7 @@ export default function Layout({children }: LayoutProps) {
             </div>
 
             <footer className="col-span-2 bg-fuchsia-100 py-24 text-center">
-                    footy
+                    footer
             </footer>
 
             <Modal content={appContext?.modal} />
@@ -59,10 +60,9 @@ export default function Layout({children }: LayoutProps) {
 
 function Logo() : JSX.Element {
     return (
-        <div>
-            <span className="text-sky-400">Social</span>
-            <span className="text-red-400">Media</span>
-            <span className="text-green-400">App</span>
+        <div className="flex items-center font-bold text-lg pl-4">
+            <Icon icon="rocket_launch" className="mr-2" />
+            <span className="text-sky-600">Postify</span>
         </div>
     )
 }

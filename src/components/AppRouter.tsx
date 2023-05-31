@@ -15,6 +15,7 @@ export default function AppRouter() {
             <Route path="/feed" element={<Feed />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:id" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<div>Error</div>} />

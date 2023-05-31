@@ -17,6 +17,9 @@ export default function Repost({post, repost} : RepostProps) {
                 <span>
                     @{repost.user?.handle}
                 </span>
+                <span className="font-normal text-sm">
+                    {repost?.date.toDate().toDateString()}
+                </span>
             </h3>
 
             <p>
