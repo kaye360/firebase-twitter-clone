@@ -1,8 +1,8 @@
 import { Suspense, lazy } from "react";
 import { Post } from "../services/PostService";
 import { ErrorBoundary } from "react-error-boundary";
-import { SinglePostError } from "./PostCard/PostCardElement";
 import { PostCardLoader } from "./PostCard/PostCardLoader";
+import { SinglePostError } from "./PostCard/SinglePostError";
 
 
 const PostCardElement = lazy(() => import("./PostCard/PostCardElement"))
@@ -16,10 +16,13 @@ export interface PostCardProps {
 }
 
 
+
 export default function PostCard({post, isLoaded, isShowingViewPostBtn = true} : PostCardProps) {
+
 
     const loader = <PostCardLoader />
 
+    
     return (
         <ErrorBoundary FallbackComponent={SinglePostError}>
             <Suspense fallback={loader}>

@@ -15,9 +15,11 @@ interface CreatePostProps {
 
 export default function CreatePost({closeModal, repostId = null} : CreatePostProps) {
 
+
     const appContext = useContext(AppContext)
     const navigate   = useNavigate()
     const lorem      = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores aliquid illum dicta excepturi labore amet, hic cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.'
+
 
     if( !appContext?.firebaseAuth ) {
         return(
@@ -27,6 +29,7 @@ export default function CreatePost({closeModal, repostId = null} : CreatePostPro
             </div>
         )
     }
+
 
     const [body, setBody]       = useState<string>('')
     const [message, setMessage] = useState<string>('')
@@ -39,20 +42,16 @@ export default function CreatePost({closeModal, repostId = null} : CreatePostPro
         if( body.length > 200 ) {
             setMessage('Post must be 200 characters or less')
             return 
+        } 
 
-        } else if( body.length === 0 && !repost ) {
+        if( body.length === 0 && !repost ) {
             setMessage('Please enter a post')
             return
-
-        } else { }
-        
-        let res: ResponseSuccess
-
-        if( repost && repostId ) {
-            res = await createRepost(body, repostId)
-        } else {
-            res = await createPost(body)
         }
+        
+        let res: ResponseSuccess = repost && repostId
+            ? await createRepost(body, repostId)
+            : await createPost(body)
 
         setMessage(res.message)
         
@@ -72,6 +71,7 @@ export default function CreatePost({closeModal, repostId = null} : CreatePostPro
             setRepost(loadRepost)
         })()
     }, [])
+    
 
     return (
         <form method="get" onSubmit={handleCreatePost}>
