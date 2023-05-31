@@ -2,7 +2,6 @@ import Icon from "../components/Icon";
 import UpdateUserHandleForm from "../components/Settings/UpdateUserHandleForm";
 
 
-
 export default function Settings() {
 
     return (

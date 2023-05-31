@@ -1,22 +1,26 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AppContext } from "../../App"
 import EditPost from "../../modals/EditPost"
-import { toggleLikePost } from "../../services/PostService"
+import { Post, getPost, toggleLikePost } from "../../services/PostService"
 import Avatar from "../Avatar"
 import Icon from "../Icon"
 import { PostCardProps } from "../PostCard"
+import Button from "../Button"
+import CreatePost from "../../modals/CreatePost"
 
 
 
 export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }: PostCardProps) {
 
+    
     if (isLoaded && !post?.body && !post?.date && !post?.userId) {
         throw 'Error getting post.'
     }
-
-    const appContext     = useContext(AppContext)
-    const loggedInUserId = appContext?.firebaseAuth?.uid
+    
+    const appContext          = useContext(AppContext)
+    const loggedInUserId      = appContext?.firebaseAuth?.uid
+    const [repost, setRepost] = useState<Post | null>(null)
 
     let isLikedByCurrentUser : boolean = 
         Array.isArray( post?.likes ) && typeof appContext?.firebaseAuth?.uid === 'string' ? (
@@ -37,10 +41,34 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
 
     async function toggleLike() {
         toggleLikePost({
-            postId: post?.id as string,
+            postId : post?.id as string,
             userId : appContext?.firebaseAuth?.uid as string
         })
     }
+
+
+    function handleRepost() {
+
+        if( typeof post?.id !== 'string' ) return
+            
+        appContext?.setModal(
+            <CreatePost repostId={post?.id} closeModal={appContext.closeModal} />
+        )
+    }
+
+
+    useEffect( () => {( async function loadRepost() {
+
+        if( typeof post?.repostId === 'string' ) {
+            const loadRepost = await getPost(post?.repostId) as Post
+            setRepost(loadRepost)
+        } else {
+            setRepost(null)
+        }
+
+    })()}, [post])
+
+    console.log(post)
 
     return (
         <div className="flex flex-col gap-4 w-full border-2 border-sky-50 p-6 rounded-xl shadow-md shadow-sky-50">
@@ -73,37 +101,65 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
 
             </div>
 
-            <div className="mt-2 my-4">{post?.body}</div>
+            <div className="mt-2">
+                {post?.body}
+            </div>
+
+            { repost &&
+                <div className="flex flex-col gap-2 border-2 border-sky-100 p-4 rounded-lg">
+
+                    <h3 className="flex items-center gap-2 font-bold mb-2">
+                        <Avatar src={repost.user?.avatar} className="w-8 h-8" />
+                        <span>
+                            @{repost.user?.handle}
+                        </span>
+                    </h3>
+
+                    <p>
+                        {repost.body}
+                    </p>
+
+                    <Link 
+                        to={`/post/${post?.repostId}`} 
+                        relative="path"
+                        className="block bg-sky-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
+                    >
+                        <span>View Post</span>
+                    </Link>
+                </div>
+            }
 
             {isShowingViewPostBtn &&
                 <Link 
                     to={`/post/${post?.id}`} 
-                    className="block bg-sky-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
+                    className="block bg-sky-100 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
                 >
                     View Post
                 </Link>
             }
 
-            <div className="flex items-start gap-2 w-1/2 text-sky-400 text-base">
+            <div className="flex items-center gap-2 w-1/2 text-sky-400 text-base">
                 
-                <button onClick={ toggleLike }>
+                <Button onClick={ toggleLike }>
                     <Icon icon="favorite" className={isLikedByCurrentUser ? 'text-rose-400' : ''} />
-                </button>
-                <span className="mr-6">
-                    {totalLikes}
-                </span>
+                    <span>
+                        {totalLikes}
+                    </span>
+                </Button>
 
-                <Link to={`/post/${post?.id}#comments`} >
-                    <Icon icon="chat_bubble" className="" />
-                </Link>
-                <span className="mr-6">
-                    {post?.comments?.length || 0}
-                </span>
+                <Button>
+                    <Link to={`/post/${post?.id}#comments`} className="translate-y-[3px]">
+                        <Icon icon="chat_bubble" />
+                    </Link>
+                    <span>
+                        {post?.comments?.length || 0}
+                    </span>
+                </Button>
 
-                <Icon icon="sync" className="" />
-                <span className="mr-6">
-                    0
-                </span>
+                <Button onClick={ handleRepost } >
+                    <Icon icon="sync" />
+                    <span>{post?.reposts}</span>
+                </Button>
 
             </div>
 

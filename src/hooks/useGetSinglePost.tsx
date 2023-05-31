@@ -31,7 +31,7 @@ export default function useGetSinglePost(postId : string) : UseGetSinglePost {
                 setIsLoaded(true)
             })
         })()
-    }, [])
+    }, [postId])
 
     return { post, isLoaded}
 }

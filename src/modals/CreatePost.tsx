@@ -1,20 +1,23 @@
-import { SyntheticEvent, useState, useContext } from "react"
-import { createPost } from "../services/PostService"
+import { SyntheticEvent, useState, useContext, useEffect } from "react"
+import { Post, createPost, createRepost, getPost } from "../services/PostService"
 import { redirectTime } from "../utils/appConfig"
 import { AppContext } from "../App"
 import Icon from "../components/Icon"
 import { useNavigate } from "react-router-dom"
+import Avatar from "../components/Avatar"
+import { ResponseSuccess } from "../utils/types"
 
 
 interface CreatePostProps {
-    closeModal : Function
+    closeModal : Function,
+    repostId?  : string | null
 }
 
-export default function CreatePost({closeModal} : CreatePostProps) {
+export default function CreatePost({closeModal, repostId = null} : CreatePostProps) {
 
     const appContext = useContext(AppContext)
     const navigate   = useNavigate()
-    const lorem      = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores aliquid illum dicta excepturi labore amet, hic cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita magnam enim. Omnis, laborum beatae.'
+    const lorem      = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores aliquid illum dicta excepturi labore amet, hic cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.'
 
     if( !appContext?.firebaseAuth ) {
         return(
@@ -27,12 +30,30 @@ export default function CreatePost({closeModal} : CreatePostProps) {
 
     const [body, setBody]       = useState<string>('')
     const [message, setMessage] = useState<string>('')
+    const [repost, setRepost]   = useState<Post | null>(null)
 
 
     async function handleCreatePost(e: SyntheticEvent) {
         e.preventDefault()
 
-        const res = await createPost(body)
+        if( body.length > 200 ) {
+            setMessage('Post must be 200 characters or less')
+            return 
+
+        } else if( body.length === 0 && !repost ) {
+            setMessage('Please enter a post')
+            return
+
+        } else { }
+        
+        let res: ResponseSuccess
+
+        if( repost && repostId ) {
+            res = await createRepost(body, repostId)
+        } else {
+            res = await createPost(body)
+        }
+
         setMessage(res.message)
         
         if( res.success && res.content) {
@@ -43,18 +64,51 @@ export default function CreatePost({closeModal} : CreatePostProps) {
         }
     }
 
+
+    useEffect( () => {
+        ( async function loadRepost() {
+            if( !repostId ) return
+            const loadRepost = await getPost(repostId)
+            setRepost(loadRepost)
+        })()
+    }, [])
+
     return (
         <form method="get" onSubmit={handleCreatePost}>
-            <div className="flex flex-col gap-4 items-start">
+            <div className="flex flex-col gap-4">
                 <h2>Create a Post</h2>
 
-                <p>Posting as {appContext.userHandle}</p>
+                <div className="flex justify-between">
+                    <label htmlFor="create-post-body">Posting as {appContext.userHandle}</label>
+                    <span className={body.length > 200 ? 'text-red-400 font-bold' : ''}>
+                        {body.length} / 200
+                    </span>
+                </div>
 
                 <textarea
+                    id="create-post-body"
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     className="p-4 rounded-lg border w-full h-36"
                 ></textarea>
+
+                { repostId && 
+                    <div className="bg-sky-100 border border-sky-200 w-full rounded-lg p-4">
+                        <h3 className="font-bold mb-4 border-b border-slate-300">Reposting:</h3>
+
+                        { repost ? (
+                            <div>
+                                <h4 className="flex items-center gap-2 mb-2 font-bold text-sky-700">
+                                    <Avatar src={repost.user?.avatar} className="w-8 h-8" />
+                                    {repost?.user?.handle}
+                                </h4>
+                                {repost.body}
+                            </div>
+                        ) : (
+                            <p>Post could not be loaded</p>
+                        )}
+                    </div>
+                }
 
                 <div className="flex items-center gap-4">
                     <button className="bg-sky-200 hover:bg-rose-200 px-8 py-4 rounded-lg">

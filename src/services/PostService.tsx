@@ -1,4 +1,4 @@
-import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore"
+import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc, increment } from "firebase/firestore"
 import { auth, db } from "../../firebase-config"
 import { ResponseSuccess } from "../utils/types"
 import { User } from "./UserServices"
@@ -6,13 +6,16 @@ import { PostComment } from "./CommentService"
 
 
 export interface Post {
-    body     : string,
-    date     : Timestamp,
-    userId   : string,
-    id       : string | undefined,
-    user     : User,
-    likes    : string[],
-    comments : PostComment[]
+    // postData  : any
+    body      : string,
+    date      : Timestamp,
+    userId    : string,
+    id        : string | undefined,
+    user?     : User,
+    likes     : string[],
+    comments  : PostComment[],
+    reposts   : number,
+    repostId? : string
 }
 
 
@@ -35,7 +38,12 @@ export async function getPost(id: string | undefined) : Promise<Post | null> {
         const post    = await getDoc(postRef)
     
         if( post.exists() ) {
-            return post.data() as Post
+            const postData = post.data()
+            const userRef  = doc(db, "users", postData.userId)
+            const user     = await getDoc( userRef )
+            const userData = user.data()
+            postData.user  = userData
+            return postData as Post
         } 
 
         return null
@@ -62,8 +70,48 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
             date     : Timestamp.fromDate(new Date()),
             userId   : auth.currentUser?.uid,
             likes    : [],
-            comments : []
+            comments : [],
+            reposts  : 0
         })
+
+        return { 
+            success : true, 
+            message : 'Post created! Redirecting...',
+            content : post.id
+        } as ResponseSuccess
+
+    } catch (error: any) {
+        
+        return { 
+            success : false, 
+            message : error.toString()
+        } as ResponseSuccess
+    }
+}
+
+
+export async function createRepost(body: string, repostId: string) : Promise<ResponseSuccess> {
+    try {
+        if( typeof body !== 'string' || typeof repostId !== 'string' ) {
+            throw 'Invalid post body or repostId'
+        }
+
+        if( !auth.currentUser ) {
+            throw 'You must be logged in to post'
+        }
+        
+        const post = await addDoc(postCollectionRef,  {
+            body,
+            repostId,
+            date     : Timestamp.fromDate(new Date()),
+            userId   : auth.currentUser?.uid,
+            likes    : [],
+            comments : [],
+            reposts  : 0
+        })
+
+        const repostRef = doc(db, "posts", repostId)
+        await updateDoc( repostRef, { reposts: increment(1) })
 
         return { 
             success : true, 
