@@ -10,7 +10,7 @@ export default function Settings() {
 
             <div className="my-8">
                 
-                <h2 className="mb-2">
+                <h2 className="mb-2"> 
                     <label htmlFor="user-handle">
                         User Handle:
                     </label>
