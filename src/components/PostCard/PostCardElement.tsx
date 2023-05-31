@@ -27,6 +27,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
 
     const totalLikes : number = post && Array.isArray(post?.likes) ? post?.likes.length : 0
 
+    
     function openEditModal() {
         appContext?.setModal(
             <EditPost postId={post?.id} closeModal={appContext.closeModal} />
@@ -56,7 +57,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
                         to={`/profile/${post?.userId}`}
                         className="inline-block px-2 text-md font-semibold bg-teal-50 hover:bg-orange-100 rounded-lg"
                     >
-                        @{post?.user?.handle || '[deleted]' }
+                        @{ post?.user?.handle }
                     </Link>
 
                     <span className="text-sm">
@@ -88,19 +89,20 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
                 <button onClick={ toggleLike }>
                     <Icon icon="favorite" className={isLikedByCurrentUser ? 'text-rose-400' : ''} />
                 </button>
-
                 <span className="mr-6">
                     {totalLikes}
                 </span>
 
-                <Icon icon="chat_bubble" className="" />
+                <Link to={`/post/${post?.id}#comments`} >
+                    <Icon icon="chat_bubble" className="" />
+                </Link>
                 <span className="mr-6">
-                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
+                    {post?.comments?.length || 0}
                 </span>
 
                 <Icon icon="sync" className="" />
                 <span className="mr-6">
-                    {Math.floor(Math.random() * (99-1 + 1) + 1 )}
+                    0
                 </span>
 
             </div>

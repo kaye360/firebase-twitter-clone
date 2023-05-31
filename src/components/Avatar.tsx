@@ -14,7 +14,7 @@ export default function Avatar({src} : AvatarProps) {
     }
 
     return (
-        <div className="rounded-full w-12 h-12 bg-slate-300 overflow-hidden">
+        <div className="relative rounded-full w-12 h-12 bg-slate-300 overflow-hidden">
             { src && 
                 <img
                     src={src}

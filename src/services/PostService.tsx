@@ -2,15 +2,17 @@ import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc } from
 import { auth, db } from "../../firebase-config"
 import { ResponseSuccess } from "../utils/types"
 import { User } from "./UserServices"
+import { PostComment } from "./CommentService"
 
 
 export interface Post {
-    body   : string,
-    date   : Timestamp,
-    userId : string,
-    id     : string | undefined,
-    user   : User,
-    likes  : string[]
+    body     : string,
+    date     : Timestamp,
+    userId   : string,
+    id       : string | undefined,
+    user     : User,
+    likes    : string[],
+    comments : PostComment[]
 }
 
 
@@ -57,9 +59,10 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
 
         const post = await addDoc(postCollectionRef,  {
             body,
-            date   : Timestamp.fromDate(new Date()),
-            userId : auth.currentUser?.uid,
-            likes  : []
+            date     : Timestamp.fromDate(new Date()),
+            userId   : auth.currentUser?.uid,
+            likes    : [],
+            comments : []
         })
 
         return { 

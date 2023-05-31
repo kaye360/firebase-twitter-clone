@@ -16,7 +16,7 @@ export default function UpdateUserHandleForm() {
                     type="text"
                     value={ userHandle.userHandle } 
                     onChange={ userHandle.handleChange }
-                    className="border-sky-200 focus-visible:outline-sky-400"
+                    className="border-sky-200"
                     id="user-handle"
                 />
                 <div>
@@ -28,7 +28,12 @@ export default function UpdateUserHandleForm() {
                 </div>
             </div>
 
-            <div className="text-rose-500 min-h-min transition-all duration-200">{ userHandle.errorMessage }</div>
+
+            <div className={` ${userHandle.errorMessage ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500 py-2`}>
+                <div className="overflow-hidden">
+                    { userHandle.errorMessage }
+                </div>
+            </div>
 
             <div className="flex items-center gap-4 mt-4">
                 <button

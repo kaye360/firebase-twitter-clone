@@ -35,11 +35,16 @@
         font-weight: 600;
     }
 
-    input {
+    input, textarea {
         padding : 0.5rem;
         border : 1px solid var(--sky-300);
         border-radius: 0.5rem;
         width : 100%;
+        max-width: none;
+    }
+
+    input:focus-visible, textarea:focus-visible {
+        outline : 1px solid var(--sky-400)
     }
 
 }
