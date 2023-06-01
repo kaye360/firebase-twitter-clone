@@ -1,7 +1,7 @@
 import { FormEventHandler, ChangeEventHandler, MouseEventHandler, useContext, useState, SyntheticEvent, useEffect } from "react"
 import { AppContext } from "../App"
 import { getAllUserHandles, updateUser } from "../services/UserServices"
-import Validator from "../utils/Validator"
+import Validator from "../utils/Validators"
 
 interface UseUpdateUserHandle { 
     handleUpdate   : FormEventHandler<HTMLFormElement>, 
@@ -29,7 +29,7 @@ export default function useUpdateUserHandle() : UseUpdateUserHandle {
         setUserHandle(e.target.value)
     }
 
-    
+
     useEffect( () => {
         ( function validate() {
 

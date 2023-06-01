@@ -1,7 +1,7 @@
 import Icon from "../Icon"
 import useUpdateUserBio from "../../hooks/useUpdateUserBio"
 import { User } from "../../services/UserServices"
-import Validator from "../../utils/Validator"
+import Validator from "../../utils/Validators"
 import ValidationIcon from "../Validation/ValidationIcon"
 import ValidationError from "../Validation/ValidationError"
 import Button from "../Button"
