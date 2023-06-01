@@ -1,9 +1,7 @@
-import { UserCredential, signInWithPopup, signOut } from "firebase/auth"
+import { signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../../firebase-config"
-import { doc, getDoc, updateDoc, collection, getDocs } from "firebase/firestore"
+import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "firebase/firestore"
 import { ResponseSuccess, User, Users } from "../utils/types"
-
-
 
 
 
@@ -11,10 +9,32 @@ import { ResponseSuccess, User, Users } from "../utils/types"
 export const userCollectionRef = collection(db, "users")
 
 
-export async function signInWithGoogle() : Promise<UserCredential | null>  {
+export async function signInWithGoogle() : Promise<User | null>  {
 	try {
 		let signIn = await signInWithPopup(auth, googleProvider)	
-		return signIn
+
+		if( !signIn ) throw 'Error signing in to Google.'
+
+        const userId : string | null = signIn.user.uid
+        const userRef  				 = doc(db, "users", userId)
+        const userSnap 				 = await getDoc(userRef)
+		let user 	   				 = userSnap.data() as User
+
+        if( !userSnap.exists() ) {
+			
+			// Create a new user in users collection if not already created
+			user = {
+				handle			 : signIn.user.email?.split('@')[0].substring(0,15) as string,
+				avatar			 : signIn.user.photoURL as string, 
+				bio 			 : 'Hi! I\'m new to this app.',
+				location 		 : 'Earth',
+				notifcations_new : [],
+				notifcations_old : [],
+			}
+            await setDoc(userRef, user)
+        }
+
+		return user as User
 
 	} catch (error) {
 		return null

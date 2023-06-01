@@ -109,28 +109,11 @@ function GuestAvatar() : JSX.Element {
     const appContext = useContext(AppContext)
 
     async function signIn() {
-        const signIn: UserCredential | null = await signInWithGoogle()
+        const user = await signInWithGoogle()
 
-        if( !signIn ) return
+        if( !user ) return
 
-        const username : string | undefined = signIn.user.email?.split('@')[0].substring(0,15)
-        const userId : string | null        = signIn.user.uid
-        const avatar : string | null        = signIn.user.photoURL
-    
-        const userRef  = doc(db, "users", userId)
-        const userSnap = await getDoc(userRef)
-
-        if( !userSnap.exists() ) {
-            
-            // Create a new user in users collection
-            await setDoc(userRef, {
-                handle        : username,
-                avatar        : avatar,
-                notifications : []
-            })
-        }
-
-        appContext?.setUserHandle(username as string)
+        appContext?.setUserHandle(user.handle)
     }
 
     return (
