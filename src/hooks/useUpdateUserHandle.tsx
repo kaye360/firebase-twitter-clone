@@ -1,7 +1,7 @@
 import { FormEventHandler, ChangeEventHandler, MouseEventHandler, useContext, useState, SyntheticEvent, useEffect } from "react"
 import { AppContext } from "../App"
 import { getAllUserHandles, updateUser } from "../services/UserServices"
-import Validator from "../utils/Validators"
+import Validator from "../utils/Validator"
 
 interface UseUpdateUserHandle { 
     handleUpdate   : FormEventHandler<HTMLFormElement>, 
