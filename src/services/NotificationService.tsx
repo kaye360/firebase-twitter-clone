@@ -7,7 +7,7 @@ interface MarkNotifcationsAsReadProps {
 
 export function markNotifcationsAsRead({userId} : MarkNotifcationsAsReadProps) : ResponseSuccess {
     try {
-        
+        userId
         return {} as ResponseSuccess
     } catch (error) {
         
