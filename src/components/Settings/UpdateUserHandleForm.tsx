@@ -3,6 +3,7 @@ import useUpdateUserHandle from "../../hooks/useUpdateUserHandle"
 import ValidationIcon from "../Validation/ValidationIcon"
 import ValidationError from "../Validation/ValidationError"
 import Button from "../Button"
+import Validator from "../../utils/Validator"
 
 
 
@@ -13,7 +14,14 @@ export default function UpdateUserHandleForm() {
     return (
         <form onSubmit={ userHandle.handleUpdate }>
 
-            <div className="grid grid-cols-[1ch_1fr_10px] items-center gap-4">
+            <div className="relative grid grid-cols-[1ch_1fr_10px] items-center gap-4">
+
+                <div className="absolute right-[30px] top-[-2rem]">
+                        <span className={Validator.isTooLong(userHandle.userHandle, 15) ? 'text-red-400' : ''}>
+                            {userHandle.userHandle.length} / 15
+                        </span>
+                </div>
+
                 <label htmlFor="user-handle" className="text-xl">@</label>
                 <input
                     type="text"

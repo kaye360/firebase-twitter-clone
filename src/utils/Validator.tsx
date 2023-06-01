@@ -2,7 +2,8 @@
 
 export default class Validator {
 
-    static regexUserHandle = /^[a-zA-Z0-9._-]+$/
+    static regexUserHandle   = /^[a-zA-Z0-9._-]+$/
+    static regexUserLocation = /^[a-zA-Z0-9 .,-]+$/
 
     static isEmpty(string: string) {
         return ( !string || string.length === 0 )

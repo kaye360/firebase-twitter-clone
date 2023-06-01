@@ -8,7 +8,8 @@ export interface User {
 	handle		 : string,
 	avatar	     : string,
 	notifcations : object[],
-	bio			 : string
+	bio			 : string,
+	location	 : string
 }
 
 

@@ -4,6 +4,7 @@ import UpdateUserBioForm from "../components/Settings/UpdateUserBioForm";
 import UpdateUserHandleForm from "../components/Settings/UpdateUserHandleForm";
 import { User, getUser } from "../services/UserServices";
 import { AppContext } from "../App";
+import UpdateUserLocationForm from "../components/Settings/UpdateUserLocationForm";
 
 
 export default function Settings() {
@@ -33,6 +34,9 @@ export default function Settings() {
                     <UpdateUserBioForm user={user as User} />
                 </Setting>
 
+                <Setting heading="Location" htmlFor="user-location">
+                    <UpdateUserLocationForm user={user as User} />
+                </Setting>
 
             </div>
 
@@ -43,9 +47,9 @@ export default function Settings() {
 
 
 interface SettingProps {
-    heading  : string,
-    htmlFor  : string,
-    children : string | JSX.Element
+    heading   : string,
+    htmlFor   : string,
+    children? : any
 }
 
 function Setting({htmlFor, heading, children} : SettingProps) {

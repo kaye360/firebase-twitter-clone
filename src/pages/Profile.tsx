@@ -49,7 +49,7 @@ export default function Profile() {
                 <div className='h-[1px] bg-sky-200'></div>
 
                 <div className='flex items-center gap-2'>
-                    <Icon icon="place" /> BC, Canada
+                    <Icon icon="place" /> {user?.location}
                 </div>
             </div>
 
