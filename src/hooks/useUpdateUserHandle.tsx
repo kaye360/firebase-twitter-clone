@@ -1,6 +1,7 @@
 import { FormEventHandler, ChangeEventHandler, MouseEventHandler, useContext, useState, SyntheticEvent, useEffect } from "react"
 import { AppContext } from "../App"
 import { getAllUserHandles, updateUser } from "../services/UserServices"
+import Validator from "../utils/Validator"
 
 interface UseUpdateUserHandle { 
     handleUpdate   : FormEventHandler<HTMLFormElement>, 
@@ -22,34 +23,28 @@ export default function useUpdateUserHandle() : UseUpdateUserHandle {
     const [isValidated, setIsValidated]       = useState<boolean>(true)
     const [all, setAll]                       = useState<string[]>([''])
 
-    const regex = /^[a-zA-Z0-9._-]+$/
-
 
     function handleChange(e: SyntheticEvent) {
         if( !(e.target instanceof HTMLInputElement) ) return
         setUserHandle(e.target.value)
     }
 
-
+    
     useEffect( () => {
         ( function validate() {
-            const isEmpty                = userHandle.length === 0
-            const isTooLong              = userHandle.length > 15
-            const hasForbiddenCharacters = !regex.test(userHandle)
-            const isTaken                = all.includes(userHandle) && userHandle !== appContext?.userHandle
 
             setIsValidated(false)
 
-            if ( isEmpty ) {
+            if ( Validator.isEmpty(userHandle) ) {
                 setErrorMessage('Please enter a user handle')
                 
-            } else if ( isTooLong ) {
+            } else if ( Validator.isTooLong(userHandle, 15) ) {
                 setErrorMessage('Username must be less than 15 characters')
                 
-            } else if ( hasForbiddenCharacters ) {
+            } else if ( Validator.hasForbiddenCharacters(userHandle, Validator.regexUserHandle) ) {
                 setErrorMessage('Only characters letters, numbers, -, _, and . are allowed')
                 
-            } else if( isTaken ) {
+            } else if( Validator.isTaken(userHandle, all, appContext?.userHandle as string) ) {
                 setErrorMessage('This user handle is already taken')
                 
             } else { // Validated

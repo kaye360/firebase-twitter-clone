@@ -33,7 +33,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     
 
     return (
-        <div className="flex flex-col gap-4 w-full border-2 border-sky-50 p-6 rounded-xl shadow-md shadow-sky-50">
+        <div className="flex flex-col gap-4 w-full border-2 border-sky-100 p-6 rounded-xl shadow-lg shadow-sky-50">
 
             <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 

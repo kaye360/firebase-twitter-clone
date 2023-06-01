@@ -14,10 +14,10 @@ export default function Profile() {
     const { id }          = useParams()
     const [user, setUser] = useState<User | null>(null)
     const appContext      = useContext(AppContext)
+    const userId          = id ? id : appContext?.firebaseAuth?.uid
 
     useEffect( () => {
         ( async function loadUserData () {
-            const userId = id ? id : appContext?.firebaseAuth?.uid
             const userData = await getUser(userId) as User
             setUser(userData)
         })()
@@ -55,7 +55,7 @@ export default function Profile() {
 
 			<ErrorBoundary fallback={<PostListError />}>
 				<Suspense fallback={loader}>
-					<PostList userId={id} />
+					<PostList userId={userId} />
 				</Suspense>
 			</ErrorBoundary>
 			

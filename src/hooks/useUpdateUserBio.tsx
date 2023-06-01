@@ -1,6 +1,7 @@
 import { FormEventHandler, ChangeEventHandler, MouseEventHandler, useContext, useState, SyntheticEvent, useEffect } from "react"
 import { AppContext } from "../App"
 import { User, updateUser } from "../services/UserServices"
+import Validator from "../utils/Validator"
 
 interface UseUpdateUserBio { 
     handleUpdate   : FormEventHandler<HTMLFormElement>, 
@@ -25,8 +26,6 @@ export default function useUpdateUserBio({ user } : UseUpdateUserBioProps) : Use
     const [successMessage, setSuccessMessage] = useState<string>('')
     const [isValidated, setIsValidated]       = useState<boolean>(true)
 
-    const regex = /^[a-zA-Z0-9 ._-]+$/
-
 
     useEffect( () => {
         ( function loadCurrentUserBio() {
@@ -43,20 +42,11 @@ export default function useUpdateUserBio({ user } : UseUpdateUserBioProps) : Use
 
     useEffect( () => {
         ( function validate() {
-            const isEmpty                = userBio.length === 0
-            const isTooLong              = userBio.length > 200
-            const hasForbiddenCharacters = !regex.test(userBio)
 
             setIsValidated(false)
 
-            if ( isEmpty ) {
-                setErrorMessage('Please enter a user handle')
-                
-            } else if ( isTooLong ) {
-                setErrorMessage('Username must be less than 15 characters')
-                
-            } else if ( hasForbiddenCharacters ) {
-                setErrorMessage('Only characters letters, numbers, -, _, and . are allowed')
+            if ( Validator.isTooLong(userBio, 200) ) {
+                setErrorMessage('Bio must be less than 200 characters')
                 
             } else { // Validated
                 setErrorMessage('')

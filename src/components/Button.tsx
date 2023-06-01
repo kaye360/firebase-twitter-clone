@@ -4,7 +4,7 @@ import Icon from './Icon'
 
 interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
 	icon?      : string | null,
-	children   : JSX.Element | JSX.Element[] | string,
+	children   : any,
 	className? : string,
 	disabled?  : boolean
 }

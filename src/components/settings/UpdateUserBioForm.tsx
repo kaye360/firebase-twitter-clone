@@ -1,6 +1,10 @@
 import Icon from "../Icon"
 import useUpdateUserBio from "../../hooks/useUpdateUserBio"
 import { User } from "../../services/UserServices"
+import Validator from "../../utils/Validator"
+import ValidationIcon from "../Validation/ValidationIcon"
+import ValidationError from "../Validation/ValidationError"
+import Button from "../Button"
 
 
 interface UpdateUserBioFormProps {
@@ -14,41 +18,42 @@ export default function UpdateUserBioForm({user} : UpdateUserBioFormProps) {
     return (
         <form onSubmit={ userBio.handleUpdate }>
 
-            <div className="grid grid-cols-[1fr_10px] items-center gap-4">
+            <div className="relative grid grid-cols-[1fr_10px] items-center gap-4">
+
+                <div className="absolute right-[30px] top-[-2rem]">
+                    <span className={Validator.isTooLong(userBio.userBio, 200) ? 'text-red-400' : ''}>
+                        {userBio.userBio.length} / 200
+                    </span>
+                </div>
+
                 <textarea
                     value={ userBio.userBio } 
                     onChange={ userBio.handleChange }
-                    className="border-sky-200"
+                    className="border-sky-200 h-24"
                     id="user-bio"
                 ></textarea>
-                <div>
-                    { userBio.isValidated ? (
-                        <Icon icon="check_circle" className="text-emerald-400" />
-                    ) : (
-                        <Icon icon="error_outline" className="text-rose-400" />
-                    )}
-                </div>
+
+                <ValidationIcon isValid={userBio.isValidated} />
+
             </div>
 
-
-            <div className={` ${userBio.errorMessage ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500 py-2`}>
-                <div className="overflow-hidden">
-                    { userBio.errorMessage }
-                </div>
-            </div>
+            <ValidationError message={userBio.errorMessage} />
 
             <div className="flex items-center gap-4">
-                <button
+                <Button
                     type="submit"
                     disabled={ !userBio.isValidated }
-                    className={`inline-flex items-center gap-2 bg-sky-100 hover:bg-fuchsia-100 px-4 py-2 rounded-lg ${ userBio.isValidated ? '' : 'opacity-40 cursor-not-allowed'}`}
+                    className="bg-sky-100 hover:bg-fuchsia-100"
                 >
                     <Icon icon="save" /> Save
-                </button>
+                </Button>
 
-                <button onClick={ userBio.handleReset } className="bg-sky-50 hover:bg-fuchsia-50 bg-opacity-50 px-4 py-2 rounded-lg">
+                <Button 
+                    onClick={ userBio.handleReset } 
+                    className="border border-sky-200 hover:border-fuchsia-400 font-medium"
+                >
                     Reset
-                </button>
+                </Button>
 
                 <div>
                     { userBio.successMessage }
