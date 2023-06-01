@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { NavLink as RouterLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { AppContext } from "../App"
 import CreatePost from "../modals/CreatePost"
 import Icon from "./Icon"
@@ -10,7 +10,6 @@ export default function NavLinks() {
 
     return (
         <NavWrapper>
-            <NavLink to="/feed"            icon="view_agenda">   Feed         </NavLink>
             <NavLink to="/explore"         icon="explore">       Explore      </NavLink>
             <NavLink to="/notifications"   icon="notifications"> Notifications</NavLink>
             <NavLink to="/profile"         icon="account_circle">Profile      </NavLink>
@@ -26,7 +25,7 @@ export default function NavLinks() {
 
 function NavWrapper({children} : {children : JSX.Element[]}) {
     return (
-        <ul className="flex flex-col gap-0 mt-4 text-md">{children}</ul>
+        <ul className="flex flex-col gap-0 mt-4 text-md text-sky-800">{children}</ul>
     )
 }
 
@@ -44,10 +43,10 @@ interface NavLinkProps {
 function NavLink({to, icon, className = '', children} :  NavLinkProps) {
     return (
         <li>
-            <RouterLink to={to} className={`flex items-center w-full px-4 py-4 gap-4 hover:bg-orange-100 rounded-xl ${className}`}>
-                <Icon icon={icon} />
+            <Link to={to} className={`nav-link flex items-center w-full px-4 py-4 gap-4 font-bold hover:text-rose-400 rounded-xl border border-transparent hover:border-rose-200 transition-all duration-100 ${className}`}>
+                <Icon icon={icon}  className="nav-icon"/>
                 {children}
-            </RouterLink>
+            </Link>
         </li>
     )
 }
@@ -62,7 +61,7 @@ function CreatePostBtn() {
     return (
         <li>
             <button 
-                className="flex items-center gap-2 justify-center mt-2 bg-sky-100 w-full p-2 rounded-xl hover:bg-teal-100"
+                className="flex items-center gap-2 justify-center mt-2 bg-sky-400 text-white font-bold w-full p-2 rounded-xl hover:bg-rose-500 transition-all duration-100"
                 onClick={ () => {
                     appContext?.setModal(<CreatePost closeModal={appContext.closeModal} />)
                 }}

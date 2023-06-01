@@ -8,7 +8,7 @@ import { UserCredential } from "firebase/auth/react-native"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "../../firebase-config"
 import NavLinks from "./NavLinks"
-import Icon from "./Icon"
+import Lightbulb from "../assets/logo.svg"
 
 interface LayoutProps {
     children: ReactElement
@@ -20,7 +20,7 @@ export default function Layout({children }: LayoutProps) {
 
     return (
         <>
-            <div className="grid grid-cols-[300px_1fr] gap-0 items-start  min-h-screen max-w-5xl mx-auto">
+            <div className="grid grid-cols-[auto_1fr] gap-0 items-start  min-h-screen max-w-5xl mx-auto">
 
                 <nav className="sticky top-0 p-4 flex flex-col h-screen bg-white bg-opacity-40">
 
@@ -60,9 +60,9 @@ export default function Layout({children }: LayoutProps) {
 
 function Logo() : JSX.Element {
     return (
-        <div className="flex items-center font-bold text-lg pl-4">
-            <Icon icon="rocket_launch" className="mr-2" />
-            <span className="text-sky-600">Postify</span>
+        <div className="flex items-center gap-4 font-bold text-2xl pl-4">
+            <img src={Lightbulb} className="w-[35px]" />
+            <span className="text-sky-500 duppercase font-bold">idealy</span>
         </div>
     )
 }
