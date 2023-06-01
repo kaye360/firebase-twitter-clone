@@ -13,15 +13,15 @@ export default function NavLinks() {
 
     return (
         <NavWrapper>
-            <NavLink to="/explore"       icon="explore">      Explore      </NavLink>
-            <NavLink to="/notifications" icon="notifications">Notifications</NavLink>
-            <NavLink to="/about"         icon="description">  About        </NavLink>
+            <NavLink to="/explore" icon="explore">    Explore</NavLink>
+            <NavLink to="/about" icon="description">About  </NavLink>
             <NavSpacer />
 
             { appContext?.firebaseAuth &&
                 <div>
-                    <NavLink to="/profile"  icon="account_circle">Profile </NavLink>
-                    <NavLink to="/settings" icon="settings">      Settings</NavLink>
+                    <NavLink to="/notifications" icon="notifications">Notifications</NavLink>
+                    <NavLink to="/profile"  icon="account_circle">    Profile      </NavLink>
+                    <NavLink to="/settings" icon="settings">          Settings     </NavLink>
                     <NavSpacer />
                 </div>
             }
