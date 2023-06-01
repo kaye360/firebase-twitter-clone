@@ -1,9 +1,9 @@
 
 import { Dispatch, useEffect, useState } from "react"
-import { PostComment } from "../../services/CommentService"
-import { User, Users, getUsers } from "../../services/UserServices"
+import { getUsers } from "../../services/UserServices"
 import CommentCard from "./CommentCard"
 import { useLocation } from "react-router-dom"
+import { PostComment, User, Users } from "../../utils/types"
 
 interface CommentListProps {
     comments : PostComment[]

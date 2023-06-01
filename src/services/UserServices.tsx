@@ -1,21 +1,11 @@
 import { UserCredential, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../../firebase-config"
 import { doc, getDoc, updateDoc, collection, getDocs } from "firebase/firestore"
-import { ResponseSuccess } from "../utils/types"
+import { ResponseSuccess, User, Users } from "../utils/types"
 
 
-export interface User {
-	handle		 : string,
-	avatar	     : string,
-	notifcations : object[],
-	bio			 : string,
-	location	 : string
-}
 
 
-export interface Users {
-	[key : string] : User
-}
 
 
 export const userCollectionRef = collection(db, "users")

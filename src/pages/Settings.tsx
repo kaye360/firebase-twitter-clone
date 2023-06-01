@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import Icon from "../components/Icon";
 import UpdateUserBioForm from "../components/Settings/UpdateUserBioForm";
 import UpdateUserHandleForm from "../components/Settings/UpdateUserHandleForm";
-import { User, getUser } from "../services/UserServices";
+import { getUser } from "../services/UserServices";
 import { AppContext } from "../App";
 import UpdateUserLocationForm from "../components/Settings/UpdateUserLocationForm";
+import { User } from "../utils/types";
 
 
 export default function Settings() {

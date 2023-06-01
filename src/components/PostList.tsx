@@ -1,5 +1,5 @@
 import useGetPosts, { UseGetPostsProps } from "../hooks/useGetPosts"
-import { Post } from "../services/PostService"
+import { Post } from "../utils/types"
 import PostCard from "./PostCard"
 
 

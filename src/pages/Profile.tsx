@@ -6,8 +6,9 @@ import PostList from '../components/PostList'
 import { PostCardLoader } from '../components/PostCard/PostCardLoader'
 import { PostListError } from './Explore'
 import Icon from '../components/Icon'
-import { User, getUser } from '../services/UserServices'
+import { getUser } from '../services/UserServices'
 import { AppContext } from '../App'
+import { User } from '../utils/types'
 
 export default function Profile() {
 

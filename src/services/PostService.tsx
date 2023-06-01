@@ -1,22 +1,9 @@
 import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc, increment } from "firebase/firestore"
 import { auth, db } from "../../firebase-config"
-import { ResponseSuccess } from "../utils/types"
-import { User } from "./UserServices"
-import { PostComment } from "./CommentService"
+import { Post, ResponseSuccess } from "../utils/types"
 
 
-export interface Post {
-    // postData  : any
-    body      : string,
-    date      : Timestamp,
-    userId    : string,
-    id        : string | undefined,
-    user?     : User,
-    likes     : string[],
-    comments  : PostComment[],
-    reposts   : number,
-    repostId? : string
-}
+
 
 
 export const postCollectionRef = collection(db, "posts")

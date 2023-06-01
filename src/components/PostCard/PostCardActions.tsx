@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import Button from "../Button";
 import Icon from "../Icon";
-import { Post, toggleLikePost } from "../../services/PostService";
+import { toggleLikePost } from "../../services/PostService";
 import { useContext } from "react";
 import { AppContext } from "../../App";
 import CreatePost from "../../modals/CreatePost";
+import { Post } from "../../utils/types";
 
 interface PostCardActionsProps {
     post : Post

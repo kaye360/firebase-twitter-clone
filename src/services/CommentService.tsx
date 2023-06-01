@@ -1,15 +1,8 @@
 import { doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase-config"
-import { ResponseSuccess } from "../utils/types"
-import { getPost, Post } from "./PostService"
+import { Post, PostComment, ResponseSuccess } from "../utils/types"
+import { getPost } from "./PostService"
 
-
-export interface PostComment {
-    postId    : string,
-    userId    : string,
-    comment   : string,
-    commentId : string
-}
 
 
 

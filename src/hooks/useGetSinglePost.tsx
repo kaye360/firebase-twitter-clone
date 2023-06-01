@@ -1,9 +1,9 @@
 
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { Post } from '../services/PostService'
 import { db } from '../../firebase-config'
-import { Users, getUsers } from '../services/UserServices'
+import { getUsers } from '../services/UserServices'
+import { Post, Users } from '../utils/types'
 
 interface UseGetSinglePost {
     post     : Post | null,

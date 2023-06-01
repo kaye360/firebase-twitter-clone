@@ -1,8 +1,9 @@
 
 import { query, orderBy, onSnapshot, DocumentData, Query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { Post, postCollectionRef } from '../services/PostService'
+import { postCollectionRef } from '../services/PostService'
 import { getUsers } from '../services/UserServices'
+import { Post } from '../utils/types'
 
 /**
  * If userId is passed in as a prop, only posts from that user will be fetched

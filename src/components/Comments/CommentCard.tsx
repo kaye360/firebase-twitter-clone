@@ -1,5 +1,4 @@
-import { PostComment } from "../../services/CommentService"
-import { User } from "../../services/UserServices"
+import { PostComment, User } from "../../utils/types"
 import Avatar from "../Avatar"
 
 interface CommentCardProps {

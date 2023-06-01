@@ -1,11 +1,11 @@
 import { SyntheticEvent, useState, useContext, useEffect } from "react"
-import { Post, createPost, createRepost, getPost } from "../services/PostService"
+import { createPost, createRepost, getPost } from "../services/PostService"
 import { redirectTime } from "../utils/appConfig"
 import { AppContext } from "../App"
 import Icon from "../components/Icon"
 import { useNavigate } from "react-router-dom"
 import Avatar from "../components/Avatar"
-import { ResponseSuccess } from "../utils/types"
+import { Post, ResponseSuccess } from "../utils/types"
 
 
 interface CreatePostProps {

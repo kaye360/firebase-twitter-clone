@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Post, getPost } from "../../services/PostService"
+import { getPost } from "../../services/PostService"
 import { PostCardProps } from "../PostCard"
 import Repost from "./Repost"
 import PostCardHeader from "./PostCardHeader"
 import PostCardActions from "./PostCardActions"
+import { Post } from "../../utils/types"
 
 
 

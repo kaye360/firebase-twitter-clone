@@ -4,7 +4,7 @@ import PostCard from "../components/PostCard"
 import Icon from "../components/Icon"
 import CommentForm from "../components/Comments/CommentForm"
 import CommentList from "../components/Comments/CommentList"
-import { PostComment } from "../services/CommentService"
+import { PostComment } from "../utils/types"
 
 export default function SinglePost() {
 

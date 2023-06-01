@@ -1,6 +1,7 @@
 import { SyntheticEvent, useEffect, useState } from "react"
-import { Post, deletePost, getPost, updatePostBody } from "../services/PostService"
+import { deletePost, getPost, updatePostBody } from "../services/PostService"
 import { redirectTime } from "../utils/appConfig"
+import { Post } from "../utils/types"
 
 
 interface EditPostProps {

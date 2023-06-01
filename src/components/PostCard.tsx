@@ -1,8 +1,8 @@
 import { Suspense, lazy } from "react";
-import { Post } from "../services/PostService";
 import { ErrorBoundary } from "react-error-boundary";
 import { PostCardLoader } from "./PostCard/PostCardLoader";
 import { SinglePostError } from "./PostCard/SinglePostError";
+import { Post } from "../utils/types";
 
 
 const PostCardElement = lazy(() => import("./PostCard/PostCardElement"))
