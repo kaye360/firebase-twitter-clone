@@ -9,13 +9,23 @@ import Button from "./Button"
 
 export default function NavLinks() {
 
+    const appContext = useContext(AppContext)
+
     return (
         <NavWrapper>
-            <NavLink to="/explore"         icon="explore">       Explore      </NavLink>
-            <NavLink to="/notifications"   icon="notifications"> Notifications</NavLink>
-            <NavLink to="/profile"         icon="account_circle">Profile      </NavLink>
-            <NavLink to="/about"           icon="description">   About        </NavLink>
-            <NavLink to="/settings"        icon="settings">      Settings     </NavLink>
+            <NavLink to="/explore"       icon="explore">      Explore      </NavLink>
+            <NavLink to="/notifications" icon="notifications">Notifications</NavLink>
+            <NavLink to="/about"         icon="description">  About        </NavLink>
+            <NavSpacer />
+
+            { appContext?.firebaseAuth &&
+                <div>
+                    <NavLink to="/profile"  icon="account_circle">Profile </NavLink>
+                    <NavLink to="/settings" icon="settings">      Settings</NavLink>
+                    <NavSpacer />
+                </div>
+            }
+
             <CreatePostBtn />
         </NavWrapper>
     )
@@ -24,7 +34,7 @@ export default function NavLinks() {
 
 
 
-function NavWrapper({children} : {children : JSX.Element[]}) {
+function NavWrapper({children} : {children : any}) {
     return (
         <ul className="flex flex-col gap-0 mt-4 text-md text-sky-600">{children}</ul>
     )
@@ -73,5 +83,13 @@ function CreatePostBtn() {
                 </span>
             </Button>
         </li>
+    )
+}
+
+
+
+function NavSpacer() {
+    return (
+        <div className="h-[1px] my-2 bg-sky-100"></div>
     )
 }

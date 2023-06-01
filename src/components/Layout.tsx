@@ -62,10 +62,13 @@ export default function Layout({children }: LayoutProps) {
 
 function Logo() : JSX.Element {
     return (
-        <div className="flex items-center gap-4 font-bold text-2xl pl-4">
-            <img src={Lightbulb} className="w-[35px]" />
-            <span className="text-sky-500 duppercase font-bold">idealy</span>
-        </div>
+        <>
+            <div className="flex items-center gap-4 font-bold text-2xl pl-4">
+                <img src={Lightbulb} className="w-[35px]" />
+                <span className="text-sky-500 font-bold">idealy</span>
+            </div>
+            <div className="pl-4 text-sky-600">Exchange Ideas.</div>
+        </>
     )
 }
 

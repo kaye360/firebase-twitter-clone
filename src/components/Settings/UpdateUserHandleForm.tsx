@@ -1,9 +1,5 @@
-import Icon from "../Icon"
 import useUpdateUserHandle from "../../hooks/useUpdateUserHandle"
-import ValidationIcon from "../Validation/ValidationIcon"
-import ValidationError from "../Validation/ValidationError"
-import Button from "../Button"
-import Validator from "../../utils/Validator"
+import Icon from "../Icon"
 
 
 
@@ -14,14 +10,7 @@ export default function UpdateUserHandleForm() {
     return (
         <form onSubmit={ userHandle.handleUpdate }>
 
-            <div className="relative grid grid-cols-[1ch_1fr_10px] items-center gap-4">
-
-                <div className="absolute right-[30px] top-[-2rem]">
-                        <span className={Validator.isTooLong(userHandle.userHandle, 15) ? 'text-red-400' : ''}>
-                            {userHandle.userHandle.length} / 15
-                        </span>
-                </div>
-
+            <div className="grid grid-cols-[1ch_1fr_10px] items-center gap-4">
                 <label htmlFor="user-handle" className="text-xl">@</label>
                 <input
                     type="text"
@@ -30,27 +19,34 @@ export default function UpdateUserHandleForm() {
                     className="border-sky-200"
                     id="user-handle"
                 />
-
-                <ValidationIcon isValid={userHandle.isValidated} />
+                <div>
+                    { userHandle.isValidated ? (
+                        <Icon icon="check_circle" className="text-emerald-400" />
+                    ) : (
+                        <Icon icon="error_outline" className="text-rose-400" />
+                    )}
+                </div>
             </div>
 
-            <ValidationError message={userHandle.errorMessage} />
 
-            <div className="flex items-center gap-4">
-                <Button
+            <div className={` ${userHandle.errorMessage ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500 py-2`}>
+                <div className="overflow-hidden">
+                    { userHandle.errorMessage }
+                </div>
+            </div>
+
+            <div className="flex items-center gap-4 mt-4">
+                <button
                     type="submit"
                     disabled={ !userHandle.isValidated }
-                    className="bg-sky-100 hover:bg-fuchsia-100"
+                    className={`inline-flex items-center gap-2 bg-sky-100 hover:bg-fuchsia-100 px-4 py-2 rounded-lg ${ userHandle.isValidated ? '' : 'opacity-40 cursor-not-allowed'}`}
                 >
                     <Icon icon="save" /> Save
-                </Button>
+                </button>
 
-                <Button 
-                    onClick={ userHandle.handleReset } 
-                    className="border border-sky-200 hover:border-fuchsia-400 font-medium"
-                >
+                <button onClick={ userHandle.handleReset } className="bg-sky-50 hover:bg-fuchsia-50 bg-opacity-50 px-4 py-2 rounded-lg">
                     Reset
-                </Button>
+                </button>
 
                 <div>
                     { userHandle.successMessage }
