@@ -1,10 +1,10 @@
 import Icon from "../Icon"
-import { User } from "../../services/UserServices"
 import Validator from "../../utils/Validator"
 import ValidationIcon from "../Validation/ValidationIcon"
 import ValidationError from "../Validation/ValidationError"
 import Button from "../Button"
 import useUpdateUserLocation from "../../hooks/useUpdateUserLocation"
+import { User } from "../../utils/types"
 
 
 interface UpdateUserLocationFormProps {
