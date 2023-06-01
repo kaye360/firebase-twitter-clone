@@ -9,6 +9,8 @@ import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "../../firebase-config"
 import NavLinks from "./NavLinks"
 import Lightbulb from "../assets/logo.svg"
+import { Link } from "react-router-dom"
+import Button from "./Button"
 
 interface LayoutProps {
     children: ReactElement
@@ -76,18 +78,22 @@ function UserAvatar() : JSX.Element {
     const appContext = useContext(AppContext)
 
     return(
-        <div className="flex items-center justify-between flex-wrap gap-4 mt-auto">
-            <div>
-                @{appContext?.userHandle}
-            </div>
+        <div className="flex items-center flex-wrap gap-2 mt-auto">
 
             { appContext?.firebaseAuth?.photoURL &&
                 <Avatar src={appContext?.firebaseAuth?.photoURL} />
             }
 
-            <button onClick={signOutOfGoogle} className="block w-full border border-sky-200 rounded-lg hover:border-sky-400">
+            <div className="font-bold text-sky-600">
+                <Link to="/profile" className="hover:underline hover:text-rose-500">
+                    @{appContext?.userHandle}
+                </Link>
+            </div>
+
+            <Button onClick={signOutOfGoogle} className="block w-full px-2 py-[4px] border border-sky-200 bg-sky-100 rounded-lg hover:border-sky-400 text-sky-700 justify-center">
                 Sign out
-            </button>
+            </Button>
+
         </div>
     )
 }

@@ -33,32 +33,32 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     
 
     return (
-        <div className="flex flex-col gap-4 w-full border-2 border-sky-100 p-6 rounded-xl shadow-lg shadow-sky-50">
+        <div className="p-[2px] rounded-xl bg-gradient-to-br from-sky-200 via-rose-200 to-sky-200 shadow-lg shadow-sky-50">
+            <div className="flex flex-col gap-4 p-4 rounded-xl bg-white">
+                <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 
-            <PostCardHeader post={post as Post} isLoaded={isLoaded} />
+                <div className="mt-2">
+                    {post?.body}
+                </div>
 
-            <div className="mt-2">
-                {post?.body}
+                { repost && 
+                    <Repost 
+                        post={post as Post} 
+                        repost={repost} 
+                    />
+                }
+
+                {isShowingViewPostBtn &&
+                    <Link 
+                        to={`/post/${post?.id}`} 
+                        className="block bg-sky-100 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
+                    >
+                        View Post
+                    </Link>
+                }
+
+                <PostCardActions post={post as Post} />
             </div>
-
-            { repost && 
-                <Repost 
-                    post={post as Post} 
-                    repost={repost} 
-                />
-            }
-
-            {isShowingViewPostBtn &&
-                <Link 
-                    to={`/post/${post?.id}`} 
-                    className="block bg-sky-100 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
-                >
-                    View Post
-                </Link>
-            }
-
-            <PostCardActions post={post as Post} />
-
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { AppContext } from "../App"
 import CreatePost from "../modals/CreatePost"
 import Icon from "./Icon"
+import Button from "./Button"
 
 
 
@@ -25,7 +26,7 @@ export default function NavLinks() {
 
 function NavWrapper({children} : {children : JSX.Element[]}) {
     return (
-        <ul className="flex flex-col gap-0 mt-4 text-md text-sky-800">{children}</ul>
+        <ul className="flex flex-col gap-0 mt-4 text-md text-sky-600">{children}</ul>
     )
 }
 
@@ -43,7 +44,7 @@ interface NavLinkProps {
 function NavLink({to, icon, className = '', children} :  NavLinkProps) {
     return (
         <li>
-            <Link to={to} className={`nav-link flex items-center w-full px-4 py-4 gap-4 font-bold hover:text-rose-400 rounded-xl border border-transparent hover:border-rose-200 transition-all duration-100 ${className}`}>
+            <Link to={to} className={`nav-link flex items-center w-full px-4 py-3 gap-4 font-bold hover:text-rose-400 rounded-xl border border-transparent hover:border-rose-200 transition-all duration-100 ${className}`}>
                 <Icon icon={icon}  className="nav-icon"/>
                 {children}
             </Link>
@@ -60,15 +61,17 @@ function CreatePostBtn() {
 
     return (
         <li>
-            <button 
-                className="flex items-center gap-2 justify-center mt-2 bg-sky-400 text-white font-bold w-full p-2 rounded-xl hover:bg-rose-500 transition-all duration-100"
+            <Button 
+                className="relative mt-2 h-12 bg-gradient-to-br from-sky-200 via-rose-200 to-sky-200  text-sky-600 font-bold w-full rounded-lg hover:bg-rose-500 transition-all duration-100"
                 onClick={ () => {
                     appContext?.setModal(<CreatePost closeModal={appContext.closeModal} />)
                 }}
             >
-                <Icon icon="add" />
-                Add Post
-            </button>
+                <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-gradient-to-br from-sky-50 to-rose-50 via-sky-50 hover:from-rose-100 hover:to-rose-100 hover:via-sky-100 transition-all">
+                    Add Post
+                    <Icon icon="add_comment" className="rotate-y-180" />
+                </span>
+            </Button>
         </li>
     )
 }

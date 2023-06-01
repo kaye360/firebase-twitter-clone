@@ -6,7 +6,9 @@ import PostCard from "./PostCard"
 
 export default function PostList({userId} : UseGetPostsProps) {
 
+
     const posts: Post[] | null = useGetPosts({userId})
+
     
     return (
         <>

@@ -29,7 +29,7 @@
         font-size: 1.5rem;
         font-weight: 600;
         border-bottom: 2px solid var(--sky-100);
-        color : var(--sky-600);
+        color : var(--sky-500);
     }
 
     h2 {
@@ -50,6 +50,10 @@
 
 
     @layer components {
+
+        .rotate-y-180 {
+            rotate: y 180deg;
+        }
 
         .nav-link:hover .nav-icon, 
         .nav-link:focus-visible .nav-icon {

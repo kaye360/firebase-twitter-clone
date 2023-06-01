@@ -14,14 +14,14 @@ export default function Profile() {
     const { id }          = useParams()
     const [user, setUser] = useState<User | null>(null)
     const appContext      = useContext(AppContext)
-    const userId          = id ? id : appContext?.firebaseAuth?.uid
+    let userId            = id ? id : appContext?.firebaseAuth?.uid
 
     useEffect( () => {
         ( async function loadUserData () {
             const userData = await getUser(userId) as User
             setUser(userData)
         })()
-    }, [])
+    }, [id])
 
     
 
@@ -43,13 +43,13 @@ export default function Profile() {
 
             <div className='flex flex-col gap-4 bg-gradient-to-r from-sky-100 via-sky-50 to-fuchsia-50 text-sky-800 p-8 rounded-xl'>
                 <div>
-                    { user?.bio }
+                    <span className='font-bold'>Bio: </span>{ user?.bio || 'Not Available' }
                 </div>
 
                 <div className='h-[1px] bg-sky-200'></div>
 
                 <div className='flex items-center gap-2'>
-                    <Icon icon="place" /> {user?.location}
+                    <Icon icon="place" /> {user?.location || 'Not Available'}
                 </div>
             </div>
 

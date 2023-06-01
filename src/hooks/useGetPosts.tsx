@@ -39,7 +39,7 @@ export default function useGetPosts( { userId } : UseGetPostsProps ) : Post[] | 
                 }))
             )
         })()
-    }, [])
+    }, [userId])
 
     return posts
 }

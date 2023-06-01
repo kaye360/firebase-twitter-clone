@@ -18,7 +18,7 @@ export default function Explore() {
 	)
 
 	return (
-		<div className="flex flex-col gap-8 rounded-xl p-4">
+		<div className="flex flex-col gap-8 rounded-xl">
 
 			<h1><Icon icon="explore" /> Explore</h1>
 
