@@ -9,12 +9,11 @@ import { Post, ResponseSuccess } from "../utils/types"
 
 
 interface CreatePostProps {
-    closeModal    : Function,
     repostId?     : string | null
     targetUserId? : string
 }
 
-export default function CreatePost({closeModal, targetUserId, repostId = null} : CreatePostProps) {
+export default function CreatePost({targetUserId, repostId = null} : CreatePostProps) {
 
 
     const appContext = useContext(AppContext)
@@ -68,7 +67,7 @@ export default function CreatePost({closeModal, targetUserId, repostId = null} :
         
         if( res.success && res.content) {
             setTimeout( () => {
-                closeModal()
+                appContext?.closeModal()
                 navigate('/post/' + res.content)
             }, redirectTime)
         }

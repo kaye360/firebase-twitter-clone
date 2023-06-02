@@ -1,16 +1,17 @@
-import { SyntheticEvent, useEffect, useState } from "react"
+import { SyntheticEvent, useContext, useEffect, useState } from "react"
 import { deletePost, getPost, updatePostBody } from "../services/PostService"
 import { redirectTime } from "../utils/appConfig"
 import { Post } from "../utils/types"
+import { AppContext } from "../App"
 
 
 interface EditPostProps {
     postId     : string | undefined,
-    closeModal : Function
 }
 
-export default function EditPost({postId, closeModal} : EditPostProps) {
+export default function EditPost({postId} : EditPostProps) {
 
+    const appContext                                  = useContext(AppContext)
     const [_, setPost]                                = useState<Post | null>(null)
     const [body, setBody]                             = useState<string>('')
     const [message, setMessage]                       = useState<string>('')
@@ -35,7 +36,7 @@ export default function EditPost({postId, closeModal} : EditPostProps) {
         setMessage(res.message)
         
         if( res.success) {
-            setTimeout( closeModal, redirectTime)
+            setTimeout( () => appContext?.closeModal(), redirectTime)
         }
     }
 
@@ -57,7 +58,7 @@ export default function EditPost({postId, closeModal} : EditPostProps) {
         setMessage(res.message)
 
         if(res.success) {
-            setTimeout( closeModal, redirectTime)
+            setTimeout( () => appContext?.closeModal(), redirectTime)
         }
     }
 

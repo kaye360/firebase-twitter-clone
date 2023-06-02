@@ -78,7 +78,7 @@ function CreatePostBtn() {
             <Button 
                 className="relative mt-2 h-12 bg-gradient-to-br from-sky-200 via-rose-200 to-sky-200  text-sky-600 font-bold w-full rounded-lg hover:bg-rose-500 transition-all duration-100"
                 onClick={ () => {
-                    appContext?.setModal(<CreatePost closeModal={appContext.closeModal} />)
+                    appContext?.setModal(<CreatePost />)
                 }}
             >
                 <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-sky-50 hover:bg-sky-200 transition-all">

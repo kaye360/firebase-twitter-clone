@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AppContext } from "../../App";
 import CreatePost from "../../modals/CreatePost";
 import { Post } from "../../utils/types";
+import ViewPostLikes from "../../modals/ViewPostLikes";
 
 interface PostCardActionsProps {
     post : Post
@@ -39,15 +40,19 @@ export default function PostCardActions({post} : PostCardActionsProps) {
 
     function handleRepost() {
 
-        if( typeof post?.id !== 'string' ) return
+        // if( typeof post?.id !== 'string' ) return
             
         appContext?.setModal(
             <CreatePost 
                 repostId={post?.id} 
                 targetUserId={post.userId}
-                closeModal={appContext.closeModal} 
             />
         )
+    }
+
+
+    function handleViewLikes() {
+        appContext?.setModal(<ViewPostLikes likes={post.likes} />)
     }
 
 
@@ -55,12 +60,15 @@ export default function PostCardActions({post} : PostCardActionsProps) {
     return (
         <div className="flex items-center gap-2 w-1/2 text-sky-400 text-base">
 
-            <Button onClick={toggleLike}>
-                <Icon icon="favorite" className={isLikedByCurrentUser ? 'text-rose-400' : ''} />
-                <span>
+            <div className="flex items-center gap-0">
+                <Button onClick={toggleLike} className="px-[3px]">
+                    <Icon icon="favorite" className={` ${isLikedByCurrentUser ? 'text-rose-400' : ''} hover:text-fuchsia-400 `} />
+                </Button>
+
+                <Button onClick={handleViewLikes} className="px-[3px] hover:underline">
                     {totalLikes}
-                </span>
-            </Button>
+                </Button>
+            </div>
 
             <Button>
                 <Link to={`/post/${post?.id}#comments`} className="translate-y-[3px]">

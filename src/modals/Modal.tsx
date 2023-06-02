@@ -14,7 +14,7 @@ export default function Modal({content} : ModalProps) : JSX.Element {
 
     function handleModalBgClick(e : SyntheticEvent ) {
         if( e.target instanceof HTMLDivElement && e.target.id === 'modal' ) {
-            appContext?.closeModal(e)
+            appContext?.closeModal()
         }
     }
 
