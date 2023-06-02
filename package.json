@@ -12,6 +12,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.14",
     "firebase": "^9.22.0",
+    "framer-motion": "^10.12.16",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "postcss": "^8.4.23",

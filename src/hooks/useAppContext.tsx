@@ -1,5 +1,5 @@
 import { User as FirebaseUser } from "firebase/auth"
-import { Dispatch, MouseEventHandler, useEffect, useState } from "react"
+import { Dispatch, useEffect, useState } from "react"
 import { auth, db } from "../../firebase-config"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { getUser } from "../services/UserServices"
@@ -13,7 +13,7 @@ export interface UseAppContext {
     notificationCount : number
     modal             : JSX.Element | null,
     setModal          : Function,
-    closeModal        : MouseEventHandler<HTMLButtonElement>,
+    closeModal        : Function,
     signOutUser       : Function,
 }
 
