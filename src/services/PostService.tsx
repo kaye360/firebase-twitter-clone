@@ -1,6 +1,6 @@
 import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc, increment } from "firebase/firestore"
 import { auth, db } from "../../firebase-config"
-import { Post, ResponseSuccess, UserNotification } from "../utils/types"
+import { Post, ResponseSuccess } from "../utils/types"
 import { sendNotification } from "./NotificationService"
 
 
@@ -79,7 +79,14 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
 }
 
 
-export async function createRepost(body: string, repostId: string) : Promise<ResponseSuccess> {
+interface CreateRepostProps {
+    body         : string,
+    repostId     : string,
+    targetUserId : string,
+    userHandle   : string
+}
+
+export async function createRepost({body, repostId, targetUserId, userHandle} : CreateRepostProps) : Promise<ResponseSuccess> {
     try {
         if( typeof body !== 'string' || typeof repostId !== 'string' ) {
             throw 'Invalid post body or repostId'
@@ -101,6 +108,15 @@ export async function createRepost(body: string, repostId: string) : Promise<Res
 
         const repostRef = doc(db, "posts", repostId)
         await updateDoc( repostRef, { reposts: increment(1) })
+
+        await sendNotification({
+            userId       : targetUserId,
+            notification : {
+                message : `${userHandle} reposted your post: "${body}`,
+                type    :  'comment',
+                link    : `/post/${post.id}`
+            }
+        })
 
         return { 
             success : true, 
@@ -176,7 +192,6 @@ export async function toggleLikePost({ postId, userId, userHandle } : ToggleLike
     try {
         const post              = await(getPost(postId)) as Post
         const postIsLikedByUser = post?.likes?.includes(userId)
-        console.log(post)
         
         const updatedLikes: string[] = postIsLikedByUser
             ? post.likes.filter( likedId => likedId != userId )
@@ -197,7 +212,6 @@ export async function toggleLikePost({ postId, userId, userHandle } : ToggleLike
         return { success: true, message: '' } as ResponseSuccess
         
     } catch (error) {
-        console.log(error)
         return { success: false, message: '' } as ResponseSuccess
     }
     

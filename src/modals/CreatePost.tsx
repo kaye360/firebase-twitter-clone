@@ -9,11 +9,12 @@ import { Post, ResponseSuccess } from "../utils/types"
 
 
 interface CreatePostProps {
-    closeModal : Function,
-    repostId?  : string | null
+    closeModal    : Function,
+    repostId?     : string | null
+    targetUserId? : string
 }
 
-export default function CreatePost({closeModal, repostId = null} : CreatePostProps) {
+export default function CreatePost({closeModal, targetUserId, repostId = null} : CreatePostProps) {
 
 
     const appContext = useContext(AppContext)
@@ -49,9 +50,19 @@ export default function CreatePost({closeModal, repostId = null} : CreatePostPro
             return
         }
         
-        let res: ResponseSuccess = repost && repostId
-            ? await createRepost(body, repostId)
-            : await createPost(body)
+        let res: ResponseSuccess
+        
+        if( repost && repostId ) {
+            res = await createRepost({
+                body,
+                repostId,
+                targetUserId : targetUserId as string,
+                userHandle   : appContext?.userHandle as string,
+            })
+
+        } else {
+            res = await createPost(body)
+        }
 
         setMessage(res.message)
         

@@ -77,6 +77,11 @@ function UserAvatar() : JSX.Element {
 
     const appContext = useContext(AppContext)
 
+    function signOut() : void {
+        signOutOfGoogle()
+        appContext?.signOutUser()
+    }
+
     return(
         <div className="flex items-center flex-wrap gap-2 mt-auto">
 
@@ -90,7 +95,7 @@ function UserAvatar() : JSX.Element {
                 </Link>
             </div>
 
-            <Button onClick={signOutOfGoogle} className="block w-full px-2 py-[4px] border border-sky-200 bg-sky-100 rounded-lg hover:border-sky-400 text-sky-700 justify-center">
+            <Button onClick={signOut} className="block w-full px-2 py-[4px] border border-sky-200 bg-sky-100 rounded-lg hover:border-sky-400 text-sky-700 justify-center">
                 Sign out
             </Button>
 

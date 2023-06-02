@@ -4,8 +4,8 @@ import { Timestamp } from "firebase/firestore"
 export interface User {
 	handle		     : string,
 	avatar	         : string,
-	notifcations_new : Notification[],
-	notifcations_old : Notification[],
+	notificationsNew : UserNotification[],
+	notificationsOld : UserNotification[],
 	bio			 	 : string,
 	location	 	 : string,
 }

@@ -19,7 +19,11 @@ export default function NavLinks() {
 
             { appContext?.firebaseAuth &&
                 <div>
-                    <NavLink to="/notifications" icon="notifications">Notifications</NavLink>
+                    <NavLink to="/notifications" icon="notifications">
+                        Notifications
+                        <NotifcationBubble />
+                    </NavLink>
+
                     <NavLink to="/profile"  icon="account_circle">    Profile      </NavLink>
                     <NavLink to="/settings" icon="settings">          Settings     </NavLink>
                     <NavSpacer />
@@ -48,7 +52,7 @@ interface NavLinkProps {
     to         : string,
     icon       : string,
     className? : string,
-    children   : string
+    children   : any
 }
 
 function NavLink({to, icon, className = '', children} :  NavLinkProps) {
@@ -77,7 +81,7 @@ function CreatePostBtn() {
                     appContext?.setModal(<CreatePost closeModal={appContext.closeModal} />)
                 }}
             >
-                <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-gradient-to-br from-sky-50 to-rose-50 via-sky-50 hover:from-rose-100 hover:to-rose-100 hover:via-sky-100 transition-all">
+                <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-sky-50 hover:bg-sky-200 transition-all">
                     Add Post
                     <Icon icon="add_comment" className="rotate-y-180" />
                 </span>
@@ -92,4 +96,21 @@ function NavSpacer() {
     return (
         <div className="h-[1px] my-2 bg-sky-100"></div>
     )
+}
+
+
+
+function NotifcationBubble() {
+
+    const appContext = useContext(AppContext)
+
+    if( appContext?.notificationCount && appContext?.notificationCount > 0) {
+        return (
+            <div className="grid place-items-center rounded-full px-2 py-[3px] bg-rose-400 text-white text-sm font-black leading-none">
+                {appContext?.notificationCount}
+            </div>
+        )
+    }
+
+    return <></>
 }

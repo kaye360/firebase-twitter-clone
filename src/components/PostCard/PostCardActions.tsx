@@ -42,7 +42,11 @@ export default function PostCardActions({post} : PostCardActionsProps) {
         if( typeof post?.id !== 'string' ) return
             
         appContext?.setModal(
-            <CreatePost repostId={post?.id} closeModal={appContext.closeModal} />
+            <CreatePost 
+                repostId={post?.id} 
+                targetUserId={post.userId}
+                closeModal={appContext.closeModal} 
+            />
         )
     }
 

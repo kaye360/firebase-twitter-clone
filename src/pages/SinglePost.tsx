@@ -35,7 +35,7 @@ export default function SinglePost() {
 
             <CommentList comments={ post?.comments as PostComment[] } />
 
-            <CommentForm postId={postId as string} />       
+            <CommentForm postId={postId as string} targetUserId={post?.userId as string} />       
 
         </div>
     )

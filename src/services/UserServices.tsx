@@ -28,8 +28,8 @@ export async function signInWithGoogle() : Promise<User | null>  {
 				avatar			 : signIn.user.photoURL as string, 
 				bio 			 : 'Hi! I\'m new to this app.',
 				location 		 : 'Earth',
-				notifcations_new : [],
-				notifcations_old : [],
+				notificationsNew : [],
+				notificationsOld : [],
 			}
             await setDoc(userRef, user)
         }

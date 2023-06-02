@@ -5,9 +5,10 @@ import Button from "../Button"
 
 interface CommentFormProps {
     postId : string,
+    targetUserId : string,
 }
 
-export default function CommentForm({ postId } : CommentFormProps) {
+export default function CommentForm({ postId, targetUserId } : CommentFormProps) {
 
     const appContext  = useContext(AppContext)
 
@@ -50,9 +51,10 @@ export default function CommentForm({ postId } : CommentFormProps) {
            
         const res = await createComment({
             postId,
-            userId     : appContext?.firebaseAuth?.uid as string,
-            userHandle : appContext?.userHandle as string,
-            comment    : commentBody
+            targetUserId, 
+            userId       : appContext?.firebaseAuth?.uid as string,
+            userHandle   : appContext?.userHandle as string,
+            comment      : commentBody,
         })
         
         setSubmitMessage(res.message)
