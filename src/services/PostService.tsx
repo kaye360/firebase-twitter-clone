@@ -113,7 +113,7 @@ export async function createRepost({body, repostId, targetUserId, userHandle} : 
             userId       : targetUserId,
             notification : {
                 message : `${userHandle} reposted your post: "${body}`,
-                type    :  'comment',
+                type    :  'repost',
                 link    : `/post/${post.id}`
             }
         })
