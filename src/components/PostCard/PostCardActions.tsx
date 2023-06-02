@@ -30,8 +30,9 @@ export default function PostCardActions({post} : PostCardActionsProps) {
 
     async function toggleLike() {
         toggleLikePost({
-            postId : post?.id as string,
-            userId : appContext?.firebaseAuth?.uid as string
+            postId     : post?.id as string,
+            userId     : appContext?.firebaseAuth?.uid as string,
+            userHandle : appContext?.userHandle as string
         })
     }
 

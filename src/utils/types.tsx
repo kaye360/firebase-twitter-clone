@@ -37,7 +37,7 @@ export interface PostComment {
 }
 
 
-export interface Notification {
+export interface UserNotification {
     type    : 'comment' | 'like' | 'repost',
     message : string,
     link    : string,

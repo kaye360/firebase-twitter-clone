@@ -1,6 +1,7 @@
 import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc, increment } from "firebase/firestore"
 import { auth, db } from "../../firebase-config"
-import { Post, ResponseSuccess } from "../utils/types"
+import { Post, ResponseSuccess, UserNotification } from "../utils/types"
+import { sendNotification } from "./NotificationService"
 
 
 
@@ -30,6 +31,7 @@ export async function getPost(id: string | undefined) : Promise<Post | null> {
             const user     = await getDoc( userRef )
             const userData = user.data()
             postData.user  = userData
+            postData.id    = post.id
             return postData as Post
         } 
 
@@ -165,21 +167,33 @@ export async function updatePostBody(id : string, body : string) : Promise<Respo
 
 
 interface ToggleLikePostProps {
-    postId : string,
-    userId : string
+    postId     : string,
+    userId     : string,
+    userHandle : string,
 }
 
-export async function toggleLikePost({ postId, userId } : ToggleLikePostProps) : Promise<ResponseSuccess> {
+export async function toggleLikePost({ postId, userId, userHandle } : ToggleLikePostProps) : Promise<ResponseSuccess> {
     try {
-        const post = await(getPost(postId)) as Post
+        const post              = await(getPost(postId)) as Post
+        const postIsLikedByUser = post?.likes?.includes(userId)
+        console.log(post)
         
-        const updatedLikes: string[] = post?.likes?.includes(userId)
+        const updatedLikes: string[] = postIsLikedByUser
             ? post.likes.filter( likedId => likedId != userId )
             : [...post.likes, userId]
 
         const postDocToEdit = doc(db, "posts", postId)
         await updateDoc(postDocToEdit, {likes : updatedLikes})
-
+        
+        if( !postIsLikedByUser ) sendNotification({
+            userId       : post.userId, 
+            notification : {
+                message : `${userHandle} liked your post: "${post.body}`,
+                type    :  'like',
+                link    : `/post/${post.id}`
+            }
+        })
+        
         return { success: true, message: '' } as ResponseSuccess
         
     } catch (error) {
