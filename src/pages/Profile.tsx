@@ -8,15 +8,19 @@ import { PostListError } from './Explore'
 import Icon from '../components/Icon'
 import { getUser } from '../services/UserServices'
 import { AppContext } from '../App'
-import { User } from '../utils/types'
+import { Post, User } from '../utils/types'
+import useGetPosts from '../hooks/useGetPosts'
 
 export default function Profile() {
 
+    const appContext      = useContext(AppContext)
     const { id }          = useParams()
     const [user, setUser] = useState<User | null>(null)
-    const appContext      = useContext(AppContext)
-    let userId            = id ? id : appContext?.firebaseAuth?.uid
+    
+    let userId  = id ? id : appContext?.firebaseAuth?.uid
+    const posts = useGetPosts({userId}) as Post[]
 
+    
     useEffect( () => {
         ( async function loadUserData () {
             const userData = await getUser(userId) as User
@@ -38,8 +42,8 @@ export default function Profile() {
     return (
 		<div className="flex flex-col gap-8 rounded-xl p-4">
 
-			<h1>
-                @{ user?.handle || 'deleted' }
+			<h1 className='m-0'>
+                @{ user?.handle }
             </h1>
 
             <div className='flex flex-col gap-4 bg-gradient-to-r from-sky-100 via-sky-50 to-fuchsia-50 text-sky-800 p-8 rounded-xl'>
@@ -56,7 +60,7 @@ export default function Profile() {
 
 			<ErrorBoundary fallback={<PostListError />}>
 				<Suspense fallback={loader}>
-					<PostList userId={userId} />
+					<PostList posts={posts} />
 				</Suspense>
 			</ErrorBoundary>
 			

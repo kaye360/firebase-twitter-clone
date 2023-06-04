@@ -1,12 +1,9 @@
-import useGetPosts, { UseGetPostsProps } from "../hooks/useGetPosts"
 import { Post } from "../utils/types"
 import PostCard from "./PostCard"
 
 
 
-export default function PostList({userId} : UseGetPostsProps) {
-
-    const posts: Post[] | null = useGetPosts({userId})
+export default function PostList({posts} : {posts: Post[]}) {
 
     return (
         <>

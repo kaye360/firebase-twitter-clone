@@ -26,6 +26,7 @@ export interface Post {
     comments  : PostComment[],
     reposts   : number,
     repostId? : string,
+    hashtags  : string[],
 }
 
 
@@ -48,4 +49,11 @@ export interface ResponseSuccess{
     success  : boolean,
     message  : string,
     content? : string,
+}
+
+
+
+export interface RecentHashtags {
+    tag   : string,
+    count : number
 }

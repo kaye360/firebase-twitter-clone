@@ -26,7 +26,7 @@
         display : flex;
         align-items: center;
         gap : 0.5rem;
-        margin-bottom : 2rem;
+        margin-bottom : 1rem;
         font-size: 1.5rem;
         font-weight: 600;
         border-bottom: 2px solid var(--sky-100);

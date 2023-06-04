@@ -2,6 +2,7 @@ import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc, incre
 import { auth, db } from "../../firebase-config"
 import { Post, ResponseSuccess } from "../utils/types"
 import { sendNotification } from "./NotificationService"
+import { extractHashtags } from "../utils/hashtags"
 
 
 
@@ -54,13 +55,24 @@ export async function createPost(body: string) : Promise<ResponseSuccess> {
             throw 'You must be logged in to post'
         }
 
+        if( body.length === 0) {
+            throw 'Please enter a post'
+        }
+
+        if( body.length > 200 ) {
+            throw 'Post must be 200 characters or less'
+        } 
+
+        const hashtags = extractHashtags({body})
+
         const post = await addDoc(postCollectionRef,  {
             body,
+            hashtags,
             date     : Timestamp.fromDate(new Date()),
             userId   : auth.currentUser?.uid,
             likes    : [],
             comments : [],
-            reposts  : 0
+            reposts  : 0,
         })
 
         return { 
@@ -88,17 +100,24 @@ interface CreateRepostProps {
 
 export async function createRepost({body, repostId, targetUserId, userHandle} : CreateRepostProps) : Promise<ResponseSuccess> {
     try {
-        if( typeof body !== 'string' || typeof repostId !== 'string' ) {
-            throw 'Invalid post body or repostId'
+        if( !body || body === '' || typeof body !== 'string' ) {
+            throw 'Invalid post body'
         }
 
         if( !auth.currentUser ) {
             throw 'You must be logged in to post'
         }
+
+        if( body.length > 200 ) {
+            throw 'Post must be 200 characters or less'
+        } 
+
+        const hashtags = extractHashtags({body})
         
         const post = await addDoc(postCollectionRef,  {
             body,
             repostId,
+            hashtags,
             date     : Timestamp.fromDate(new Date()),
             userId   : auth.currentUser?.uid,
             likes    : [],
@@ -164,8 +183,10 @@ export async function updatePostBody(id : string, body : string) : Promise<Respo
             throw 'You must be logged in to post'
         }
 
+        const hashtags = extractHashtags({body})
+
         const postDocToEdit = doc(db, "posts", id)
-        await updateDoc(postDocToEdit, {body})
+        await updateDoc(postDocToEdit, {body, hashtags})
 
 
         return {

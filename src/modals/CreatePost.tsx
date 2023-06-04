@@ -6,6 +6,8 @@ import Icon from "../components/Icon"
 import { useNavigate } from "react-router-dom"
 import Avatar from "../components/Avatar"
 import { Post, ResponseSuccess } from "../utils/types"
+import { extractHashtags } from "../utils/hashtags"
+import Button from "../components/Button"
 
 
 interface CreatePostProps {
@@ -18,7 +20,6 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
 
     const appContext = useContext(AppContext)
     const navigate   = useNavigate()
-    const lorem      = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores aliquid illum dicta excepturi labore amet, hic cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.'
 
 
     if( !appContext?.firebaseAuth ) {
@@ -30,24 +31,15 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
         )
     }
 
-
-    const [body, setBody]       = useState<string>('')
-    const [message, setMessage] = useState<string>('')
-    const [repost, setRepost]   = useState<Post | null>(null)
+    const [body, setBody]         = useState<string>('')
+    const [message, setMessage]   = useState<string>('')
+    const [repost, setRepost]     = useState<Post | null>(null)
+    const [hashtags, setHashtags] = useState<string[]>([])
+    const hasHashtags             = hashtags.length !== 0
 
 
     async function handleCreatePost(e: SyntheticEvent) {
         e.preventDefault()
-
-        if( body.length > 200 ) {
-            setMessage('Post must be 200 characters or less')
-            return 
-        } 
-
-        if( body.length === 0 && !repost ) {
-            setMessage('Please enter a post')
-            return
-        }
         
         let res: ResponseSuccess
         
@@ -81,6 +73,12 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
             setRepost(loadRepost)
         })()
     }, [])
+
+
+    useEffect( () => {
+        const newHashtags = extractHashtags({body})
+        setHashtags(newHashtags || [])
+    }, [body])
     
 
     return (
@@ -120,13 +118,32 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
                     </div>
                 }
 
-                <div className="flex items-center gap-4">
-                    <button className="bg-sky-200 hover:bg-rose-200 px-8 py-4 rounded-lg">
-                        Create
-                    </button>
+                <div 
+                    className={` ${ hasHashtags ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 py-2`}
+                >
+                    <div className="overflow-hidden flex items-center flex-wrap gap-2">
 
-                    <button onClick={(e) => { e.preventDefault(); setBody(lorem) }}>
-                        Lorem
+                        {hasHashtags &&
+                            <span className="font-bold">Hashtags:</span>
+                        }
+
+                        {hashtags.map( (tag, index) => (
+                            <span className="px-3 py-1 border rounded-lg" key={index}>
+                                {tag}
+                            </span>
+                        ))}
+
+                    </div>
+                </div>                
+
+                <div className="flex items-center gap-4">
+                    <Button className="bg-sky-200 hover:bg-rose-200">
+                        Create
+                    </Button>
+
+                    {/* For development and testing */}
+                    <button onClick={(e) => { e.preventDefault(); setBody('Lorem ipsum #dolor sit amet consectetur #adipisicing elit. Asperiores aliquid #illum dicta excepturi labore, hic #cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.') }}>
+                        Insert dummy text
                     </button>
 
                     {message}

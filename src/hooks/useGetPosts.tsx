@@ -10,16 +10,20 @@ import { Post } from '../utils/types'
  */
 
 export interface UseGetPostsProps {
-    userId? : string
+    userId? : string,
+    tag?    : string,
 }
 
-export default function useGetPosts( { userId } : UseGetPostsProps ) : Post[] | null {
+export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : Post[] | null {
 
     let q: Query<DocumentData>
 
     if( userId ) {
         q = query( postCollectionRef, where('userId', '==', userId), orderBy("date", "desc") )
-
+        
+    } else if ( tag ) {
+        q = query( postCollectionRef, where('hashtags', 'array-contains', tag), orderBy("date", "desc") )
+        
     } else {
         q = query( postCollectionRef, orderBy("date", "desc") )
     }

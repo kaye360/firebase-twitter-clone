@@ -6,6 +6,8 @@ import Repost from "./Repost"
 import PostCardHeader from "./PostCardHeader"
 import PostCardActions from "./PostCardActions"
 import { Post } from "../../utils/types"
+import { hashtagRegex } from "../../utils/hashtags"
+import reactStringReplace from "react-string-replace"
 
 
 
@@ -30,7 +32,20 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
         }
 
     })()}, [post])
+    
 
+    const bodyWithHashtags = reactStringReplace(post?.body, hashtagRegex, (match, index) => {
+
+        return (
+            <Link 
+                to={`/tag/${match.replace('#', '')}`} 
+                className="text-rose-500 hover:underline" 
+                key={index}
+            >
+                {match}
+            </Link>
+        )
+    })
     
 
     return (
@@ -39,7 +54,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
                 <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 
                 <div className="mt-2">
-                    {post?.body}
+                    {bodyWithHashtags}
                 </div>
 
                 { repost && 
