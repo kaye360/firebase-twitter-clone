@@ -16,7 +16,7 @@ export default function UpdateUserHandleForm() {
                     type="text"
                     value={ userHandle.userHandle } 
                     onChange={ userHandle.handleChange }
-                    className="border-sky-200"
+                    className="border-blue-200"
                     id="user-handle"
                 />
                 <div>
@@ -39,12 +39,12 @@ export default function UpdateUserHandleForm() {
                 <button
                     type="submit"
                     disabled={ !userHandle.isValidated }
-                    className={`inline-flex items-center gap-2 bg-sky-100 hover:bg-fuchsia-100 px-4 py-2 rounded-lg ${ userHandle.isValidated ? '' : 'opacity-40 cursor-not-allowed'}`}
+                    className={`inline-flex items-center gap-2 bg-blue-100 hover:bg-fuchsia-100 px-4 py-2 rounded-lg ${ userHandle.isValidated ? '' : 'opacity-40 cursor-not-allowed'}`}
                 >
                     <Icon icon="save" /> Save
                 </button>
 
-                <button onClick={ userHandle.handleReset } className="bg-sky-50 hover:bg-fuchsia-50 bg-opacity-50 px-4 py-2 rounded-lg">
+                <button onClick={ userHandle.handleReset } className="bg-blue-50 hover:bg-fuchsia-50 bg-opacity-50 px-4 py-2 rounded-lg">
                     Reset
                 </button>
 

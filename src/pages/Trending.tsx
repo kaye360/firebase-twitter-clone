@@ -24,7 +24,7 @@ export default function Trending() {
 			<SearchBar />
 
 			<p className="my-6">
-				Here are the topics that the community is talking about.
+				See what the community is talking about:
 			</p>
 
 			<div className="flex items-center flex-wrap gap-4 rounded-xl border border-blue-100 bg-blue-50 p-6">
@@ -35,6 +35,8 @@ export default function Trending() {
 							${tag.count === 2 ? 'text-xl'   : ''}
 							${tag.count === 3 ? 'text-2xl'  : ''}
 							${tag.count > 3   ? 'text-4xl'  : ''}
+							rounded-lg inline-block px-2
+							hover:bg-rose-200
 						`}
 						key={tag.tag}
 					>

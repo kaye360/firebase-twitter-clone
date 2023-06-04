@@ -29,7 +29,7 @@ export default function UpdateUserLocationForm({user} : UpdateUserLocationFormPr
                 <input
                     value={ userLocation.userLocation } 
                     onChange={ userLocation.handleChange }
-                    className="border-sky-200"
+                    className="border-blue-200"
                     id="user-location"
                 />
 
@@ -43,14 +43,14 @@ export default function UpdateUserLocationForm({user} : UpdateUserLocationFormPr
                 <Button
                     type="submit"
                     disabled={ !userLocation.isValidated }
-                    className="bg-sky-100 hover:bg-fuchsia-100"
+                    className="bg-blue-100 hover:bg-fuchsia-100"
                 >
                     <Icon icon="save" /> Save
                 </Button>
 
                 <Button 
                     onClick={ userLocation.handleReset } 
-                    className="border border-sky-200 hover:border-fuchsia-400 font-medium"
+                    className="border border-blue-200 hover:border-fuchsia-400 font-medium"
                 >
                     Reset
                 </Button>

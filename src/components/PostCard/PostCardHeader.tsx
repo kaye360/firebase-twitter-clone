@@ -50,7 +50,7 @@ export default function PostCardHeader({post, isLoaded} : PostCardHeaderProps) {
 
             {loggedInUserId === post?.userId &&
                 <button onClick={openEditModal}>
-                    <Icon icon="more_vert" className="text-sky-500 hover:text-orange-500" />
+                    <Icon icon="more_vert" className="text-blue-500 hover:text-orange-500" />
                 </button>
             }
 

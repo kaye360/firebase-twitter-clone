@@ -101,12 +101,12 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
                 ></textarea>
 
                 { repostId && 
-                    <div className="bg-sky-100 border border-sky-200 w-full rounded-lg p-4">
+                    <div className="bg-blue-100 border border-blue-200 w-full rounded-lg p-4">
                         <h3 className="font-bold mb-4 border-b border-slate-300">Reposting:</h3>
 
                         { repost ? (
                             <div>
-                                <h4 className="flex items-center gap-2 mb-2 font-bold text-sky-700">
+                                <h4 className="flex items-center gap-2 mb-2 font-bold text-blue-700">
                                     <Avatar src={repost.user?.avatar} className="w-8 h-8" />
                                     {repost?.user?.handle}
                                 </h4>
@@ -137,7 +137,7 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
                 </div>                
 
                 <div className="flex items-center gap-4">
-                    <Button className="bg-sky-200 hover:bg-rose-200">
+                    <Button className="bg-blue-200 hover:bg-rose-200">
                         Create
                     </Button>
 

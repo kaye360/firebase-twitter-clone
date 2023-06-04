@@ -52,7 +52,7 @@ export default function Settings() {
                 </Setting>
 
                 <Setting heading="Sign out of your account">
-                    <Button onClick={signOut} className="text-sky-700 border border-sky-700 hover:border-rose-600 hover:text-rose-700">
+                    <Button onClick={signOut} className="text-blue-700 border border-blue-700 hover:border-rose-600 hover:text-rose-700">
                         Sign out
                     </Button>
                 </Setting>

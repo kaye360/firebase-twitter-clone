@@ -29,7 +29,7 @@ export default function UpdateUserBioForm({user} : UpdateUserBioFormProps) {
                 <textarea
                     value={ userBio.userBio } 
                     onChange={ userBio.handleChange }
-                    className="border-sky-200 h-24"
+                    className="border-blue-200 h-24"
                     id="user-bio"
                 ></textarea>
 
@@ -43,14 +43,14 @@ export default function UpdateUserBioForm({user} : UpdateUserBioFormProps) {
                 <Button
                     type="submit"
                     disabled={ !userBio.isValidated }
-                    className="bg-sky-100 hover:bg-fuchsia-100"
+                    className="bg-blue-100 hover:bg-fuchsia-100"
                 >
                     <Icon icon="save" /> Save
                 </Button>
 
                 <Button 
                     onClick={ userBio.handleReset } 
-                    className="border border-sky-200 hover:border-fuchsia-400 font-medium"
+                    className="border border-blue-200 hover:border-fuchsia-400 font-medium"
                 >
                     Reset
                 </Button>

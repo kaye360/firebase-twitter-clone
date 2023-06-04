@@ -5,9 +5,11 @@ import Modal from "../modals/Modal"
 import Avatar from "./Avatar"
 import { ErrorBoundary } from "react-error-boundary"
 import NavLinks from "./NavLinks"
-import Lightbulb from "../assets/logo.svg"
 import { Link } from "react-router-dom"
 import Button from "./Button"
+import Quark from "../assets/quark.svg"
+import QuarkLogo from "./QuarkLogo"
+
 
 interface LayoutProps {
     children: ReactElement
@@ -45,7 +47,7 @@ export default function Layout({children }: LayoutProps) {
 
             </div>
 
-            <footer className="bg-sky-700 text-white mb-12 md:mb-0 py-16 text-center">
+            <footer className="bg-blue-700 text-white mb-12 md:mb-0 py-16 text-center">
                 <p>
                     Made by Josh Kaye.
                 </p>
@@ -67,10 +69,11 @@ export default function Layout({children }: LayoutProps) {
 
 function Logo() : JSX.Element {
     return (
-        <div className="bg-sky-100 py-4 md:p-0 md:bg-transparent md:static ">
+        <div className="bg-blue-100 py-4 md:p-0 md:bg-transparent md:static ">
             <div className="flex items-center gap-4 font-bold text-2xl pl-4">
-                <img src={Lightbulb} className="w-[35px]" />
-                <span className="text-sky-500 font-bold">idealy</span>
+                {/* <img src={Quark} className="w-[35px] fill-blue-400" /> */}
+                <QuarkLogo />
+                <span className="text-blue-500 font-bold">Quark</span>
             </div>
         </div>
     )
@@ -91,7 +94,7 @@ function UserAvatar() : JSX.Element {
                 <Avatar src={appContext?.firebaseAuth?.photoURL} />
             }
 
-            <div className="font-bold text-sky-600">
+            <div className="font-bold text-blue-600">
                 <Link to="/profile" className="hover:underline hover:text-rose-500">
                     @{appContext?.userHandle}
                 </Link>

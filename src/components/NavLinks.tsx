@@ -41,7 +41,7 @@ export default function NavLinks() {
 
 function NavWrapper({children} : {children : any}) {
     return (
-        <ul className="fixed z-50 -bottom-1 left-0 right-0 md:static flex justify-evenly md:flex-col gap-0 mt-4 text-md text-sky-600 bg-sky-100 md:bg-transparent">{children}</ul>
+        <ul className="fixed z-50 -bottom-1 left-0 right-0 md:static flex justify-evenly md:flex-col gap-0 mt-4 text-md text-blue-600 bg-blue-100 md:bg-transparent">{children}</ul>
     )
 }
 
@@ -59,7 +59,7 @@ interface NavLinkProps {
 function NavLink({to, icon, className = '', children} :  NavLinkProps) {
     return (
         <li>
-            <Link to={to} className={`nav-link relative flex flex-col md:flex-row items-center w-full px-1 md:px-4 py-3 md:gap-4 text-xs md:text-base font-bold hover:text-rose-400 rounded-xl border border-transparent hover:border-rose-200 transition-all duration-100 ${className}`}>
+            <Link to={to} className={`nav-link relative flex flex-col md:flex-row items-center w-full px-1 md:px-4 py-3 md:gap-4 text-xs md:text-base font-medium hover:text-rose-400 rounded-xl border border-transparent hover:border-rose-200 transition-all duration-100 ${className}`}>
                 <Icon icon={icon}  className="nav-icon"/>
                 {children}
             </Link>
@@ -77,16 +77,16 @@ function CreatePostBtn() {
     return (
         <li className="absolute right-2 bottom-20 md:static">
             <Button 
-                className="relative mt-2 w-12 h-12 md:w-full md:h-12 bg-sky-700 md:bg-gradient-to-br from-sky-200 via-rose-200 to-sky-200  text-sky-600 font-bold rounded-full md:rounded-lg hover:bg-rose-500 transition-all duration-100"
+                className="relative mt-2 w-12 h-12 md:w-full md:h-12 bg-blue-700 md:bg-gradient-to-br from-blue-200 via-rose-200 to-blue-200  text-blue-600 font-bold rounded-full md:rounded-lg hover:bg-rose-500 transition-all duration-100"
                 onClick={ () => {
                     appContext?.setModal(<CreatePost />)
                 }}
             >
-                <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-sky-700 md:bg-sky-50 hover:bg-sky-200 transition-all">
+                <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-blue-700 md:bg-blue-50 hover:bg-blue-200 transition-all">
                     <span className="hidden md:block">
                         Add Post
                     </span>
-                    <Icon icon="add_comment" className="rotate-y-180 text-sky-100 md:text-inherit" />
+                    <Icon icon="add_comment" className="rotate-y-180 text-blue-100 md:text-inherit" />
                 </span>
             </Button>
         </li>
@@ -97,7 +97,7 @@ function CreatePostBtn() {
 
 function NavSpacer() {
     return (
-        <div className="hidden md:block h-[1px] my-2 bg-sky-100"></div>
+        <div className="hidden md:block h-[1px] my-2 bg-blue-100"></div>
     )
 }
 

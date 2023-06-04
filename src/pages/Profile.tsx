@@ -46,12 +46,12 @@ export default function Profile() {
                 @{ user?.handle }
             </h1>
 
-            <div className='flex flex-col gap-4 bg-gradient-to-r from-sky-100 via-sky-50 to-fuchsia-50 text-sky-800 p-8 rounded-xl'>
+            <div className='flex flex-col gap-4 bg-gradient-to-r from-blue-100 via-blue-50 to-fuchsia-50 text-blue-800 p-8 rounded-xl'>
                 <div>
                     <span className='font-bold'>Bio: </span>{ user?.bio || 'Not Available' }
                 </div>
 
-                <div className='h-[1px] bg-sky-200'></div>
+                <div className='h-[1px] bg-blue-200'></div>
 
                 <div className='flex items-center gap-2'>
                     <Icon icon="place" /> {user?.location || 'Not Available'}

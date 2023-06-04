@@ -10,7 +10,7 @@ interface RepostProps {
 
 export default function Repost({post, repost} : RepostProps) {
     return (
-        <div className="flex flex-col gap-2 border-2 border-sky-100 p-4 rounded-lg">
+        <div className="flex flex-col gap-2 border-2 border-blue-100 p-4 rounded-lg">
 
             <h3 className="flex items-center gap-2 font-bold mb-2">
                 <Avatar src={repost.user?.avatar} className="w-8 h-8" />
@@ -29,7 +29,7 @@ export default function Repost({post, repost} : RepostProps) {
             <Link
                 to={`/post/${post?.repostId}`}
                 relative="path"
-                className="block bg-sky-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
+                className="block bg-blue-50 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
             >
                 <span>View Post</span>
             </Link>

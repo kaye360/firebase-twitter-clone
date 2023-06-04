@@ -4,17 +4,17 @@ export default function Home() {
     return(
         <div className="animate-bounce-up-in">
             <h1 className="block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left">
-                Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-black bg-gradient-to-r from-blue-50 to-emerald-50">idealy</span>.
+                Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-black bg-gradient-to-r from-blue-50 to-emerald-50">Quark</span>.
             </h1>
 
-            <SectionHeading>What is <AppName>idealy?</AppName></SectionHeading>
+            <SectionHeading>What is <AppName>Quark?</AppName></SectionHeading>
 
             <p className="my-4">
-                <AppName>Idealy</AppName> is a social media web app similar to Twitter and Facebook. It was made by <a href="https://joshkaye.dev" className="text-blue-500 underline">Josh</a> as a portfolio project. View the repo on <a href="https://github.com/kaye360/firebase-twitter-clone" className="text-blue-500 underline">GitHub</a>.
+                <AppName>Quark</AppName> is a social media web app similar to Twitter and Facebook. It was made by <a href="https://joshkaye.dev" className="text-blue-500 underline">Josh</a> as a portfolio project. View the repo on <a href="https://github.com/kaye360/firebase-twitter-clone" className="text-blue-500 underline">GitHub</a>.
             </p>
 
             <p className="my-2">
-                The technologies used to create <AppName>idealy</AppName> include:
+                The technologies used to create <AppName>Quark</AppName> include:
             </p>
 
             <ul className="flex gap-2 flex-wrap">
@@ -26,10 +26,10 @@ export default function Home() {
                 <ListItem>Netlify</ListItem>
             </ul>
 
-            <SectionHeading>What can <AppName>idealy</AppName> do?</SectionHeading>
+            <SectionHeading>What can <AppName>Quark</AppName> do?</SectionHeading>
 
             <p className="my-2">
-                <AppName>Idealy</AppName> has the following features:
+                <AppName>Quark</AppName> has the following features:
             </p>
 
             <ul className="grid gap-2 pl-6 ">

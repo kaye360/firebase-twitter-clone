@@ -5,21 +5,22 @@
 @layer base {
 
     :root {
-        --sky-50  : rgb(240 249 255);
-        --sky-100 : rgb(224 242 254);
-        --sky-200 : rgb(186 230 253);
-        --sky-300 : rgb(125 211 252);
-        --sky-400 : rgb(56 189 248);
-        --sky-500 : rgb(14 165 233);
-        --sky-600 : rgb(2 132 199);
-        --sky-700 : rgb(14 165 233);
-        --sky-800 : rgb(7 89 133);
-        --sky-900 : rgb(12 74 110);
+        --blue-50  : rgb(240 249 255);
+        --blue-100 : rgb(224 242 254);
+        --blue-200 : rgb(186 230 253);
+        --blue-300 : rgb(125 211 252);
+        --blue-400 : rgb(56 189 248);
+        --blue-500 : rgb(14 165 233);
+        --blue-600 : rgb(2 132 199);
+        --blue-700 : rgb(14 165 233);
+        --blue-800 : rgb(7 89 133);
+        --blue-900 : rgb(12 74 110);
     }
 
     html {
         scroll-behavior: smooth;
-        font-family: Nunito, Roboto, Helvetica, sans-serif;
+        font-family: Geologica, Roboto, Helvetica, sans-serif;
+        font-weight: 300;
     }
     
     h1 {
@@ -29,8 +30,8 @@
         margin-bottom : 1rem;
         font-size: 1.5rem;
         font-weight: 600;
-        border-bottom: 2px solid var(--sky-100);
-        color : var(--sky-500);
+        border-bottom: 2px solid var(--blue-100);
+        color : var(--blue-500);
     }
 
     h2 {
@@ -39,14 +40,14 @@
 
     input, textarea {
         padding : 0.5rem;
-        border : 1px solid var(--sky-300);
+        border : 1px solid var(--blue-300);
         border-radius: 0.5rem;
         width : 100%;
         max-width: none;
     }
 
     input:focus-visible, textarea:focus-visible {
-        outline : 1px solid var(--sky-400)
+        outline : 1px solid var(--blue-400)
     }
 
 

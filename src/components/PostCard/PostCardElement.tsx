@@ -49,7 +49,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     
 
     return (
-        <div className="p-[2px] rounded-xl bg-gradient-to-br from-sky-200 via-rose-200 to-sky-200 shadow-lg shadow-sky-50">
+        <div className="p-[2px] rounded-xl bg-gradient-to-br from-blue-200 via-rose-200 to-blue-200 shadow-lg shadow-blue-50">
             <div className="flex flex-col gap-4 p-4 rounded-xl bg-white">
                 <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 
@@ -67,7 +67,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
                 {isShowingViewPostBtn &&
                     <Link 
                         to={`/post/${post?.id}`} 
-                        className="block bg-sky-100 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
+                        className="block bg-blue-100 hover:bg-orange-50 px-2 py-1 rounded-lg text-sm text-center"
                     >
                         View Post
                     </Link>

@@ -121,7 +121,7 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
                     <Button 
                         icon="chat_bubble" 
                         disabled={!isValidated} 
-                        className="bg-sky-200 text-sky-700 hover:bg-orange-100 hover:text-orange-400"
+                        className="bg-blue-200 text-blue-700 hover:bg-orange-100 hover:text-orange-400"
                     >
                         Post Comment
                     </Button>

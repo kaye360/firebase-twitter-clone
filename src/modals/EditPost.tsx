@@ -110,7 +110,7 @@ export default function EditPost({postId} : EditPostProps) {
                 </div>        
 
                 <div className="flex items-center justify-between w-full gap-4">
-                    <Button className="bg-sky-200 hover:bg-orange-200">
+                    <Button className="bg-blue-200 hover:bg-orange-200">
                         Save
                     </Button>
 

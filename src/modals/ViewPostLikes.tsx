@@ -35,7 +35,7 @@ export default function ViewPostLikes({likes} : ViewPostLikesProps) {
                     <Link
                         to={`profile/${user}`}
                         key={user}
-                        className="flex items-center gap-2 hover:underline hover:bg-sky-100 py-2"
+                        className="flex items-center gap-2 hover:underline hover:bg-blue-100 py-2"
                         onClick={() => appContext?.closeModal() }
                     >
                         <Avatar src={users[user].avatar} />

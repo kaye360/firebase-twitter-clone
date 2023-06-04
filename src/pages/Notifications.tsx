@@ -50,7 +50,7 @@ export default function Notifications() {
             <div className="flex items-center justify-between">
                 <h2>New</h2>
 
-                <Button onClick={handleMarkAsRead} className="border border-sky-200 hover:bg-sky-100">
+                <Button onClick={handleMarkAsRead} className="border border-blue-200 hover:bg-blue-100">
                     Mark as Read
                 </Button>
             </div>
@@ -59,10 +59,10 @@ export default function Notifications() {
                 { newNotifications?.map((notification, index) => (
                     <Link 
                         to={notification.link}
-                        className="flex items-center gap-4 px-1 py-3 border-b border-sky-100 hover:bg-sky-50"
+                        className="flex items-center gap-4 px-1 py-3 border-b border-blue-100 hover:bg-blue-50"
                         key={index}
                     >
-                        <Icon icon={ icons[notification.type] || icons.default } className="text-sky-300" />
+                        <Icon icon={ icons[notification.type] || icons.default } className="text-blue-300" />
                         {notification.message}
                     </Link>
                 ))}
@@ -79,10 +79,10 @@ export default function Notifications() {
                 { oldNotifications?.map((notification, index) => (
                     <Link 
                         to={notification.link}
-                        className="flex items-center gap-4 px-1 py-4 border-b border-sky-100 hover:bg-sky-50"
+                        className="flex items-center gap-4 px-1 py-4 border-b border-blue-100 hover:bg-blue-50"
                         key={index}
                     >
-                        <Icon icon={ icons[notification.type] || icons.default } className="text-sky-300" />
+                        <Icon icon={ icons[notification.type] || icons.default } className="text-blue-300" />
                         {notification.message}
                     </Link>
                 ))}

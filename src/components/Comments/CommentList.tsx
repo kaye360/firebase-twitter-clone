@@ -33,7 +33,7 @@ export default function CommentList({comments} : CommentListProps)  {
                     Comments
                 </h2>
 
-                <a href="#comment-form" className="text-sky-600 hover:underline">
+                <a href="#comment-form" className="text-blue-600 hover:underline">
                     Leave a comment
                 </a>
             </header>

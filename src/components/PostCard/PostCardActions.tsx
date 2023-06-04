@@ -58,7 +58,7 @@ export default function PostCardActions({post} : PostCardActionsProps) {
 
     
     return (
-        <div className="flex items-center gap-2 w-1/2 text-sky-400 text-base">
+        <div className="flex items-center gap-2 w-1/2 text-blue-400 text-base">
 
             <div className="flex items-center gap-0">
                 <Button onClick={toggleLike} className="px-[3px]">
