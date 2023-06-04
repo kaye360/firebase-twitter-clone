@@ -1,12 +1,19 @@
 
 
-export default function QuarkLogo() {
+
+interface QuarkLogoProps {
+    strokeClassName? : string,
+    fillClassName? : string,
+    className? : string
+}
+
+export default function QuarkLogo({strokeClassName, fillClassName, ...rest} : QuarkLogoProps) {
     return (
-        <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg {...rest} width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
 
             <path 
                 id="logo-orbit"
-                className="stroke-blue-500" 
+                className={`stroke-blue-500 ${strokeClassName}`}
                 stroke="black" 
                 stroke-width="3" 
                 stroke-linecap="round" 
@@ -16,7 +23,7 @@ export default function QuarkLogo() {
 
             <path 
                 id="logo-q-line"
-                className="stroke-blue-500"
+                className={`stroke-blue-500 ${strokeClassName}`}
                 stroke="black" 
                 stroke-width="3" 
                 stroke-linecap="round" 
@@ -25,7 +32,7 @@ export default function QuarkLogo() {
 
             <ellipse 
                 id="logo-nucleus"
-                className="fill-blue-500"
+                className={`fill-blue-500 ${fillClassName}`}
                 cx="13.6381" 
                 cy="13.6991" 
                 rx="1.39822" 
@@ -35,7 +42,7 @@ export default function QuarkLogo() {
 
             <path 
                 id="logo-top-right-particle"
-                className="stroke-blue-500"
+                className={`stroke-blue-500 ${strokeClassName}`}
                 fill="black" 
                 stroke="black" 
                 stroke-width="3" 
@@ -46,7 +53,7 @@ export default function QuarkLogo() {
 
             <path 
                 id="logo-bottom-left-particle"
-                className="stroke-blue-500"
+                className={`stroke-blue-500 ${strokeClassName}`}
                 fill="black" 
                 stroke="black" 
                 stroke-width="3" 

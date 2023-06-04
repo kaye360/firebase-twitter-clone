@@ -14,8 +14,8 @@ export default function NavLinks() {
     return (
         <NavWrapper>
             <NavLink to="/"         icon="description">Home</NavLink>
-            <NavLink to="/explore"  icon="explore"    >Explore</NavLink>
-            <NavLink to="/trending" icon="tag"       >Trending</NavLink>
+            <NavLink to="/explore"  icon="explore">Explore</NavLink>
+            <NavLink to="/trending" icon="tag">Trending</NavLink>
             <NavSpacer />
 
             { appContext?.firebaseAuth &&
@@ -26,7 +26,7 @@ export default function NavLinks() {
                     </NavLink>
 
                     <NavLink to="/profile"  icon="account_circle" className="hidden md:flex">Profile </NavLink>
-                    <NavLink to="/settings" icon="settings"      >Settings</NavLink>
+                    <NavLink to="/settings" icon="settings">Settings</NavLink>
                     <NavSpacer />
                 </div>
             }

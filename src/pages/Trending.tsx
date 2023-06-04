@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { RecentHashtags } from "../utils/types"
 import { Link } from "react-router-dom"
 import { SearchBar } from "../components/SearchBar"
+import Icon from "../components/Icon"
 
 
 
@@ -19,7 +20,10 @@ export default function Trending() {
 
 	return (
 		<div>
-			<h1>What's Trending</h1>
+			<h1>
+				<Icon icon="tag" />
+				What's Trending
+			</h1>
 
 			<SearchBar />
 

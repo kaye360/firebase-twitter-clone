@@ -1,10 +1,22 @@
+import QuarkLogo from "../components/QuarkLogo"
 
 export default function Home() {
 
     return(
-        <div className="animate-bounce-up-in">
-            <h1 className="block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left">
-                Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-black bg-gradient-to-r from-blue-50 to-emerald-50">Quark</span>.
+        <div className="animate-bounce-up-in pb-12">
+            <h1 className="relative block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left overflow-hidden">
+
+                <p className="relative z-10">
+                    Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-bold bg-gradient-to-r from-rose-300 to-orange-300 text-white">Quark</span>
+                </p>
+
+                <p className="text-lg max-w-[30ch]">
+                    Microblogging Redefined, One Quantum Leap at a Time
+                </p>
+
+                <QuarkLogo className='absolute top-1/2 left-3/4 z-0 -translate-y-1/2 scale-[10] blur-[0.4px] opacity-10' />
+                <QuarkLogo className='absolute top-4 left-12 z-0 -translate-y-1/2 scale-[2] blur-[0.4px] opacity-10' />
+                <QuarkLogo className='absolute bottom-4 left-[15%] z-0 -translate-y-1/2 scale-[4] blur-[0.4px] opacity-10' />
             </h1>
 
             <SectionHeading>What is <AppName>Quark?</AppName></SectionHeading>

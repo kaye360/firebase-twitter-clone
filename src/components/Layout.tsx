@@ -7,7 +7,6 @@ import { ErrorBoundary } from "react-error-boundary"
 import NavLinks from "./NavLinks"
 import { Link } from "react-router-dom"
 import Button from "./Button"
-import Quark from "../assets/quark.svg"
 import QuarkLogo from "./QuarkLogo"
 
 
@@ -21,7 +20,7 @@ export default function Layout({children }: LayoutProps) {
 
     return (
         <>
-            <div className="static md:grid md:grid-cols-[auto_1fr] gap-0 items-start min-h-screen max-w-5xl mx-auto">
+            <div className="relative border md:grid md:grid-cols-[auto_1fr] gap-0 items-start min-h-screen max-w-5xl mx-auto">
 
                 <nav className="static md:sticky md:top-0 md:p-4 md:flex md:flex-col md:h-screen bg-white bg-opacity-40">
 
@@ -47,16 +46,29 @@ export default function Layout({children }: LayoutProps) {
 
             </div>
 
-            <footer className="bg-blue-700 text-white mb-12 md:mb-0 py-16 text-center">
-                <p>
-                    Made by Josh Kaye.
-                </p>
-                <p>
-                    <a href="https://joshkaye.dev" className="underline hover:text-rose-400">Portfolio</a>
-                </p>
-                <p>
-                    <a href="https://github.com/kaye360/" className="underline hover:text-rose-400">GitHub</a>
-                </p>
+            <footer className="bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900 text-white mb-12 md:mb-0 py-16">
+
+                <div className="grid grid-cols-2 items-start max-w-xl mx-auto">
+
+                    <div className="flex items-center gap-4">
+                        <QuarkLogo className="scale-[1.5]" strokeClassName="stroke-white" fillClassName="fill-white" />
+                        Quark<br />
+                        Made by Josh Kaye.
+                    </div>
+
+                    <div>
+                        <p>
+                        </p>
+                        <p>
+                            <a href="https://joshkaye.dev" className="underline hover:text-rose-400">Portfolio</a>
+                        </p>
+                        <p>
+                            <a href="https://github.com/kaye360/" className="underline hover:text-rose-400">GitHub</a>
+                        </p>
+                    </div>
+
+                </div>
+
             </footer>
 
             <Modal content={appContext?.modal} />
@@ -71,7 +83,6 @@ function Logo() : JSX.Element {
     return (
         <div className="bg-blue-100 py-4 md:p-0 md:bg-transparent md:static ">
             <div className="flex items-center gap-4 font-bold text-2xl pl-4">
-                {/* <img src={Quark} className="w-[35px] fill-blue-400" /> */}
                 <QuarkLogo />
                 <span className="text-blue-500 font-bold">Quark</span>
             </div>
