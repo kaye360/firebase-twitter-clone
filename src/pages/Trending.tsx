@@ -36,6 +36,7 @@ export default function Trending() {
 							${tag.count === 3 ? 'text-2xl'  : ''}
 							${tag.count > 3   ? 'text-4xl'  : ''}
 						`}
+						key={tag.tag}
 					>
 						{tag.tag}
 					</Link>

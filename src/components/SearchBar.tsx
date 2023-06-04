@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import Icon from "./Icon";
 import Button from "./Button";
 import ValidationError from "./Validation/ValidationError";
@@ -36,6 +36,11 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
         setErrorMessage('');
         setSearchPhrase(e.target.value);
     }
+
+
+    useEffect( () => {
+        setSearchPhrase(defaultSearchPhrase)
+    }, [defaultSearchPhrase])
 
     return (
         <form onSubmit={handleSearch}>

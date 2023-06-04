@@ -10,7 +10,7 @@ export default function UpdateUserHandleForm() {
     return (
         <form onSubmit={ userHandle.handleUpdate }>
 
-            <div className="grid grid-cols-[1ch_1fr_10px] items-center gap-4">
+            <div className="grid grid-cols-[1ch_1fr_20px] items-center gap-4">
                 <label htmlFor="user-handle" className="text-xl">@</label>
                 <input
                     type="text"

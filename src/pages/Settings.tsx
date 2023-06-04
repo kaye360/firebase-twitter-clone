@@ -2,10 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import Icon from "../components/Icon";
 import UpdateUserBioForm from "../components/Settings/UpdateUserBioForm";
 import UpdateUserHandleForm from "../components/Settings/UpdateUserHandleForm";
-import { getUser } from "../services/UserServices";
+import { getUser, signOutOfGoogle } from "../services/UserServices";
 import { AppContext } from "../App";
 import UpdateUserLocationForm from "../components/Settings/UpdateUserLocationForm";
 import { User } from "../utils/types";
+import Button from "../components/Button";
 
 
 export default function Settings() {
@@ -20,6 +21,14 @@ export default function Settings() {
             setUser(currentUser)
         })()
     }, [])
+
+
+    function signOut() : void {
+        signOutOfGoogle()
+        appContext?.signOutUser()
+    }
+
+    
 
     return (
         <div>
@@ -39,6 +48,12 @@ export default function Settings() {
                     <UpdateUserLocationForm user={user as User} />
                 </Setting>
 
+                <Setting heading="Sign out of your account">
+                    <Button onClick={signOut} className="text-sky-700 border border-sky-700 hover:border-rose-600 hover:text-rose-700">
+                        Sign out
+                    </Button>
+                </Setting>
+
             </div>
 
         </div>
@@ -48,9 +63,9 @@ export default function Settings() {
 
 
 interface SettingProps {
-    heading   : string,
-    htmlFor   : string,
-    children? : any
+    heading    : string,
+    htmlFor?   : string,
+    children?  : any
 }
 
 function Setting({htmlFor, heading, children} : SettingProps) {

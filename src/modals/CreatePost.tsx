@@ -141,13 +141,15 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
                         Create
                     </Button>
 
-                    {/* For development and testing */}
-                    <button onClick={(e) => { e.preventDefault(); setBody('Lorem ipsum #dolor sit amet consectetur #adipisicing elit. Asperiores aliquid #illum dicta excepturi labore, hic #cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.') }}>
-                        Insert dummy text
-                    </button>
 
                     {message}
                 </div>
+
+                {/* For development and testing */}
+                <Button onClick={(e) => { e.preventDefault(); setBody('Lorem ipsum #dolor sit amet consectetur #adipisicing elit. Asperiores aliquid #illum dicta excepturi labore, hic #cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.') }}>
+                    Insert dummy text
+                </Button>
+
             </div>
         </form>
     )

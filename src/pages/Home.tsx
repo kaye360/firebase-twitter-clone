@@ -2,8 +2,8 @@
 export default function Home() {
 
     return(
-        <div>
-            <h1 className="py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100">
+        <div className="animate-bounce-up-in">
+            <h1 className="block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left">
                 Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-black bg-gradient-to-r from-blue-50 to-emerald-50">idealy</span>.
             </h1>
 
@@ -17,7 +17,7 @@ export default function Home() {
                 The technologies used to create <AppName>idealy</AppName> include:
             </p>
 
-            <ul className="flex gap-2">
+            <ul className="flex gap-2 flex-wrap">
                 <ListItem>React</ListItem>
                 <ListItem>Typescript</ListItem>
                 <ListItem>Firebase</ListItem>
@@ -37,11 +37,10 @@ export default function Home() {
                 <li className="list-disc">Create and view posts, and repost other posts</li>
                 <li className="list-disc">Like and comment on posts</li>
                 <li className="list-disc">Notifications for user interactions</li>
-                <li className="list-disc">Hashtags to find other similar posts</li>
+                <li className="list-disc">Hashtags and search to find other similar posts</li>
                 <li className="list-disc">Customize user handles and profile info</li>
                 <li className="list-disc">Continous deployment with Netlify hosting</li>
                 <li className="list-disc">Responsive Tailwindcss user interface</li>
-                {/* <li className="list-disc"></li> */}
             </ul>
 
         </div>

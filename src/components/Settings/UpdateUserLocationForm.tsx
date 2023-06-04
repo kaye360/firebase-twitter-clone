@@ -18,7 +18,7 @@ export default function UpdateUserLocationForm({user} : UpdateUserLocationFormPr
     return (
         <form onSubmit={ userLocation.handleUpdate }>
 
-            <div className="relative grid grid-cols-[1fr_10px] items-center gap-4">
+            <div className="relative grid grid-cols-[1fr_20px] items-center gap-4">
 
                 <div className="absolute right-[30px] top-[-2rem]">
                     <span className={Validator.isTooLong(userLocation.userLocation, 30) ? 'text-red-400' : ''}>
