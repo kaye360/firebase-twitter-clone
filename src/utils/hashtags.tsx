@@ -5,6 +5,9 @@ interface ExtractHashtagsProps {
     body : string,
 }
 
+// All hashtags are stored as lowercase
 export function extractHashtags({body} : ExtractHashtagsProps) : string[] | null {
-    return body.match(hashtagRegex)
+    let hashtags = body.match(hashtagRegex)
+    hashtags = hashtags?.map(tag => tag.toLowerCase() ) as RegExpMatchArray | null
+    return hashtags
 }

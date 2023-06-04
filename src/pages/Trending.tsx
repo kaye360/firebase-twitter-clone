@@ -2,6 +2,7 @@ import { getAllRecentHashtags } from "../services/HashtagService"
 import { useEffect, useState } from "react"
 import { RecentHashtags } from "../utils/types"
 import { Link } from "react-router-dom"
+import { SearchBar } from "../components/SearchBar"
 
 
 
@@ -19,6 +20,8 @@ export default function Trending() {
 	return (
 		<div>
 			<h1>What's Trending</h1>
+
+			<SearchBar />
 
 			<p className="my-6">
 				Here are the topics that the community is talking about.

@@ -2,6 +2,7 @@
 
 export default class Validator {
 
+    static regexHashTag      = /^[a-zA-Z0-9-]+$/
     static regexUserHandle   = /^[a-zA-Z0-9._-]+$/
     static regexUserLocation = /^[a-zA-Z0-9 .,-]+$/
 

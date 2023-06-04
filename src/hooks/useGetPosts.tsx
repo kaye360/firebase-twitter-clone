@@ -44,7 +44,7 @@ export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : Post
                 }))
             )
         })()
-    }, [userId])
+    }, [userId, tag])
 
     return posts
 }
