@@ -7,11 +7,13 @@ import { AppContext } from "../App";
 import UpdateUserLocationForm from "../components/Settings/UpdateUserLocationForm";
 import { User } from "../utils/types";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Settings() {
     
     const appContext      = useContext(AppContext)
+    const navigate        = useNavigate()
     const [user, setUser] = useState<User | null>(null)
 
 
@@ -26,6 +28,7 @@ export default function Settings() {
     function signOut() : void {
         signOutOfGoogle()
         appContext?.signOutUser()
+        navigate('/')
     }
 
     
