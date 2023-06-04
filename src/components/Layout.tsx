@@ -1,5 +1,5 @@
 import { ReactElement, useContext } from "react"
-import { signInWithGoogle, signOutOfGoogle } from "../services/UserServices"
+import { signInWithGoogle } from "../services/UserServices"
 import { AppContext } from "../App"
 import Modal from "../modals/Modal"
 import Avatar from "./Avatar"
