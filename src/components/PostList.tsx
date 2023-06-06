@@ -16,11 +16,7 @@ export default function PostList({posts} : PostListProps) {
                 <PostCard post={post} isLoaded={true} key={post.id} />
             ))}
 
-            { posts.posts.length >= posts.totalPosts ? (
-                <div className="text-lg">
-                    There are no posts to show.
-                </div>
-            ) : (
+            { posts.posts.length < posts.totalPosts && (
                 <Button 
                     onClick={ () => posts.gotoNextPage() }
                     className="w-full border border-blue-200"
@@ -28,6 +24,12 @@ export default function PostList({posts} : PostListProps) {
                     Load More Posts
                     <Icon icon="expand_more" className="ml-auto" />
                 </Button>
+            )}
+
+            { !posts.isLoading && posts.posts.length === 0 && (
+                <p>
+                    There are no posts to show.
+                </p>
             )}
         </div>
     )

@@ -18,6 +18,7 @@ export interface UseGetPosts {
     posts        : Post[],
     gotoNextPage : Function,
     totalPosts   : number,
+    isLoading    : boolean
 }
 
 export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : UseGetPosts {
@@ -30,6 +31,7 @@ export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : UseG
     const [posts, setPosts]           = useState<Post[]>([])
     const [postsLimit, setPostsLimit] = useState<number>(perPage)
     const [totalPosts, setTotalPosts] = useState<number>(0)
+    const [isLoading, setIsLoading]   = useState<boolean>(true)
 
 
     function gotoNextPage() {
@@ -38,10 +40,12 @@ export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : UseG
 
 
     if( userId ) {
-        postQuery = query( postCollectionRef, where('userId', '==', userId), orderBy("date", "desc") )
+        postQuery = query( postCollectionRef,       where('userId', '==', userId),            orderBy("date", "desc"), limit(postsLimit) )
+        totalPostsQuery = query( postCollectionRef, where('userId', '==', userId) )
         
     } else if ( tag ) {
-        postQuery = query( postCollectionRef, where('hashtags', 'array-contains', tag), orderBy("date", "desc") )
+        postQuery = query( postCollectionRef,       where('hashtags', 'array-contains', tag), orderBy("date", "desc"), limit(postsLimit) )
+        totalPostsQuery = query( postCollectionRef, where('hashtags', 'array-contains', tag))
         
     } else {
         postQuery       = query( postCollectionRef, orderBy("date", "desc"), limit(postsLimit) )
@@ -65,9 +69,11 @@ export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : UseG
                     } as Post )
                 }))
             )
+
+            setIsLoading(false)
         })()
     }, [userId, tag, postsLimit])
 
 
-    return { posts, gotoNextPage, totalPosts }
+    return { posts, gotoNextPage, totalPosts, isLoading }
 }
