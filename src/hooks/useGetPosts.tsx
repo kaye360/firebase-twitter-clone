@@ -1,5 +1,5 @@
 
-import { query, orderBy, onSnapshot, DocumentData, Query, where } from 'firebase/firestore'
+import { query, orderBy, onSnapshot, DocumentData, Query, where, limit } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { postCollectionRef } from '../services/PostService'
 import { getUsers } from '../services/UserServices'
@@ -14,27 +14,42 @@ export interface UseGetPostsProps {
     tag?    : string,
 }
 
-export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : Post[] | null {
+export interface UseGetPosts {
+    posts        : Post[],
+    gotoNextPage : Function,
+}
 
-    let q: Query<DocumentData>
+export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : UseGetPosts {
 
-    if( userId ) {
-        q = query( postCollectionRef, where('userId', '==', userId), orderBy("date", "desc") )
-        
-    } else if ( tag ) {
-        q = query( postCollectionRef, where('hashtags', 'array-contains', tag), orderBy("date", "desc") )
-        
-    } else {
-        q = query( postCollectionRef, orderBy("date", "desc") )
+    let postQuery : Query<DocumentData>
+    const perPage : number = 10
+
+
+    const [posts, setPosts]                     = useState<Post[]>([])
+    const [postsShownCount, setPostsShownCount] = useState<number>(perPage)
+
+
+    function gotoNextPage() {
+        setPostsShownCount(postsShownCount + perPage)
     }
 
-    const [posts, setPosts] = useState<Post[] | null>(null)
+
+    if( userId ) {
+        postQuery = query( postCollectionRef, where('userId', '==', userId), orderBy("date", "desc") )
+        
+    } else if ( tag ) {
+        postQuery = query( postCollectionRef, where('hashtags', 'array-contains', tag), orderBy("date", "desc") )
+        
+    } else {
+        postQuery = query( postCollectionRef, orderBy("date", "desc"), limit(postsShownCount) )
+    }
+    
 
     useEffect( () => {
         ( async function getPostsWithUsers() {
             const users = await getUsers()
 
-            onSnapshot( q, snap => 
+            onSnapshot( postQuery, snap => 
                 setPosts( snap.docs.map( doc => {
                     return ({
                         ...doc.data(),
@@ -44,7 +59,13 @@ export default function useGetPosts( { userId, tag } : UseGetPostsProps ) : Post
                 }))
             )
         })()
-    }, [userId, tag])
+    }, [userId, tag, postsShownCount])
 
-    return posts
+
+    useEffect( () => {
+        // if at end, setIsAtEnd(true)
+    }, [postsShownCount, posts])
+
+
+    return { posts, gotoNextPage }
 }

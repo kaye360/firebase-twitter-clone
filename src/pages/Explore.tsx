@@ -4,13 +4,12 @@ import { Link } from "react-router-dom"
 import { PostCardLoader } from "../components/PostCard/PostCardLoader"
 import Icon from "../components/Icon"
 import useGetPosts from "../hooks/useGetPosts"
-import { Post } from "../utils/types"
 
 const PostList = lazy( () => import("../components/PostList") )
 
 export default function Explore() {
 
-	const posts = useGetPosts({}) as Post[]
+	const posts = useGetPosts({})
 
 	const loader = (
 		<>

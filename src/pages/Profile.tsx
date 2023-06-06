@@ -8,7 +8,7 @@ import { PostListError } from './Explore'
 import Icon from '../components/Icon'
 import { getUser } from '../services/UserServices'
 import { AppContext } from '../App'
-import { Post, User } from '../utils/types'
+import { User } from '../utils/types'
 import useGetPosts from '../hooks/useGetPosts'
 
 export default function Profile() {
@@ -18,7 +18,7 @@ export default function Profile() {
     const [user, setUser] = useState<User | null>(null)
     
     let userId  = id ? id : appContext?.firebaseAuth?.uid
-    const posts = useGetPosts({userId}) as Post[]
+    const posts = useGetPosts({userId})
 
     
     useEffect( () => {

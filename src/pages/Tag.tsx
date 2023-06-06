@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom"
 import useGetPosts from "../hooks/useGetPosts"
 import PostList from "../components/PostList"
-import { Post } from "../utils/types"
 import { SearchBar } from "../components/SearchBar"
 import { useEffect, useState } from "react"
 
@@ -16,7 +15,7 @@ export default function Tag() {
         setCurrentTag(tag)
     }, [tag])
 
-    const posts = useGetPosts({ tag : `#${tag?.toLowerCase()}` }) as Post[]
+    const posts = useGetPosts({ tag : `#${tag?.toLowerCase()}` })
 
     return (
         <div className="grid gap-6">
@@ -26,7 +25,7 @@ export default function Tag() {
 
             <SearchBar defaultSearchPhrase={currentTag} />
 
-            <PostList posts={posts as Post[]} />
+            <PostList posts={posts} />
 
         </div>
     )
