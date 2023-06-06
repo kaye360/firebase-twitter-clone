@@ -4,7 +4,7 @@ export default function Home() {
 
     return(
         <div className="animate-bounce-up-in pb-12">
-            <h1 className="relative block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left overflow-hidden">
+            <h1 className="relative block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left overflow-hidden text-blue-700">
 
                 <p className="relative z-10">
                     Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-bold bg-gradient-to-r from-rose-300 to-orange-300 text-white">Quark</span>

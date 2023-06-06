@@ -8,6 +8,7 @@ import PostCardActions from "./PostCardActions"
 import { Post } from "../../utils/types"
 import { hashtagRegex } from "../../utils/hashtags"
 import reactStringReplace from "react-string-replace"
+import { motion } from "framer-motion"
 
 
 
@@ -49,7 +50,11 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
     
 
     return (
-        <div className="p-[2px] rounded-xl bg-gradient-to-br from-blue-200 via-rose-200 to-blue-200 shadow-lg shadow-blue-50">
+        <motion.div 
+            initial={{ height : 0 }} 
+            animate={{ height : 'auto' }}
+            className="p-[2px] rounded-xl bg-gradient-to-br from-blue-200 via-rose-200 to-blue-200 shadow-lg shadow-blue-50"
+        >
             <div className="flex flex-col gap-4 p-4 rounded-xl bg-white">
                 <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 
@@ -75,7 +80,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
 
                 <PostCardActions post={post as Post} />
             </div>
-        </div>
+        </motion.div>
     )
 }
 

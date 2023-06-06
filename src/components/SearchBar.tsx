@@ -49,9 +49,10 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
 
                 <input
                     type="text"
-                    className="border-none outline-none focus-visible:outline-none"
+                    className="border-none outline-none focus-visible:outline-none bg-transparent"
                     value={searchPhrase}
-                    onChange={handleChange} />
+                    onChange={handleChange} 
+                />
 
                 <Button>
                     <Icon icon="search" />
@@ -63,7 +64,6 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
 
             </div>
 
-            {/* '{searchPhrase}' */}
             <ValidationError message={errorMessage} />
 
         </form>

@@ -1,5 +1,6 @@
 import { UseGetPosts } from "../hooks/useGetPosts"
 import Button from "./Button"
+import Icon from "./Icon"
 import PostCard from "./PostCard"
 
 
@@ -15,15 +16,19 @@ export default function PostList({posts} : PostListProps) {
                 <PostCard post={post} isLoaded={true} key={post.id} />
             ))}
 
-            <Button onClick={ () => posts.gotoNextPage() }>
-                Load More Posts
-            </Button>
-
-            { posts.posts?.length === 0 &&
+            { posts.posts.length >= posts.totalPosts ? (
                 <div className="text-lg">
                     There are no posts to show.
                 </div>
-            }
+            ) : (
+                <Button 
+                    onClick={ () => posts.gotoNextPage() }
+                    className="w-full border border-blue-200"
+                >
+                    Load More Posts
+                    <Icon icon="expand_more" className="ml-auto" />
+                </Button>
+            )}
         </div>
     )
 }

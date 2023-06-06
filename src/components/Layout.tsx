@@ -24,7 +24,9 @@ export default function Layout({children }: LayoutProps) {
 
                 <nav className="static md:sticky md:top-0 md:p-4 md:flex md:flex-col md:h-screen bg-white bg-opacity-40">
 
-                    <Logo />
+                    <Link to="/" className="hover:animate-ping ">
+                        <Logo />
+                    </Link>
 
                     <NavLinks />
 
@@ -51,7 +53,9 @@ export default function Layout({children }: LayoutProps) {
                 <div className="grid grid-cols-2 items-start max-w-xl mx-auto">
 
                     <div className="flex items-center gap-4">
-                        <QuarkLogo className="scale-[1.5]" strokeClassName="stroke-white" fillClassName="fill-white" />
+                        <Link to="/">
+                            <QuarkLogo className="scale-[1.5]" strokeClassName="stroke-white" fillClassName="fill-white" />
+                        </Link>
                         Quark<br />
                         Made by Josh Kaye.
                     </div>
