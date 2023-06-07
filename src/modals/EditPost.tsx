@@ -45,9 +45,10 @@ export default function EditPost({postId} : EditPostProps) {
     }
 
 
-    function bodyOnChange(e : any) {
+    function bodyOnChange(e : SyntheticEvent) {
+        if( !(e.target instanceof HTMLTextAreaElement) ) return
         setBody(e.target.value)
-        resetForm()
+        resetDeleteBtn()
     }
 
 
@@ -68,7 +69,8 @@ export default function EditPost({postId} : EditPostProps) {
         }
     }
 
-    function resetForm() {
+    
+    function resetDeleteBtn() {
         setDeleteBtnText('Delete')
         setHasConfirmedDelete(false)
     }
@@ -83,7 +85,7 @@ export default function EditPost({postId} : EditPostProps) {
     return (
         <form method="get" onSubmit={handleEditPost}>
             <div className="flex flex-col gap-4 items-start">
-                <h2>Edit a Post</h2>
+                <h2>Edit Post</h2>
 
                 <textarea 
                     value={body}

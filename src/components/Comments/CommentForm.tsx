@@ -2,6 +2,8 @@ import { useContext, useState, FormEvent, SyntheticEvent, useEffect } from "reac
 import { AppContext } from "../../App"
 import { createComment } from "../../services/CommentService"
 import Button from "../Button"
+import ValidationError from "../Validation/ValidationError"
+import useValidateComment from "../../hooks/useValidateComment"
 
 interface CommentFormProps {
     postId : string,
@@ -12,42 +14,22 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
 
     const appContext  = useContext(AppContext)
 
-    const [commentBody, setCommentBody]     = useState<string>('')
-    const [errorMessage, setErrorMessage]   = useState<string>('')
-    const [submitMessage, setSubmitMessage] = useState<string>('')
-    const [isValidated, setIsValidated]     = useState<boolean>(true)
 
-    const validateComment   = () : void => setIsValidated(true)
-    const invalidateComment = () : void => setIsValidated(false)
+    const { 
+        commentBody, setCommentBody, 
+        submitMessage, setSubmitMessage, 
+        isOnChangeValidated, 
+        isOnSubmitValidated,
+        errorMessage, 
+        resetForm, 
+    } = useValidateComment({})
 
-    function resetForm() {
-        setCommentBody('')
-        setErrorMessage('')
-        setSubmitMessage('')
-        setIsValidated(true)
-    }
-    
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        const isLoggedIn = typeof appContext?.firebaseAuth?.uid === 'string' && 
-                           typeof appContext?.userHandle === 'string'
-        const isEmpty    = !commentBody.trim() || commentBody.trim().length === 0
-
-        if( !isLoggedIn ) {
-            setSubmitMessage('You must be logged in to post')
-            return
-        }
-
-        if( !isValidated ) {
-            setSubmitMessage("Comment invalid. Please check your comment for errors")
-            return
-        }
-
-        if( isEmpty ) {
-            setSubmitMessage('Please enter a comment.')
-            return
-        }
+        const isValidComment = await isOnSubmitValidated()
+        if( !isValidComment) return
            
         const res = await createComment({
             postId,
@@ -63,32 +45,16 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
     }
 
     function handleChange(e: SyntheticEvent) {
-        if( e.target instanceof HTMLTextAreaElement ) {
-            setCommentBody(e.target.value)
-        }
+        if( !(e.target instanceof HTMLTextAreaElement) ) return
+        setCommentBody(e.target.value)
     }
-
-    useEffect( () => {
-        ( function validateCommentBody() {
-
-            const isTooLong = commentBody.length > 200
-            invalidateComment()
-
-            if( isTooLong ) {
-                setErrorMessage('Comment must be less than 200 characters')
-
-            } else { // Validated
-                setErrorMessage('')
-                validateComment()
-            }
-        })()
-    }, [commentBody])
 
 
     if( !appContext?.userHandle || !appContext.firebaseAuth) {
         return <></>
     }
 
+    
     return (
         <div id="comment-form">
 
@@ -103,11 +69,7 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
                     <span>{commentBody.length} / 200</span>
                 </div>
 
-                <div className={` ${errorMessage ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500 py-2`}>
-                    <div className="overflow-hidden">
-                        { errorMessage }
-                    </div>
-                </div>
+                <ValidationError message={errorMessage} />
 
                 <textarea
                     className="h-36"
@@ -120,7 +82,7 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
                 <div className="flex items-center gap-4">
                     <Button 
                         icon="chat_bubble" 
-                        disabled={!isValidated} 
+                        disabled={!isOnChangeValidated} 
                         className="bg-blue-200 text-blue-700 hover:bg-orange-100 hover:text-orange-400"
                     >
                         Post Comment
