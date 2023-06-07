@@ -6,6 +6,7 @@ import { getUser } from "../services/UserServices";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import { markNotifcationsAsRead } from "../services/NotificationService";
+import { motion } from "framer-motion";
 
 
 
@@ -47,6 +48,7 @@ export default function Notifications() {
         <div>
             <h1><Icon icon="notifications" /> Notifications</h1>
 
+
             <div className="flex items-center justify-between">
                 <h2>New</h2>
 
@@ -55,43 +57,60 @@ export default function Notifications() {
                 </Button>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <motion.div layout className="flex flex-col gap-4">
+
                 { newNotifications?.map((notification, index) => (
-                    <Link 
-                        to={notification.link}
-                        className="flex items-center gap-4 px-1 py-3 border-b border-blue-100 hover:bg-blue-50"
-                        key={index}
-                    >
-                        <Icon icon={ icons[notification.type] || icons.default } className="text-blue-300" />
-                        {notification.message}
-                    </Link>
+                    <Notification
+                        link={ notification.link }
+                        icon={ icons[notification.type] || icons.default }
+                        message={ notification.message }
+                        key={index} 
+                    />
                 ))}
 
-                { newNotifications?.length === 0 &&
-                    'You are up to date.'
-                }
 
-            </div>
+            </motion.div>
+
+            { newNotifications?.length === 0 && <p>You are up to date.</p> }
 
             <h2 className="mt-6 mb-2 pt-6 border-t border-slate-200">Read</h2>
 
             <div className="flex flex-col gap-4">
+
                 { oldNotifications?.map((notification, index) => (
-                    <Link 
-                        to={notification.link}
-                        className="flex items-center gap-4 px-1 py-4 border-b border-blue-100 hover:bg-blue-50"
-                        key={index}
-                    >
-                        <Icon icon={ icons[notification.type] || icons.default } className="text-blue-300" />
-                        {notification.message}
-                    </Link>
+                    <Notification
+                        link={ notification.link }
+                        icon={ icons[notification.type] || icons.default }
+                        message={ notification.message }
+                        key={index} 
+                    />
                 ))}
 
-                { oldNotifications?.length === 0 &&
-                    'You have no previous notifications.'
-                }
+                { oldNotifications?.length === 0 && 'You have no previous notifications.' }
+
             </div>
 
         </div>
+    )
+}
+
+
+
+interface NotificationProps {
+    link    : string,
+    icon    : string,
+    message : string,
+}
+
+function Notification({link, icon, message} : NotificationProps) {
+    return (
+        <Link to={ link }>
+            <motion.div layout
+                className="flex items-center gap-4 px-1 py-3 border-b border-blue-100 hover:bg-blue-50"
+            >
+                <Icon icon={ icon } className="text-blue-300" />
+                { message }
+            </motion.div>
+        </Link>
     )
 }
