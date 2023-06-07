@@ -4,9 +4,9 @@ import { PostComment, User } from "../../utils/types"
 import Avatar from "../Avatar"
 import Button from "../Button"
 import { AppContext } from "../../App"
-import EditComment from "../../modals/EditComment"
 import Icon from "../Icon"
 import { Link } from "react-router-dom"
+import EditCommentForm from "../../modals/EditCommentForm"
 
 interface CommentCardProps {
     comment: PostComment,
@@ -29,17 +29,13 @@ export default function CommentCard({ comment, user }: CommentCardProps) {
 
             <div>
                 <h3 className="flex justify-between items-center my-2 font-bold text-blue-900">
-                    <Link to={`/profile/${comment.userId}`} className="py-1 hover:underline">
+                    <Link to={`/profile/${comment.userId}`} className="hover:underline">
                         {user?.handle}
                     </Link>
 
                     { comment.userId === auth.currentUser?.uid && (
-                        <Button
-                            className="p-1 hover:bg-blue-100 text-blue-400"
-                            onClick={ () => appContext?.setModal(<EditComment comment={comment} />) }
-                        >
-                            Edit
-                            <Icon icon="edit_note" />
+                        <Button onClick={ () => appContext?.setModal(<EditCommentForm comment={comment} />) } >
+                            <Icon icon="more_vert" className="text-blue-500 hover:text-orange-500" />
                         </Button>
                     )}
                 </h3>

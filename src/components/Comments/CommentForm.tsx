@@ -1,4 +1,4 @@
-import { useContext, useState, FormEvent, SyntheticEvent, useEffect } from "react"
+import { useContext, FormEvent, SyntheticEvent } from "react"
 import { AppContext } from "../../App"
 import { createComment } from "../../services/CommentService"
 import Button from "../Button"
@@ -25,6 +25,12 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
     } = useValidateComment({})
 
 
+    function handleChange(e: SyntheticEvent) {
+        if( !(e.target instanceof HTMLTextAreaElement) ) return
+        setCommentBody(e.target.value)
+    }
+
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
@@ -44,17 +50,12 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
         setTimeout( resetForm, 5000)
     }
 
-    function handleChange(e: SyntheticEvent) {
-        if( !(e.target instanceof HTMLTextAreaElement) ) return
-        setCommentBody(e.target.value)
-    }
-
 
     if( !appContext?.userHandle || !appContext.firebaseAuth) {
         return <></>
     }
 
-    
+
     return (
         <div id="comment-form">
 
@@ -88,16 +89,12 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
                         Post Comment
                     </Button>
 
-                    <div>
+                    <span>
                         {submitMessage}
-                    </div>
+                    </span>
                 </div>
             </form>
 
         </div>
     )
 }
-
-
-
-
