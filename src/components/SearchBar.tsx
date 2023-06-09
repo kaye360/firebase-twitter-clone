@@ -3,44 +3,19 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import Icon from "./Icon";
 import Button from "./Button";
 import ValidationError from "./Validation/ValidationError";
-import Validator from "../utils/validators/Validator";
+import SearchValidator from "../utils/validators/SearchValidator";
+
+
 
 export function SearchBar({ defaultSearchPhrase = '' }) {
 
-    const navigate = useNavigate();
-
-    const [searchPhrase, setSearchPhrase] = useState<string>(defaultSearchPhrase);
-    const [errorMessage, setErrorMessage] = useState<string>('');
-
-    function handleSearch(e: SyntheticEvent) {
-        e.preventDefault();
-
-        if (Validator.isEmpty(searchPhrase)) {
-            setErrorMessage('Please enter a search phrase.');
-            return;
-        }
-
-        if (Validator.hasForbiddenCharacters(searchPhrase, Validator.regexHashTag)) {
-            setErrorMessage('Tags may only have letters, numbers, and hyphens (-).');
-            return;
-        }
-
-        setErrorMessage('');
-        navigate(`/tag/${searchPhrase}`);
-    }
-
-
-    function handleChange(e: SyntheticEvent) {
-        if (!(e.target instanceof HTMLInputElement))
-            return;
-        setErrorMessage('');
-        setSearchPhrase(e.target.value);
-    }
-
-
-    useEffect( () => {
-        setSearchPhrase(defaultSearchPhrase)
-    }, [defaultSearchPhrase])
+    const { 
+        searchPhrase, 
+        setSearchPhrase, 
+        handleChange, 
+        handleSearch, 
+        errorMessage,
+    } = useSearchBar({defaultSearchPhrase})
 
     return (
         <form onSubmit={handleSearch}>
@@ -69,4 +44,44 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
         </form>
     );
 
+}
+
+
+
+
+function useSearchBar({defaultSearchPhrase = ''}) {
+
+    const navigate = useNavigate();
+
+    const [searchPhrase, setSearchPhrase] = useState<string>(defaultSearchPhrase);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    function handleSearch(e: SyntheticEvent) {
+        e.preventDefault();
+
+        try {
+            SearchValidator.onSubmit({searchPhrase})
+    
+            setErrorMessage('');
+            navigate(`/tag/${searchPhrase}`);
+
+        } catch (error : any) {
+            setErrorMessage(error)
+        }
+    }
+
+
+    function handleChange(e: SyntheticEvent) {
+        if (!(e.target instanceof HTMLInputElement)) return;
+        setErrorMessage('');
+        setSearchPhrase(e.target.value);
+    }
+
+
+    useEffect( () => {
+        setSearchPhrase(defaultSearchPhrase)
+    }, [defaultSearchPhrase])
+
+
+    return { handleChange, handleSearch, searchPhrase, setSearchPhrase, errorMessage }
 }
