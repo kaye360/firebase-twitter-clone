@@ -11,42 +11,16 @@ interface EditCommentProps {
 
 export default function EditCommentForm({comment} : EditCommentProps) {
 
+
     const { 
-        commentBody, setCommentBody, 
-        submitMessage, setSubmitMessage, 
-        isOnChangeValidated, 
-        isOnSubmitValidated,
+        commentBody, 
+        handleOnChange, 
+        handleSubmit, 
         errorMessage, 
-    } = useValidateComment({defaultCommentBody : comment.comment})
+        submitMessage, 
+        isOnChangeValidated
+    } = useEditCommentForm({comment})
 
-    const {
-        postId, 
-        userId,
-        commentId
-    } = comment
-
-
-    function handleOnChange(e: SyntheticEvent) {
-        if( !(e.target instanceof HTMLTextAreaElement) ) return
-        setCommentBody(e.target.value)
-    }
-
-
-    async function handleSubmit(e: SyntheticEvent) {
-        e.preventDefault()
-
-        const isValidComment = await isOnSubmitValidated()
-        if( !isValidComment ) return
-
-        const res = await editComment({
-            postId,
-            userId,
-            commentId,
-            comment : commentBody
-        })
-
-        setSubmitMessage(res.message)
-    }
 
     return (
         <form onSubmit={ handleSubmit }>
@@ -56,7 +30,7 @@ export default function EditCommentForm({comment} : EditCommentProps) {
                 <div className="flex items-center justify-between w-full">
                     <h2>
                         Edit Comment
-                    </h2>
+                    </h2>   
 
                     <span className={commentBody.length > 200 ? 'text-rose-400' : ''}>
                         {commentBody.length} / 200
@@ -89,4 +63,44 @@ export default function EditCommentForm({comment} : EditCommentProps) {
 
         </form>
     )
+}
+
+
+
+function useEditCommentForm({comment} : EditCommentProps) {
+
+    const { 
+        commentBody, setCommentBody, 
+        submitMessage, setSubmitMessage, 
+        isOnChangeValidated, 
+        isOnSubmitValidated,
+        errorMessage, 
+    } = useValidateComment({defaultCommentBody : comment.comment})
+
+    const { postId, userId, commentId } = comment
+
+
+    function handleOnChange(e: SyntheticEvent) {
+        if( !(e.target instanceof HTMLTextAreaElement) ) return
+        setCommentBody(e.target.value)
+    }
+
+
+    async function handleSubmit(e: SyntheticEvent) {
+        e.preventDefault()
+
+        const isValidComment = await isOnSubmitValidated()
+        if( !isValidComment ) return
+
+        const res = await editComment({
+            postId,
+            userId,
+            commentId,
+            comment : commentBody
+        })
+
+        setSubmitMessage(res.message)
+    }
+
+    return { handleOnChange, handleSubmit, commentBody, errorMessage, submitMessage, isOnChangeValidated}
 }

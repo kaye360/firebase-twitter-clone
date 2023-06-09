@@ -4,9 +4,9 @@ import Icon from "../Icon";
 import { toggleLikePost } from "../../services/PostService";
 import { useContext } from "react";
 import { AppContext } from "../../App";
-import CreatePost from "../../modals/CreatePost";
 import { Post } from "../../utils/types";
 import ViewPostLikes from "../../modals/ViewPostLikes";
+import CreatePost from "../../modals/CreatePost";
 
 interface PostCardActionsProps {
     post : Post
@@ -39,9 +39,6 @@ export default function PostCardActions({post} : PostCardActionsProps) {
 
 
     function handleRepost() {
-
-        // if( typeof post?.id !== 'string' ) return
-            
         appContext?.setModal(
             <CreatePost 
                 repostId={post?.id} 

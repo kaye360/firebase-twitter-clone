@@ -20,7 +20,6 @@ export default function ViewPostLikes({likes} : ViewPostLikesProps) {
     useEffect( () => {
         ( async function loadUserHandles() {
             const loadUsers = await getUsers()
-            console.log(loadUsers)
             setUsers(loadUsers)
         })()
     }, [])

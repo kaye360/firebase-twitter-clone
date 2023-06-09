@@ -13,83 +13,27 @@ interface EditPostProps {
 
 export default function EditPost({postId} : EditPostProps) {
 
-    const appContext                                  = useContext(AppContext)
-    const [_, setPost]                                = useState<Post | null>(null)
-    const [body, setBody]                             = useState<string>('')
-    const [message, setMessage]                       = useState<string>('')
-    const [deleteBtnText, setDeleteBtnText]           = useState<string>('Delete')
-    const [hasConfirmedDelete, setHasConfirmedDelete] = useState<boolean>(false)
-    const [hashtags, setHashtags]                     = useState<string[]>([])
-    const hasHashtags                                 = hashtags.length !== 0
-
-    useEffect( () => {
-        ( async function loadCurrentPost() {
-            const currentPost = await getPost(postId)
-
-            setPost(currentPost)
-
-            if(currentPost) setBody(currentPost.body)
-        })()
-    },[])
-
-
-    async function handleEditPost(e: SyntheticEvent) : Promise<void> {
-        e.preventDefault()
-
-        const res = await updatePostBody(postId as string, body)
-        setMessage(res.message)
-        
-        if( res.success) {
-            setTimeout( () => appContext?.closeModal(), redirectTime)
-        }
-    }
-
-
-    function bodyOnChange(e : SyntheticEvent) {
-        if( !(e.target instanceof HTMLTextAreaElement) ) return
-        setBody(e.target.value)
-        resetDeleteBtn()
-    }
-
-
-    async function handleDeletePost(id: string, e: SyntheticEvent) : Promise<void> {
-        e.preventDefault()
-
-        if(!hasConfirmedDelete) {
-            setDeleteBtnText('Are you sure?')
-            setHasConfirmedDelete(true)
-            return
-        }
-
-        const res = await deletePost(id)
-        setMessage(res.message)
-
-        if(res.success) {
-            setTimeout( () => appContext?.closeModal(), redirectTime)
-        }
-    }
-
     
-    function resetDeleteBtn() {
-        setDeleteBtnText('Delete')
-        setHasConfirmedDelete(false)
-    }
-
-    
-    useEffect( () => {
-        const newHashtags = extractHashtags({body})
-        setHashtags(newHashtags || [])
-    }, [body])
+    const { 
+        body, 
+        handleOnChange, 
+        handleSubmit, 
+        handleDelete, 
+        hasHashtags, 
+        hashtags, 
+        message, 
+        deleteBtnText 
+    } = useEditPost({postId})
     
 
     return (
-        <form method="get" onSubmit={handleEditPost}>
+        <form method="get" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4 items-start">
                 <h2>Edit Post</h2>
 
                 <textarea 
                     value={body}
-                    onChange={bodyOnChange}
+                    onChange={handleOnChange}
                     className="p-4 rounded-lg border w-full h-36"
                 ></textarea>
 
@@ -120,7 +64,7 @@ export default function EditPost({postId} : EditPostProps) {
 
                     <Button 
                         className="bg-rose-100 hover:bg-orange-200"
-                        onClick={ (e) => handleDeletePost(postId as string, e) }
+                        onClick={ (e) => handleDelete(postId as string, e) }
                     >
                         {deleteBtnText}
                     </Button>
@@ -128,4 +72,81 @@ export default function EditPost({postId} : EditPostProps) {
             </div>
         </form>
     )
+}
+
+
+
+
+function useEditPost({postId} : EditPostProps) {
+
+
+    const appContext                                  = useContext(AppContext)
+    const [_, setPost]                                = useState<Post | null>(null)
+    const [body, setBody]                             = useState<string>('')
+    const [message, setMessage]                       = useState<string>('')
+    const [deleteBtnText, setDeleteBtnText]           = useState<string>('Delete')
+    const [hasConfirmedDelete, setHasConfirmedDelete] = useState<boolean>(false)
+    const [hashtags, setHashtags]                     = useState<string[]>([])
+    const hasHashtags                                 = hashtags.length !== 0
+
+    useEffect( () => {
+        ( async function loadCurrentPost() {
+            const currentPost = await getPost(postId)
+
+            setPost(currentPost)
+
+            if(currentPost) setBody(currentPost.body)
+        })()
+    },[])
+
+
+    async function handleSubmit(e: SyntheticEvent) : Promise<void> {
+        e.preventDefault()
+
+        const res = await updatePostBody(postId as string, body)
+        setMessage(res.message)
+        
+        if( res.success) {
+            setTimeout( () => appContext?.closeModal(), redirectTime)
+        }
+    }
+
+
+    function handleOnChange(e : SyntheticEvent) {
+        if( !(e.target instanceof HTMLTextAreaElement) ) return
+        setBody(e.target.value)
+        resetDeleteBtn()
+    }
+
+
+    async function handleDelete(id: string, e: SyntheticEvent) : Promise<void> {
+        e.preventDefault()
+
+        if(!hasConfirmedDelete) {
+            setDeleteBtnText('Are you sure?')
+            setHasConfirmedDelete(true)
+            return
+        }
+
+        const res = await deletePost(id)
+        setMessage(res.message)
+
+        if(res.success) {
+            setTimeout( () => appContext?.closeModal(), redirectTime)
+        }
+    }
+
+    
+    function resetDeleteBtn() {
+        setDeleteBtnText('Delete')
+        setHasConfirmedDelete(false)
+    }
+
+    
+    useEffect( () => {
+        const newHashtags = extractHashtags({body})
+        setHashtags(newHashtags || [])
+    }, [body])
+
+    return { handleSubmit, body, handleOnChange, hasHashtags, hashtags, message, handleDelete, deleteBtnText }
 }

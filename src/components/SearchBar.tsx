@@ -3,7 +3,7 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import Icon from "./Icon";
 import Button from "./Button";
 import ValidationError from "./Validation/ValidationError";
-import Validator from "../utils/Validator";
+import Validator from "../utils/validators/Validator";
 
 export function SearchBar({ defaultSearchPhrase = '' }) {
 

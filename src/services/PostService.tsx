@@ -45,72 +45,46 @@ export async function getPost(id: string | undefined) : Promise<Post | null> {
 }
 
 
-export async function createPost(body: string) : Promise<ResponseSuccess> {
-    try {
-        if( !body || body === '' || typeof body !== 'string' ) {
-            throw 'Invalid post body'
-        }
+// export async function createPost(body: string) : Promise<ResponseSuccess> {
+//     try {
 
-        if( !auth.currentUser ) {
-            throw 'You must be logged in to post'
-        }
+//         const hashtags = extractHashtags({body})
 
-        if( body.length === 0) {
-            throw 'Please enter a post'
-        }
+//         const post = await addDoc(postCollectionRef,  {
+//             body,
+//             hashtags,
+//             date     : Timestamp.fromDate(new Date()),
+//             userId   : auth.currentUser?.uid,
+//             likes    : [],
+//             comments : [],
+//             reposts  : 0,
+//         })
 
-        if( body.length > 200 ) {
-            throw 'Post must be 200 characters or less'
-        } 
+//         return { 
+//             success : true, 
+//             message : 'Post created! Redirecting...',
+//             content : post.id
+//         } as ResponseSuccess
 
-        const hashtags = extractHashtags({body})
-
-        const post = await addDoc(postCollectionRef,  {
-            body,
-            hashtags,
-            date     : Timestamp.fromDate(new Date()),
-            userId   : auth.currentUser?.uid,
-            likes    : [],
-            comments : [],
-            reposts  : 0,
-        })
-
-        return { 
-            success : true, 
-            message : 'Post created! Redirecting...',
-            content : post.id
-        } as ResponseSuccess
-
-    } catch (error: any) {
+//     } catch (error: any) {
         
-        return { 
-            success : false, 
-            message : error.toString()
-        } as ResponseSuccess
-    }
+//         return { 
+//             success : false, 
+//             message : error.toString()
+//         } as ResponseSuccess
+//     }
+// }
+
+
+interface CreatePostProps {
+    body          : string,
+    repostId?     : string | null,
+    targetUserId? : string | null,
+    userHandle?   : string | null,
 }
 
-
-interface CreateRepostProps {
-    body         : string,
-    repostId     : string,
-    targetUserId : string,
-    userHandle   : string
-}
-
-export async function createRepost({body, repostId, targetUserId, userHandle} : CreateRepostProps) : Promise<ResponseSuccess> {
+export async function createPost({body, repostId = null, targetUserId = null, userHandle = null} : CreatePostProps) : Promise<ResponseSuccess> {
     try {
-        if( !body || body === '' || typeof body !== 'string' ) {
-            throw 'Invalid post body'
-        }
-
-        if( !auth.currentUser ) {
-            throw 'You must be logged in to post'
-        }
-
-        if( body.length > 200 ) {
-            throw 'Post must be 200 characters or less'
-        } 
 
         const hashtags = extractHashtags({body})
         
@@ -125,17 +99,23 @@ export async function createRepost({body, repostId, targetUserId, userHandle} : 
             reposts  : 0
         })
 
-        const repostRef = doc(db, "posts", repostId)
-        await updateDoc( repostRef, { reposts: increment(1) })
-
-        await sendNotification({
-            userId       : targetUserId,
-            notification : {
-                message : `${userHandle} reposted your post: "${body}`,
-                type    :  'repost',
-                link    : `/post/${post.id}`
-            }
-        })
+        /**
+         * If post is a Repost, increment repost count and send notification to original poster
+         */
+        if( repostId && targetUserId && userHandle ) {
+            
+            const repostRef = doc(db, "posts", repostId)
+            await updateDoc( repostRef, { reposts: increment(1) })
+    
+            await sendNotification({
+                userId       : targetUserId,
+                notification : {
+                    message : `${userHandle} reposted your post: "${body}`,
+                    type    :  'repost',
+                    link    : `/post/${post.id}`
+                }
+            })
+        }
 
         return { 
             success : true, 
@@ -150,6 +130,7 @@ export async function createRepost({body, repostId, targetUserId, userHandle} : 
             message : error.toString()
         } as ResponseSuccess
     }
+
 }
 
 

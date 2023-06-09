@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import { markNotifcationsAsRead } from "../services/NotificationService";
 import { motion } from "framer-motion";
+import { auth } from "../../firebase-config";
 
 
 
@@ -28,7 +29,7 @@ export default function Notifications() {
             setNewNotifications(user.notificationsNew.reverse() as UserNotification[])
             setOldNotifications(user.notificationsOld.reverse() as UserNotification[])
         })()
-    }, [appContext?.notificationCount])
+    }, [auth.currentUser])
 
 
     async function handleMarkAsRead() {

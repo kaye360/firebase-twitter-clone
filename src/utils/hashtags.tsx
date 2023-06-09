@@ -11,10 +11,15 @@ interface ExtractHashtagsProps {
  * This function extracts hashtags from a text string and returns them as an array
  * All hashtags are stored as lowercase
  */
-export function extractHashtags({body} : ExtractHashtagsProps) : RegExpMatchArray | null {
+export function extractHashtags({body} : ExtractHashtagsProps) : string[] {
 
-    const hashtags          = body.match(hashtagRegex)
-    const hashtagsLowercase = hashtags?.map(tag => tag.toLowerCase() ) as RegExpMatchArray | null
+    const hashtags = body.match(hashtagRegex)
+    if(!hashtags) return []
 
-    return hashtagsLowercase
+    const hashtagsLowercase = hashtags.map(tag => tag.toLowerCase() ) as RegExpMatchArray
+    if( !hashtagsLowercase ) return []
+
+    const hashtagsUnique = Array.from( new Set(hashtagsLowercase) )
+
+    return hashtagsUnique
 }

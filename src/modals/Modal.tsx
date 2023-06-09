@@ -31,14 +31,14 @@ export default function Modal({content} : ModalProps) : JSX.Element {
                         exit={{ opacity : 0}}
                         id="modal"
                         onClick={ handleModalBgClick }
-                        className="fixed inset-0 z-9999 grid grid-cols-1 place-items-center bg-slate-900 bg-opacity-50"
+                        className="fixed inset-0 z-[9999] grid grid-cols-1 place-items-center bg-slate-900 bg-opacity-50"
                     >
                         <motion.div 
                             initial={{ opacity : 0, scale : 0, rotate : '12.5deg' }} 
                             animate={{ opacity : 1, scale : 1, rotate :  '0deg' }}
                             exit={{ opacity : 0, scale : 0, rotate : '12.5deg'}}
                             transition={{ duration : 0.3 }}
-                            className="max-w-[95vw] md:max-w-2xl w-full bg-gradient-to-r from-blue-50 via-fuchsia-50 to-blue-100 m-4 drop-shadow-lg opacity-100 p-4 pb-6 rounded-2xl aanimate-bounce-up-in"
+                            className="relative z-[9999] max-w-[95vw] md:max-w-2xl w-full max-h-[90vh] overflow-y-scroll bg-gradient-to-r from-blue-50 via-fuchsia-50 to-blue-100 m-4 drop-shadow-lg opacity-100 p-4 pb-6 rounded-2xl aanimate-bounce-up-in"
                         >
                             <div className="flex justify-end">
                                 <button 

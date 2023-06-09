@@ -1,9 +1,12 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { AppContext } from "../App"
-import CreatePost from "../modals/CreatePost"
 import Icon from "./Icon"
 import Button from "./Button"
+import CreatePost from "../modals/CreatePost"
+import { onSnapshot, DocumentReference, DocumentData, doc } from "firebase/firestore"
+import { auth, db } from "../../firebase-config"
+import { User } from "../utils/types"
 
 
 
@@ -105,12 +108,32 @@ function NavSpacer() {
 
 function NotifcationBubble() {
 
-    const appContext = useContext(AppContext)
+    const [notificationCount, setNotificationCount] = useState<number>(0)
+    let userRef: DocumentReference<DocumentData> | null = null
 
-    if( appContext?.notificationCount && appContext?.notificationCount > 0) {
+    if( auth ) {
+        userRef = doc(db, "users", auth.currentUser?.uid as string)
+    }
+
+    useEffect( () => {
+        ( function loadNotificationsForCurrentUser() {
+
+            if( !auth ) {
+                setNotificationCount(0)
+                return
+            }
+
+            onSnapshot( userRef as DocumentReference<DocumentData>, snap => {
+                const user = snap.data() as User
+                setNotificationCount( user.notificationsNew.length )
+            })
+        })()
+    }, [auth.currentUser])
+
+    if( notificationCount > 0) {
         return (
             <div className="absolute -top-[16px] right-0 md:static grid place-items-center rounded-full px-3 py-2 md:px-2 md:py-[3px] bg-rose-400 text-white text-base md:text-sm font-black leading-none">
-                {appContext?.notificationCount}
+                {notificationCount}
             </div>
         )
     }

@@ -43,11 +43,7 @@ export async function signInWithGoogle() : Promise<User | null>  {
 
 
 export async function signOutOfGoogle() : Promise<void> {
-	try {
-		await signOut(auth)
-
-	} catch (error) {
-	}
+	await signOut(auth)
 }
 
 

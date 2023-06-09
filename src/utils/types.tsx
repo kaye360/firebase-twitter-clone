@@ -52,7 +52,6 @@ export interface ResponseSuccess{
 }
 
 
-
 export interface RecentHashtags {
     tag   : string,
     count : number

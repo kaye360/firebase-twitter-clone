@@ -69,7 +69,11 @@ export async function editComment({postId, userId, commentId, comment} : EditCom
 }
 
 
-
+/**
+ * @function updateCommentArray Helper function
+ * 
+ * Updates old comment with updated comment while preserving position in the array of comments
+ */
 
 interface UpdateCommentArrayProps {
     post           : DocumentSnapshot<DocumentData>,

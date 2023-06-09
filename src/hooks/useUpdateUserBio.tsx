@@ -1,7 +1,7 @@
 import { FormEventHandler, ChangeEventHandler, MouseEventHandler, useContext, useState, SyntheticEvent, useEffect } from "react"
 import { AppContext } from "../App"
 import { updateUser } from "../services/UserServices"
-import Validator from "../utils/Validator"
+import Validator from "../utils/validators/Validator"
 import { User } from "../utils/types"
 
 interface UseUpdateUserBio { 
@@ -72,7 +72,6 @@ export default function useUpdateUserBio({ user } : UseUpdateUserBioProps) : Use
 
 
     function handleReset(e: SyntheticEvent) {
-        console.log('hi')
         e.preventDefault()
         setUserBio(user.bio)
         setErrorMessage('')

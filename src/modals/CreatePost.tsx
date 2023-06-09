@@ -1,28 +1,40 @@
-import { SyntheticEvent, useState, useContext, useEffect } from "react"
-import { createPost, createRepost, getPost } from "../services/PostService"
-import { redirectTime } from "../utils/appConfig"
-import { AppContext } from "../App"
-import Icon from "../components/Icon"
-import { useNavigate } from "react-router-dom"
-import Avatar from "../components/Avatar"
-import { Post, ResponseSuccess } from "../utils/types"
-import { extractHashtags } from "../utils/hashtags"
-import Button from "../components/Button"
+import { SyntheticEvent, useContext, useEffect, useState } from "react";
+import Button from "../components/Button";
+import ValidationError from "../components/Validation/ValidationError";
+import { useNavigate } from "react-router-dom";
+import Icon from "../components/Icon";
+import { auth } from "../../firebase-config";
+import { AppContext } from "../App";
+import { Post } from "../utils/types";
+import { extractHashtags } from "../utils/hashtags";
+import PostValidator from "../utils/validators/PostValidator";
+import { createPost, getPost } from "../services/PostService";
+import Avatar from "../components/Avatar";
+import { redirectTime } from "../utils/appConfig";
 
 
 interface CreatePostProps {
-    repostId?     : string | null
-    targetUserId? : string
+    repostId?     : string | null,
+    targetUserId? : string | null,
 }
 
-export default function CreatePost({targetUserId, repostId = null} : CreatePostProps) {
+export default function CreatePost({targetUserId = null, repostId = null} : CreatePostProps) {
+
+    const { 
+        appContext, 
+        handleFormSubmit, 
+        handleOnChange,
+        body, 
+        setBody, 
+        repost, 
+        hashtags, 
+        hasHashtags, 
+        formSubmitMessage,
+        errorMessage,
+    } = useCreatePost({targetUserId, repostId})
 
 
-    const appContext = useContext(AppContext)
-    const navigate   = useNavigate()
-
-
-    if( !appContext?.firebaseAuth ) {
+    if( !auth.currentUser ) {
         return(
             <div className="flex items-center gap-2">
                 <Icon icon="info" />
@@ -31,72 +43,25 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
         )
     }
 
-    const [body, setBody]         = useState<string>('')
-    const [message, setMessage]   = useState<string>('')
-    const [repost, setRepost]     = useState<Post | null>(null)
-    const [hashtags, setHashtags] = useState<string[]>([])
-    const hasHashtags             = hashtags.length !== 0
-
-
-    async function handleCreatePost(e: SyntheticEvent) {
-        e.preventDefault()
-        
-        let res: ResponseSuccess
-        
-        if( repost && repostId ) {
-            res = await createRepost({
-                body,
-                repostId,
-                targetUserId : targetUserId as string,
-                userHandle   : appContext?.userHandle as string,
-            })
-
-        } else {
-            res = await createPost(body)
-        }
-
-        setMessage(res.message)
-        
-        if( res.success && res.content) {
-            setTimeout( () => {
-                appContext?.closeModal()
-                navigate('/post/' + res.content)
-            }, redirectTime)
-        }
-    }
-
-
-    useEffect( () => {
-        ( async function loadRepost() {
-            if( !repostId ) return
-            const loadRepost = await getPost(repostId)
-            setRepost(loadRepost)
-        })()
-    }, [])
-
-
-    useEffect( () => {
-        const newHashtags = extractHashtags({body})
-        setHashtags(newHashtags || [])
-    }, [body])
-    
-
     return (
-        <form method="get" onSubmit={handleCreatePost}>
+        <form onSubmit={(e) => handleFormSubmit(e)}>
             <div className="flex flex-col gap-4">
                 <h2>Create a Post</h2>
 
                 <div className="flex justify-between">
-                    <label htmlFor="create-post-body">Posting as {appContext.userHandle}</label>
+                    <label htmlFor="create-post-body">Posting as {appContext?.userHandle}</label>
                     <span className={body.length > 200 ? 'text-red-400 font-bold' : ''}>
                         {body.length} / 200
                     </span>
                 </div>
 
+                <ValidationError message={errorMessage} />
+
+                {body}
                 <textarea
                     id="create-post-body"
                     value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    onChange={ handleOnChange}
                     className="p-4 rounded-lg border w-full h-36"
                 ></textarea>
 
@@ -137,12 +102,12 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
                 </div>                
 
                 <div className="flex items-center gap-4">
-                    <Button className="bg-blue-200 hover:bg-rose-200">
+                    <Button type="submit" className="bg-blue-200 hover:bg-rose-200">
                         Create
                     </Button>
 
 
-                    {message}
+                    {formSubmitMessage}
                 </div>
 
                 {/* For development and testing */}
@@ -153,4 +118,96 @@ export default function CreatePost({targetUserId, repostId = null} : CreatePostP
             </div>
         </form>
     )
+}
+
+
+
+
+function useCreatePost({targetUserId =  null, repostId = null} : CreatePostProps) {
+
+    const appContext = useContext(AppContext)
+    const navigate   = useNavigate()
+
+
+    const [body, setBody]                 = useState<string>('')
+    const [formSubmitMessage, setFormSubmitMessage] = useState<string | null>(null)
+    const [errorMessage, setErrorMessage] = useState<string>('')
+    const [repost, setRepost]             = useState<Post | null>(null)
+    const [hasUserTyped, setHasUserTyped] = useState<boolean>(false)
+    const [hashtags, setHashtags]         = useState<string[]>([])
+    const hasHashtags                     = hashtags.length !== 0
+
+
+    async function handleFormSubmit(e: SyntheticEvent) {
+        e.preventDefault()
+        
+        try {
+            PostValidator.onSubmit({postBody : body})
+            setFormSubmitMessage('Posting...')
+    
+            const res = await createPost({
+                body,
+                repostId,
+                targetUserId,
+                userHandle : appContext?.userHandle as string,
+            })
+    
+            setFormSubmitMessage(res.message)
+            
+            if( res.success && res.content) exitModal({to : '/post/' + res.content})
+            
+
+        } catch (error) {
+
+            if( typeof error === 'string') {
+                setFormSubmitMessage(error)
+            }
+        }
+        
+    }
+
+
+    function handleOnChange(e: SyntheticEvent) {
+        if( !(e.target instanceof HTMLTextAreaElement)) return
+        setBody(e.target.value)
+        setHasUserTyped(true)
+    }
+
+
+    useEffect( () => {
+        ( async function loadRepost() {
+            if( !repostId ) return
+            const loadRepost = await getPost(repostId)
+            setRepost(loadRepost)
+        })()
+    }, [])
+
+
+    useEffect( () => {
+        if(!hasUserTyped) return 
+        
+        try {
+            PostValidator.onChange({postBody : body})
+            setErrorMessage('')
+        } catch (error) {
+            if( typeof error === 'string') {
+                setErrorMessage(error)
+            }
+        }
+
+        const newHashtags = extractHashtags({body})
+        setHashtags(newHashtags || [])
+    }, [body])
+
+
+    function exitModal({to} : {to : string}) {
+        setTimeout( () => {
+            appContext?.closeModal()
+            navigate(to)
+        }, redirectTime)
+    }
+
+
+    return { appContext, handleOnChange, handleFormSubmit, body, setBody, repost, hashtags, hasHashtags, formSubmitMessage, errorMessage }
+
 }
