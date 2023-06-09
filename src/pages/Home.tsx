@@ -1,4 +1,4 @@
-import QuarkLogo from "../components/QuarkLogo"
+import QuarkLogo from "../components/QuarkSvgLogo"
 
 export default function Home() {
 

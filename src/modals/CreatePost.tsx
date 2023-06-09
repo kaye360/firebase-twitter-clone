@@ -57,7 +57,6 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
 
                 <ValidationError message={errorMessage} />
 
-                {body}
                 <textarea
                     id="create-post-body"
                     value={body}

@@ -12,8 +12,6 @@ import { User } from "../utils/types"
 
 export default function NavLinks() {
 
-    const appContext = useContext(AppContext)
-
     return (
         <NavWrapper>
             <NavLink to="/"         icon="description">Home</NavLink>
@@ -21,7 +19,7 @@ export default function NavLinks() {
             <NavLink to="/trending" icon="tag">Trending</NavLink>
             <NavSpacer />
 
-            { appContext?.firebaseAuth &&
+            { auth.currentUser &&
                 <div className="md:static flex md:flex-col gap-1">
                     <NavLink to="/notifications" icon="notifications">
                         Notifications
@@ -111,14 +109,16 @@ function NotifcationBubble() {
     const [notificationCount, setNotificationCount] = useState<number>(0)
     let userRef: DocumentReference<DocumentData> | null = null
 
-    if( auth ) {
+
+    if( auth.currentUser ) {
         userRef = doc(db, "users", auth.currentUser?.uid as string)
     }
+
 
     useEffect( () => {
         ( function loadNotificationsForCurrentUser() {
 
-            if( !auth ) {
+            if( !auth.currentUser ) {
                 setNotificationCount(0)
                 return
             }
@@ -130,7 +130,8 @@ function NotifcationBubble() {
         })()
     }, [auth.currentUser])
 
-    if( notificationCount > 0) {
+
+    if( notificationCount && notificationCount > 0) {
         return (
             <div className="absolute -top-[16px] right-0 md:static grid place-items-center rounded-full px-3 py-2 md:px-2 md:py-[3px] bg-rose-400 text-white text-base md:text-sm font-black leading-none">
                 {notificationCount}

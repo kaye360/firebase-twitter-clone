@@ -1,13 +1,10 @@
-import { useContext } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { AppContext } from '../App'
+import { auth } from '../../firebase-config'
 
 
 export default function PrivateRoutes() {
 
-    const appContext = useContext(AppContext)
-
     return (
-        appContext?.firebaseAuth ? <Outlet /> : <Navigate to='/unauthorized' />
+        auth.currentUser ? <Outlet /> : <Navigate to='/unauthorized' />
     )
 }

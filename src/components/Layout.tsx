@@ -7,7 +7,7 @@ import { ErrorBoundary } from "react-error-boundary"
 import NavLinks from "./NavLinks"
 import { Link } from "react-router-dom"
 import Button from "./Button"
-import QuarkLogo from "./QuarkLogo"
+import QuarkSvgLogo from "./QuarkSvgLogo"
 
 
 interface LayoutProps {
@@ -54,7 +54,7 @@ export default function Layout({children }: LayoutProps) {
 
                     <div className="flex items-center gap-4">
                         <Link to="/">
-                            <QuarkLogo className="scale-[1.5]" strokeClassName="stroke-white" fillClassName="fill-white" />
+                            <QuarkSvgLogo className="scale-[1.5]" strokeClassName="stroke-white" fillClassName="fill-white" />
                         </Link>
                         Quark<br />
                         Made by Josh Kaye.
@@ -87,7 +87,7 @@ function Logo() : JSX.Element {
     return (
         <div className="bg-blue-100 py-4 md:p-0 md:bg-transparent md:static ">
             <div className="flex items-center gap-4 font-bold text-2xl pl-4">
-                <QuarkLogo />
+                <QuarkSvgLogo />
                 <span className="text-blue-500 font-bold">Quark</span>
             </div>
         </div>
