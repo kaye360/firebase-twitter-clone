@@ -7,7 +7,7 @@ interface ValidationIconProps {
 export default function ValidationIcon({isValid} : ValidationIconProps) {
     return (
         <div>
-            {isValid ? (
+            { isValid ? (
                 <Icon icon="check_circle" className="text-emerald-400" />
             ) : (
                 <Icon icon="error_outline" className="text-rose-400" />
