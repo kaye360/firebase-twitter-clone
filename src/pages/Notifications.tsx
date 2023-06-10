@@ -17,23 +17,25 @@ export default function Notifications() {
     const [newNotifications, setNewNotifications] = useState<UserNotification[]>([])
     const [oldNotifications, setOldNotifications] = useState<UserNotification[]>([])
 
+    async function loadUserNotifications() {
+
+        if( !appContext?.firebaseAuth?.uid ) return
+        const user = await getUser((appContext.firebaseAuth.uid))
+
+        if( !user ) return
+        
+        setNewNotifications(user.notificationsNew.reverse() as UserNotification[])
+        setOldNotifications(user.notificationsOld.reverse() as UserNotification[])
+    }
 
     useEffect( () => {
-        ( async function loadUserNotifications() {
-
-            if( !appContext?.firebaseAuth?.uid ) return
-            const user = await getUser((appContext.firebaseAuth.uid))
-
-            if( !user ) return
-            
-            setNewNotifications(user.notificationsNew.reverse() as UserNotification[])
-            setOldNotifications(user.notificationsOld.reverse() as UserNotification[])
-        })()
+        loadUserNotifications()
     }, [auth.currentUser])
 
 
     async function handleMarkAsRead() {
         await markNotifcationsAsRead({userId: appContext?.firebaseAuth?.uid as string})
+        await loadUserNotifications()
     }
 
 

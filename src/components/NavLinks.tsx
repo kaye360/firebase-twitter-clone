@@ -139,5 +139,5 @@ function NotifcationBubble() {
         )
     }
 
-    return <></>
+    return <div className="px-3 py-2 md:px-2 md:py-[3px]"></div>
 }
