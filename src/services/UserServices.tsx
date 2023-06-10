@@ -42,9 +42,13 @@ export async function signInWithGoogle() : Promise<User | null>  {
 }
 
 
+
+
 export async function signOutOfGoogle() : Promise<void> {
 	await signOut(auth)
 }
+
+
 
 
 export async function getUser(id: string | undefined) : Promise<User | null> {
@@ -60,6 +64,8 @@ export async function getUser(id: string | undefined) : Promise<User | null> {
         return null
     }
 }
+
+
 
 
 export async function getUsers() : Promise<Users | null> {
@@ -79,6 +85,8 @@ export async function getUsers() : Promise<Users | null> {
 }
 
 
+
+
 export async function getAllUserHandles() : Promise<string[] | null> {
 	try {
 		const usersSnap 	 = await getDocs( userCollectionRef )
@@ -96,12 +104,17 @@ export async function getAllUserHandles() : Promise<string[] | null> {
 }
 
 
+
+
 export interface UpdateUserProps {
 	userId   : string,
 	newField : {
 		[key: string] : any
 	}
 }
+
+
+
 
 export async function updateUser({ userId, newField } : UpdateUserProps) : Promise<ResponseSuccess> {
 	try {

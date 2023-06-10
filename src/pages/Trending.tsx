@@ -9,14 +9,17 @@ import Icon from "../components/Icon"
 
 export default function Trending() {
 
+
 	const [tags, setTags] = useState<RecentHashtags[]>([])
 	
+
 	useEffect( () => {
 		( async function loadAllRecentTags() {
 			const recentTags = await getAllRecentHashtags()
 			setTags(recentTags)
 		})()
 	}, [])
+	
 
 	return (
 		<div>

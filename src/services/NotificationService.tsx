@@ -28,6 +28,7 @@ export async function sendNotification( {userId, notification} : SendNotificatio
 
 
 
+
 interface MarkNotifcationsAsReadProps {
     userId : string
 }

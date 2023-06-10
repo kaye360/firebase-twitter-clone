@@ -1,5 +1,6 @@
 import QuarkLogo from "../components/QuarkSvgLogo"
 
+
 export default function Home() {
 
     return(

@@ -44,7 +44,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
     }
 
     return (
-        <form onSubmit={(e) => handleFormSubmit(e)}>
+        <form onSubmit={ handleFormSubmit }>
             <div className="flex flex-col gap-4">
                 <h2>Create a Post</h2>
 

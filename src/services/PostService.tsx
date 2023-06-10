@@ -45,35 +45,6 @@ export async function getPost(id: string | undefined) : Promise<Post | null> {
 }
 
 
-// export async function createPost(body: string) : Promise<ResponseSuccess> {
-//     try {
-
-//         const hashtags = extractHashtags({body})
-
-//         const post = await addDoc(postCollectionRef,  {
-//             body,
-//             hashtags,
-//             date     : Timestamp.fromDate(new Date()),
-//             userId   : auth.currentUser?.uid,
-//             likes    : [],
-//             comments : [],
-//             reposts  : 0,
-//         })
-
-//         return { 
-//             success : true, 
-//             message : 'Post created! Redirecting...',
-//             content : post.id
-//         } as ResponseSuccess
-
-//     } catch (error: any) {
-        
-//         return { 
-//             success : false, 
-//             message : error.toString()
-//         } as ResponseSuccess
-//     }
-// }
 
 
 interface CreatePostProps {
@@ -134,6 +105,8 @@ export async function createPost({body, repostId = null, targetUserId = null, us
 }
 
 
+
+
 export async function deletePost(id : string) : Promise<ResponseSuccess> {
     try {
         const postToDelete = doc(db, "posts", id)
@@ -151,6 +124,8 @@ export async function deletePost(id : string) : Promise<ResponseSuccess> {
         } as ResponseSuccess
     }
 }
+
+
 
 
 export async function updatePostBody(id : string, body : string) : Promise<ResponseSuccess> {
@@ -182,6 +157,8 @@ export async function updatePostBody(id : string, body : string) : Promise<Respo
         }
     }
 }
+
+
 
 
 interface ToggleLikePostProps {
