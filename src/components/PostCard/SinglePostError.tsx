@@ -11,7 +11,6 @@ export function SinglePostError({ error } : SinglePostErrorProps): JSX.Element {
     const navigate = useNavigate()
 
     
-
     return (
         <div role="alert" className="flex flex-col items-start gap-4 p-4 bg-rose-50 rounded-lg">
 

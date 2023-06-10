@@ -22,7 +22,8 @@ export default function EditPost({postId} : EditPostProps) {
         hasHashtags, 
         hashtags, 
         message, 
-        deleteBtnText 
+        deleteBtnText,
+        hasDeleted,
     } = useEditPost({postId})
     
 
@@ -62,12 +63,14 @@ export default function EditPost({postId} : EditPostProps) {
 
                     {message}
 
-                    <Button 
-                        className="bg-rose-100 hover:bg-orange-200"
-                        onClick={ (e) => handleDelete(postId as string, e) }
-                    >
-                        {deleteBtnText}
-                    </Button>
+                    { !hasDeleted &&
+                        <Button 
+                            className="bg-rose-100 hover:bg-orange-200"
+                            onClick={ (e) => handleDelete(postId as string, e) }
+                        >
+                            {deleteBtnText}
+                        </Button>
+                    }
                 </div>
             </div>
         </form>
@@ -86,6 +89,7 @@ function useEditPost({postId} : EditPostProps) {
     const [message, setMessage]                       = useState<string>('')
     const [deleteBtnText, setDeleteBtnText]           = useState<string>('Delete')
     const [hasConfirmedDelete, setHasConfirmedDelete] = useState<boolean>(false)
+    const [hasDeleted, setHasDeleted]                 = useState<boolean>(false)
     const [hashtags, setHashtags]                     = useState<string[]>([])
     const hasHashtags                                 = hashtags.length !== 0
 
@@ -132,6 +136,7 @@ function useEditPost({postId} : EditPostProps) {
         setMessage(res.message)
 
         if(res.success) {
+            setHasDeleted(true)
             setTimeout( () => appContext?.closeModal(), redirectTime)
         }
     }
@@ -148,5 +153,5 @@ function useEditPost({postId} : EditPostProps) {
         setHashtags(newHashtags || [])
     }, [body])
 
-    return { handleSubmit, body, handleOnChange, hasHashtags, hashtags, message, handleDelete, deleteBtnText }
+    return { handleSubmit, body, handleOnChange, hasHashtags, hashtags, message, handleDelete, deleteBtnText, hasDeleted }
 }
