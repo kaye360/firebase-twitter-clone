@@ -12,43 +12,20 @@ import { motion } from "framer-motion"
 
 
 
-export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }: PostCardProps) {
+export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn } : PostCardProps) {
 
     
     if (isLoaded && !post?.body && !post?.date && !post?.userId) {
         throw 'Error getting post.'
     }
+
+
+    const { 
+        bodyWithHashtags, 
+        repost 
+    } = usePostCardElement({ post })
+
     
-
-    const [repost, setRepost] = useState<Post | null>(null)
-
-
-    useEffect( () => {( async function loadRepost() {
-
-        if( typeof post?.repostId === 'string' ) {
-            const loadRepost = await getPost(post?.repostId) as Post
-            setRepost(loadRepost)
-        } else {
-            setRepost(null)
-        }
-
-    })()}, [post])
-    
-
-    const bodyWithHashtags = reactStringReplace(post?.body, hashtagRegex, (match, index) => {
-
-        return (
-            <Link 
-                to={`/tag/${match.replace('#', '')}`} 
-                className="text-rose-500 hover:underline" 
-                key={index}
-            >
-                {match}
-            </Link>
-        )
-    })
-    
-
     return (
         <motion.div 
             initial={{ height : 0 }} 
@@ -82,6 +59,45 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
             </div>
         </motion.div>
     )
+}
+
+
+
+interface UsePostCardElement {
+    post : Post | null,
+}
+function usePostCardElement({ post } : UsePostCardElement) {
+
+    const [repost, setRepost] = useState<Post | null>(null)
+
+
+    useEffect( () => {( async function loadRepost() {
+
+        if( typeof post?.repostId === 'string' ) {
+            const loadRepost = await getPost(post?.repostId) as Post
+            setRepost(loadRepost)
+        } else {
+            setRepost(null)
+        }
+
+    })()}, [post])
+    
+
+    const bodyWithHashtags = reactStringReplace(post?.body, hashtagRegex, (match, index) => {
+
+        return (
+            <Link 
+                to={`/tag/${match.replace('#', '')}`} 
+                className="text-rose-500 hover:underline" 
+                key={index}
+            >
+                {match}
+            </Link>
+        )
+    })
+
+
+    return { bodyWithHashtags, repost }
 }
 
 
