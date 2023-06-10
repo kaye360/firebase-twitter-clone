@@ -48,9 +48,9 @@ export default function Layout({children }: LayoutProps) {
 
             </div>
 
-            <footer className="bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900 text-white mb-12 md:mb-0 py-16">
+            <footer className="bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900 text-white pb-32 md:pb-0 py-16">
 
-                <div className="grid grid-cols-2 items-start max-w-xl mx-auto">
+                <div className="flex items-start justify-center gap-12 mx-auto">
 
                     <div className="flex items-center gap-4">
                         <Link to="/">
@@ -61,8 +61,6 @@ export default function Layout({children }: LayoutProps) {
                     </div>
 
                     <div>
-                        <p>
-                        </p>
                         <p>
                             <a href="https://joshkaye.dev" className="underline hover:text-rose-400">Portfolio</a>
                         </p>
