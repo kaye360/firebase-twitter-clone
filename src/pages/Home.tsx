@@ -1,9 +1,96 @@
+import { useContext, useState } from "react"
 import QuarkLogo from "../components/QuarkSvgLogo"
-
+import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm"
+import ValidatedInput from "../components/ValidatedForm/components/ValidatedInput"
+import ValidatorRules from "../components/ValidatedForm/utils/ValidatorRules"
+import { AppContext } from "../App"
+import Button from "../components/Button"
+import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
 
 export default function Home() {
 
+    const [field1, setField1] = useState<string>('')
+    const [field2, setField2] = useState<string>('')
+    const [field3, setField3] = useState<string>('')
+
+    const appContext = useContext(AppContext)
+    const [currentUser] = useState(appContext?.userHandle)
+
+    const handles = ['poo', 'pee', 'boob', 'fart', ]
+
+    function handleSubmit() {
+        console.log('submitted successfully')
+    }
+
     return(
+    <>
+
+        <ValidatedForm 
+            handleSubmit={handleSubmit}
+            rules={{
+                auth : true
+            }}
+        >
+
+            <label>
+                <div>Field 1</div>
+                <ValidatedInput
+                    type="text"
+                    title="Field1"
+                    state={field1}
+                    setState={setField1}
+                    rules={{minLength : 10}}
+                />
+            </label>
+
+            <label>
+                <div>Field 2</div>
+                <ValidatedInput
+                    type="text"
+                    title="Field2"
+                    state={field2}
+                    setState={setField2}
+                    rules={{
+                        required : true,
+                        allowableChars : { 
+                            regex : ValidatorRules.regexHashTag, 
+                            chars : 'letters, numbers, and hyphens (-)'
+                        }
+                    }}
+                />
+            </label>
+
+            <label>
+                <div>Field 3</div>
+                <ValidatedInput
+                    type="text"
+                    title="Field3"
+                    state={field3}
+                    setState={setField3}
+                    rules={{
+                        maxLength : 10,
+                        required : true,
+                        allowableChars : {
+                            regex : ValidatorRules.regexUserHandle,
+                            chars : 'letters, numbers, - _',
+                        },
+                        unique : {
+                            all : handles,
+                            currentLoggedInUsername : currentUser as string
+                        }
+                    }}
+                />
+            </label>
+
+            <SubmitErrorMessage />
+
+            <Button type="submit">
+                Submit
+            </Button>
+
+        </ValidatedForm>
+
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         <div className="animate-bounce-up-in pb-12">
             <h1 className="relative block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left overflow-hidden text-blue-700">
 
@@ -57,6 +144,7 @@ export default function Home() {
             </ul>
 
         </div>
+    </>
     )
 }
 

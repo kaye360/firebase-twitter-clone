@@ -2,15 +2,27 @@ import { Dispatch, useState } from "react";
 
 
 
+export interface FormState {
+    errors : { [key: string] : string | null },
+}
+
 export interface UseValidatedFormContext {
-    errorMessage : string,
-    setErrorMessage : Dispatch<React.SetStateAction<string>>,
+    formState                 : FormState,
+    setFormState              : Dispatch<React.SetStateAction<FormState>>,
+    formSubmitErrorMessage    : string,
+    setFormSubmitErrorMessage : Dispatch<React.SetStateAction<string>>
 }
 
 
 export default function useValidatedFormContext() : UseValidatedFormContext {
 
-    const [errorMessage, setErrorMessage] = useState<string>('')
+    const defaultState : FormState = {
+        errors : {},
+    }
 
-    return { errorMessage, setErrorMessage }
+    const [formState, setFormState] = useState<FormState>(defaultState)
+
+    const [formSubmitErrorMessage, setFormSubmitErrorMessage] = useState<string>('')
+
+    return { formState, setFormState, formSubmitErrorMessage, setFormSubmitErrorMessage }
 }
