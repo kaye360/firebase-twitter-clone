@@ -1,11 +1,11 @@
 import { Dispatch, InputHTMLAttributes } from "react"
 import ValidationError from "./ValidationError"
 import { Rules } from "../utils/ValidatorRules"
-import useValidateElement from "../hooks/useValidateElement"
+import useValidatedElement from "../hooks/useValidatedElement"
 
 
 
-export interface ValidatedInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface ValidatedInputProps extends InputHTMLAttributes<HTMLElement> {
     title    : string,
     value    : string,
     setValue : Dispatch<React.SetStateAction<string>>,
@@ -21,7 +21,7 @@ export default function ValidatedInput({
         hasUserTyped, 
         errorMessage, 
         handleOnChange 
-    } = useValidateElement({title, value, setValue, rules})
+    } = useValidatedElement({title, value, setValue, rules})
 
 
     return (
@@ -30,7 +30,6 @@ export default function ValidatedInput({
             <input 
                 value={value}
                 onChange={ handleOnChange }
-                className=""
                 {...rest} 
             />
         </>

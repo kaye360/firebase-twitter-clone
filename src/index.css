@@ -46,6 +46,10 @@
         max-width: none;
     }
 
+    textarea {
+        height : 7rem;
+    }
+
     input:focus-visible, textarea:focus-visible {
         outline : 1px solid var(--blue-400)
     }

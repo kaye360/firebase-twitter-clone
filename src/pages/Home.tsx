@@ -6,6 +6,7 @@ import ValidatorRules from "../components/ValidatedForm/utils/ValidatorRules"
 import { AppContext } from "../App"
 import Button from "../components/Button"
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
+import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea"
 
 export default function Home() {
 
@@ -32,31 +33,15 @@ export default function Home() {
 
             <label>
                 <div>Field 1</div>
-                <ValidatedInput
+                <ValidatedTextarea
                     type="text"
                     title="Field1"
                     value={field1}
                     setValue={setField1}
-                    rules={{minLength : 10}}
+                    rules={{required : true, maxLength : 200}}
                 />
             </label>
 
-            <label>
-                <div>Field 2</div>
-                <ValidatedInput
-                    type="text"
-                    title="Field2"
-                    value={field2}
-                    setValue={setField2}
-                    rules={{
-                        required : true,
-                        allowableChars : { 
-                            regex : ValidatorRules.regexHashTag, 
-                            chars : 'letters, numbers, and hyphens (-)'
-                        }
-                    }}
-                />
-            </label>
 
             <label>
                 <div>Field 3</div>

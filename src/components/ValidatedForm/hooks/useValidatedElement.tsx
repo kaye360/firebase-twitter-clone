@@ -6,13 +6,13 @@ import { ValidatedInputProps } from "../components/ValidatedInput"
 
 
 
-interface UseValidateElement { 
+interface UseValidatedElement { 
     hasUserTyped   : boolean, 
     errorMessage   : string, 
-    handleOnChange : ChangeEventHandler<HTMLInputElement>,
+    handleOnChange : ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
 }
 
-export default function useValidateElement({title, value, setValue, rules} : ValidatedInputProps) : UseValidateElement {
+export default function useValidatedElement({title, value, setValue, rules} : ValidatedInputProps) : UseValidatedElement {
     
 
     const validatedFormContext = useContext(ValidatedFormContext)
@@ -39,7 +39,10 @@ export default function useValidateElement({title, value, setValue, rules} : Val
 
 
     function handleOnChange(e: SyntheticEvent) {
-        if( !(e.target instanceof HTMLInputElement) ) return
+        if( !(
+            e.target instanceof HTMLInputElement ||
+            e.target instanceof HTMLTextAreaElement
+        ) ) return
         setValue(e.target.value)
         setHasUserTyped(true)
     }
