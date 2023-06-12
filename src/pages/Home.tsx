@@ -7,6 +7,7 @@ import { AppContext } from "../App"
 import Button from "../components/Button"
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
 import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea"
+import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage"
 
 export default function Home() {
 
@@ -29,6 +30,7 @@ export default function Home() {
         <ValidatedForm 
             handleSubmit={handleSubmit}
             rules={{auth : true}}
+            config={{successMessage : 'Post created successfully.'}}
         >
 
             <label>
@@ -66,6 +68,8 @@ export default function Home() {
             </label>
 
             <SubmitErrorMessage />
+
+            <SubmitSuccessMessage />
 
             <Button type="submit">
                 Submit

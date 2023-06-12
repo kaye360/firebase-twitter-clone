@@ -8,6 +8,9 @@ import ValidatorRules, { Rules } from "../utils/ValidatorRules";
 interface ValidatedFormProps {
     handleSubmit : Function,
     rules        : Rules,
+    config       : {
+        successMessage : string
+    }
     children     : any,
 }
 
@@ -49,10 +52,13 @@ export const ValidatedFormContext  = createContext<UseValidatedFormContext | nul
  *   />
  * </label>
  * 
+ * <SubmitErrorMessage />
+ * <SubmitSuccessMessage />
+ * 
  * <button type="submit">Submit</button>
  * 
  */
-export default function ValidatedForm({ handleSubmit, rules = {}, children } : ValidatedFormProps) {
+export default function ValidatedForm({ handleSubmit, rules = {}, config, children } : ValidatedFormProps) {
 
 
     const validatedFormContext = useValidatedFormContext()
@@ -60,7 +66,7 @@ export default function ValidatedForm({ handleSubmit, rules = {}, children } : V
 
     return (
         <ValidatedFormContext.Provider value={validatedFormContext}>
-            <ValidatedFormElement handleSubmit={handleSubmit} rules={rules}>
+            <ValidatedFormElement handleSubmit={handleSubmit} rules={rules} config={config}>
                 {children}
             </ValidatedFormElement>
         </ValidatedFormContext.Provider>
@@ -71,18 +77,20 @@ export default function ValidatedForm({ handleSubmit, rules = {}, children } : V
 
 
 
-function ValidatedFormElement({ handleSubmit, rules, children } : ValidatedFormProps) {
+function ValidatedFormElement({ handleSubmit, rules, config, children } : ValidatedFormProps) {
 
     const formContext = useContext(ValidatedFormContext)
 
     function handleFormSubmit(e: SyntheticEvent) {
         e.preventDefault()
 
-
         try {
-            if( typeof handleSubmit !== 'function' ) throw 'handleSubmit must be a function'
+            if( typeof handleSubmit !== 'function' ) throw 'handleSubmit must be a function.'
+            if( typeof config !== 'object') throw 'Config object not set.'
+            if( typeof config.successMessage !== 'string') throw 'onSubmit success message not set in config object.'
             validateOnSubmit()
             handleSubmit()
+            formContext?.setFormSubmitSuccessMessage(config.successMessage)
             
         } catch (error) {
             if( (typeof error !== 'string' ) ) return

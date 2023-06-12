@@ -11,6 +11,8 @@ export interface UseValidatedFormContext {
     setFormState              : Dispatch<React.SetStateAction<FormState>>,
     formSubmitErrorMessage    : string,
     setFormSubmitErrorMessage : Dispatch<React.SetStateAction<string>>
+    formSubmitSuccessMessage    : string,
+    setFormSubmitSuccessMessage : Dispatch<React.SetStateAction<string>>
 }
 
 
@@ -24,5 +26,7 @@ export default function useValidatedFormContext() : UseValidatedFormContext {
 
     const [formSubmitErrorMessage, setFormSubmitErrorMessage] = useState<string>('')
 
-    return { formState, setFormState, formSubmitErrorMessage, setFormSubmitErrorMessage }
+    const [formSubmitSuccessMessage, setFormSubmitSuccessMessage] = useState<string>('')
+
+    return { formState, setFormState, formSubmitErrorMessage, setFormSubmitErrorMessage, formSubmitSuccessMessage, setFormSubmitSuccessMessage }
 }

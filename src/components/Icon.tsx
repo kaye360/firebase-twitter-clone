@@ -1,8 +1,8 @@
 
 
-interface IconProps {
+export interface IconProps {
     className? : string,
-    icon : string
+    icon?      : string
 }
 
 export default function Icon({ className = '', icon } : IconProps) {
