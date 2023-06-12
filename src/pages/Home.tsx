@@ -16,7 +16,7 @@ export default function Home() {
     const appContext = useContext(AppContext)
     const [currentUser] = useState(appContext?.userHandle)
 
-    const handles = ['poo', 'pee', 'boob', 'fart', ]
+    const handles = ['one', 'two', 'three', 'four', ]
 
     function handleSubmit() {
         console.log('submitted successfully')
@@ -27,9 +27,7 @@ export default function Home() {
 
         <ValidatedForm 
             handleSubmit={handleSubmit}
-            rules={{
-                auth : true
-            }}
+            rules={{auth : true}}
         >
 
             <label>
@@ -37,8 +35,8 @@ export default function Home() {
                 <ValidatedInput
                     type="text"
                     title="Field1"
-                    state={field1}
-                    setState={setField1}
+                    value={field1}
+                    setValue={setField1}
                     rules={{minLength : 10}}
                 />
             </label>
@@ -48,8 +46,8 @@ export default function Home() {
                 <ValidatedInput
                     type="text"
                     title="Field2"
-                    state={field2}
-                    setState={setField2}
+                    value={field2}
+                    setValue={setField2}
                     rules={{
                         required : true,
                         allowableChars : { 
@@ -65,8 +63,8 @@ export default function Home() {
                 <ValidatedInput
                     type="text"
                     title="Field3"
-                    state={field3}
-                    setState={setField3}
+                    value={field3}
+                    setValue={setField3}
                     rules={{
                         maxLength : 10,
                         required : true,
@@ -76,7 +74,7 @@ export default function Home() {
                         },
                         unique : {
                             all : handles,
-                            currentLoggedInUsername : currentUser as string
+                            current : currentUser as string
                         }
                     }}
                 />

@@ -16,17 +16,25 @@ export interface Rules {
         chars : string,
     },
     unique? : {
-        all                  : string[],
-        currentLoggedInUsername : string,
+        all     : string[],
+        current : string,
     },
     auth? : true,
 }
 
 export default class ValidatorRules {
 
+    /**
+     * Reusable regular expressions
+     */
+
     public static regexHashTag      = /^[a-zA-Z0-9-]+$/
     public static regexUserHandle   = /^[a-zA-Z0-9._-]+$/
     public static regexUserLocation = /^[a-zA-Z0-9 .,-]+$/
+
+    /**
+     * Validation rule methods
+     */
 
     public static isEmpty(string: string) : boolean {
         return ( !string || string.length === 0 )
@@ -54,7 +62,9 @@ export default class ValidatorRules {
 
 
     /**
-     * @method validate() Validates an input or textarea value, or Form submission
+     * @method validate() 
+     * Validates an input or textarea value, or Form submission. Runs thru
+     * all above rule methods.
      * 
      * @param title    
      * Name of field. If a form submission, set to 'FormSubmit'
@@ -62,7 +72,8 @@ export default class ValidatorRules {
      * @param string   
      * String to validate. If a form submission, set to empty string
      * 
-     * @param rules    Rules object to validate string against
+     * @param rules    
+     * Rules object to validate string against
      */
     public static validate({title, string, rules } : ValidateProps) : void {
 
@@ -119,8 +130,8 @@ export default class ValidatorRules {
         if(
             'unique' in rules && typeof rules.unique === 'object' &&
             'all' in rules.unique &&
-            'currentLoggedInUsername' in rules.unique &&
-            this.isTaken(string, rules.unique.all, rules.unique.currentLoggedInUsername)
+            'current' in rules.unique &&
+            this.isTaken(string, rules.unique.all, rules.unique.current)
         ) {
             throw `${string} is already taken.`
         }

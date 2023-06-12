@@ -21,12 +21,35 @@ export const ValidatedFormContext  = createContext<UseValidatedFormContext | nul
 
 
 /**
+ * @description
+ * Form component with automatic validation.
+ * Create a state for each field and pass into each <ValidatedInput /> or <ValidatedTextarea />
+ * Set the title to the name that appears in the error message.
  * 
  * @param handleSubmit (function) Form onSubmit handler. This is the action to be taken on 
  * form submit after successful validation. No need for e.preventDefault().
  * 
  * @param rules (object Rules) Rules object to be checked on form submission. Other form elements
  * will also automatically be checke first.
+ * 
+ * @example
+ * 
+ * const [field1, setField1] = useState<string>('')
+ * 
+ * <ValidatedForm handleSubmit={ yourHandleSubmitFunction }>
+ * 
+ * <label>
+ *   Field One Name
+ *   <ValidatedInput 
+ *     type="text" 
+ *     title="Field One Name" 
+ *     value={field1} 
+ *     setValue={setField1}
+ *     rules={{minLength : 5, maxLength : 10}}
+ *   />
+ * </label>
+ * 
+ * <button type="submit">Submit</button>
  * 
  */
 export default function ValidatedForm({ handleSubmit, rules = {}, children } : ValidatedFormProps) {
@@ -55,7 +78,6 @@ function ValidatedFormElement({ handleSubmit, rules, children } : ValidatedFormP
     function handleFormSubmit(e: SyntheticEvent) {
         e.preventDefault()
 
-        console.log(formContext?.formState)
 
         try {
             if( typeof handleSubmit !== 'function' ) throw 'handleSubmit must be a function'
@@ -66,7 +88,6 @@ function ValidatedFormElement({ handleSubmit, rules, children } : ValidatedFormP
             if( (typeof error !== 'string' ) ) return
             formContext?.setFormSubmitErrorMessage(error)   
         }
-
     }
 
     
@@ -91,7 +112,7 @@ function ValidatedFormElement({ handleSubmit, rules, children } : ValidatedFormP
 
 
     return (
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit} onChange={() => formContext?.setFormSubmitErrorMessage('')}>
             {children}
         </form>
     )  
