@@ -1,6 +1,6 @@
 import { ErrorBoundary } from "react-error-boundary"
 import { AppContext } from "../App"
-import { SyntheticEvent, useContext } from "react"
+import { SyntheticEvent, useContext, useEffect } from "react"
 import Icon from "../components/Icon"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -10,7 +10,9 @@ interface ModalProps {
 
 export default function Modal({content} : ModalProps) : JSX.Element {
     
+
     const appContext = useContext(AppContext)
+
 
     function handleModalBgClick(e : SyntheticEvent ) {
         if( e.target instanceof HTMLDivElement && e.target.id === 'modal' ) {
@@ -18,8 +20,26 @@ export default function Modal({content} : ModalProps) : JSX.Element {
         }
     }
 
+
+    function handleModalEsc(e : KeyboardEvent ) {
+        if( e.key === 'Escape' ) {
+            appContext?.closeModal()
+        }
+    }
+
+    
     let ModalContent = () : JSX.Element => content ? content : <></>
 
+
+    useEffect(() => {
+        document.addEventListener("keydown", (e) => handleModalEsc(e), false);
+    
+        return () => {
+            document.removeEventListener("keydown", (e) => handleModalEsc(e), false);
+        };
+      }, []);
+
+      
     return (
         <ErrorBoundary fallback={<ModalError handleModalBgClick={handleModalBgClick} />}>
             <AnimatePresence>
@@ -30,7 +50,7 @@ export default function Modal({content} : ModalProps) : JSX.Element {
                         transition={{ duration : 0.5 }}
                         exit={{ opacity : 0}}
                         id="modal"
-                        onClick={ handleModalBgClick }
+                        onMouseDown={ handleModalBgClick }
                         className="fixed inset-0 z-[9999] grid grid-cols-1 place-items-center bg-slate-900 bg-opacity-50"
                     >
                         <motion.div 

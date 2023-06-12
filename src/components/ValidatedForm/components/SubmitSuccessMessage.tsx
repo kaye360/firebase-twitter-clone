@@ -16,7 +16,7 @@ export default function SubmitSuccessMessage({...rest}) {
             {...rest}
         >
             <div className="overflow-hidden flex items-center gap-2">
-                <ValidationIcon isValid={true} />
+                <ValidationIcon isValid={true} className="translate-y-[2px]" />
                 {formContext?.formSubmitSuccessMessage}
             </div>
         </div>

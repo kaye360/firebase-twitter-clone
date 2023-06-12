@@ -21,7 +21,11 @@ export default function PostCardHeader({post, isLoaded} : PostCardHeaderProps) {
 
     function openEditModal() {
         appContext?.setModal(
-            <EditPost postId={post?.id} />
+            <EditPost 
+                postId={post?.id} 
+                defaultPostBody={post.body} 
+                repostId={post.repostId}
+            />
         )
     }
 

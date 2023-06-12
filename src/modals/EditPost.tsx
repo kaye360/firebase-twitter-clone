@@ -1,42 +1,89 @@
 import { SyntheticEvent, useContext, useEffect, useState } from "react"
-import { deletePost, getPost, updatePostBody } from "../services/PostService"
-import { redirectTime } from "../utils/appConfig"
-import { Post } from "../utils/types"
+import { deletePost, updatePostBody } from "../services/PostService"
+import { MAX_POST_LENGTH, REDIRECT_TIME } from "../utils/appConfig"
 import { AppContext } from "../App"
-import { extractHashtags } from "../utils/hashtags"
 import Button from "../components/Button"
+import useExtractHashtags from "../hooks/useExtractHashtags"
+import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm"
+import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea"
+import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
+import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage"
+import useLoadRepost from "../hooks/useLoadRepost"
+import Avatar from "../components/Avatar"
 
 
 interface EditPostProps {
-    postId     : string | undefined,
+    postId           : string | undefined,
+    postBody?        : string,
+    defaultPostBody? : string,
+    repostId?        : string | null,
 }
 
-export default function EditPost({postId} : EditPostProps) {
+export default function EditPost({postId, defaultPostBody = '', repostId = null} : EditPostProps) {
 
+
+    const [postBody, setPostBody] = useState<string>(defaultPostBody)
     
+
     const { 
-        body, 
-        handleOnChange, 
-        handleSubmit, 
+        appContext,
+        handleFormSubmit, 
         handleDelete, 
-        hasHashtags, 
-        hashtags, 
-        message, 
         deleteBtnText,
         hasDeleted,
-    } = useEditPost({postId})
+    } = useEditPost({postId, postBody})
+
+
+    // Load repost if repostId is given
+    const { repost } = useLoadRepost({repostId})
     
 
+    const { hashtags, hasHashtags } = useExtractHashtags({string : postBody})
+
     return (
-        <form method="get" onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-4 items-start">
+        <ValidatedForm 
+            handleSubmit={handleFormSubmit}
+            config={{ successMessage : 'Post update successfully. Closing...' }}
+            rules={{ auth : true }}
+        >
+            <div className="grid gap-4">
+
                 <h2>Edit Post</h2>
 
-                <textarea 
-                    value={body}
-                    onChange={handleOnChange}
-                    className="p-4 rounded-lg border w-full h-36"
-                ></textarea>
+                <div className="flex justify-between">
+                    <label htmlFor="create-post-postBody">Posting as {appContext?.userHandle}</label>
+                    <span className={postBody.length > MAX_POST_LENGTH ? 'text-red-400 font-bold' : ''}>
+                        {postBody.length} / {MAX_POST_LENGTH}
+                    </span>
+                </div>
+
+                <ValidatedTextarea 
+                    title="Post"
+                    value={postBody}
+                    setValue={setPostBody}
+                    rules={{
+                        required : true,
+                        maxLength : MAX_POST_LENGTH
+                    }}
+                />
+
+                { repostId && 
+                    <div className="bg-blue-100 border border-blue-200 w-full rounded-lg p-4">
+                        <h3 className="font-bold mb-4 border-b border-slate-300">Reposting:</h3>
+
+                        { repost ? (
+                            <div>
+                                <h4 className="flex items-center gap-2 mb-2 font-bold text-blue-700">
+                                    <Avatar src={repost.user?.avatar} className="w-8 h-8" />
+                                    {repost?.user?.handle}
+                                </h4>
+                                {repost.body}
+                            </div>
+                        ) : (
+                            <p>Post could not be loaded</p>
+                        )}
+                    </div>
+                }
 
                 <div 
                     className={` ${ hasHashtags ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 py-2`}
@@ -56,70 +103,51 @@ export default function EditPost({postId} : EditPostProps) {
                     </div>
                 </div>        
 
-                <div className="flex items-center justify-between w-full gap-4">
+                <div className="flex items-center justify-start w-full gap-4">
                     <Button className="bg-blue-200 hover:bg-orange-200">
                         Save
                     </Button>
 
-                    {message}
+                    <SubmitErrorMessage />
+                    <SubmitSuccessMessage />
 
-                    { !hasDeleted &&
+
+                    { hasDeleted ? (
+                        <span className="ml-auto">
+                            Post deleted. Closing...
+                        </span>
+                    ) : (
                         <Button 
-                            className="bg-rose-100 hover:bg-orange-200"
+                            className="bg-rose-100 hover:bg-orange-200 ml-auto"
                             onClick={ (e) => handleDelete(postId as string, e) }
                         >
                             {deleteBtnText}
                         </Button>
-                    }
+                    )}
                 </div>
             </div>
-        </form>
+        </ValidatedForm>
     )
 }
 
 
 
 
-function useEditPost({postId} : EditPostProps) {
+function useEditPost({postBody, postId} : EditPostProps) {
 
 
     const appContext                                  = useContext(AppContext)
-    const [_, setPost]                                = useState<Post | null>(null)
-    const [body, setBody]                             = useState<string>('')
-    const [message, setMessage]                       = useState<string>('')
     const [deleteBtnText, setDeleteBtnText]           = useState<string>('Delete')
     const [hasConfirmedDelete, setHasConfirmedDelete] = useState<boolean>(false)
     const [hasDeleted, setHasDeleted]                 = useState<boolean>(false)
-    const [hashtags, setHashtags]                     = useState<string[]>([])
-    const hasHashtags                                 = hashtags.length !== 0
-
-    useEffect( () => {
-        ( async function loadCurrentPost() {
-            const currentPost = await getPost(postId)
-
-            setPost(currentPost)
-
-            if(currentPost) setBody(currentPost.body)
-        })()
-    },[])
 
 
-    async function handleSubmit(e: SyntheticEvent) : Promise<void> {
-        e.preventDefault()
-
-        const res = await updatePostBody(postId as string, body)
-        setMessage(res.message)
+    async function handleFormSubmit() : Promise<void> {
+        const res = await updatePostBody(postId as string, postBody as string)
         
         if( res.success) {
-            setTimeout( () => appContext?.closeModal(), redirectTime)
+            setTimeout( () => appContext?.closeModal(), REDIRECT_TIME)
         }
-    }
-
-
-    function handleOnChange(e : SyntheticEvent) {
-        if( !(e.target instanceof HTMLTextAreaElement) ) return
-        setBody(e.target.value)
-        resetDeleteBtn()
     }
 
 
@@ -133,13 +161,17 @@ function useEditPost({postId} : EditPostProps) {
         }
 
         const res = await deletePost(id)
-        setMessage(res.message)
 
         if(res.success) {
             setHasDeleted(true)
-            setTimeout( () => appContext?.closeModal(), redirectTime)
+            setTimeout( () => appContext?.closeModal(), REDIRECT_TIME)
         }
     }
+
+
+    useEffect( () => {
+        resetDeleteBtn()
+    }, [postBody])
 
     
     function resetDeleteBtn() {
@@ -148,10 +180,5 @@ function useEditPost({postId} : EditPostProps) {
     }
 
     
-    useEffect( () => {
-        const newHashtags = extractHashtags({string : body})
-        setHashtags(newHashtags || [])
-    }, [body])
-
-    return { handleSubmit, body, handleOnChange, hasHashtags, hashtags, message, handleDelete, deleteBtnText, hasDeleted }
+    return { handleFormSubmit, appContext, handleDelete, deleteBtnText, hasDeleted }
 }

@@ -25,6 +25,8 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
         repost 
     } = usePostCardElement({ post })
 
+    console.log(repost)
+
     
     return (
         <motion.div 
@@ -70,12 +72,20 @@ function usePostCardElement({ post } : UsePostCardElement) {
 
     const [repost, setRepost] = useState<Post | null>(null)
 
+    console.log(repost)
 
     useEffect( () => {( async function loadRepost() {
 
         if( typeof post?.repostId === 'string' ) {
             const loadRepost = await getPost(post?.repostId) as Post
-            setRepost(loadRepost)
+
+            if(loadRepost) {
+                setRepost(loadRepost)
+            } else {
+                setRepost({
+                    body : 'This post was deleted'
+                } as Post)
+            }
         } else {
             setRepost(null)
         }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Avatar from "../Avatar";
 import { Post } from "../../utils/types";
+import Icon from "../Icon";
 
 
 interface RepostProps {
@@ -9,6 +10,17 @@ interface RepostProps {
 }
 
 export default function Repost({post, repost} : RepostProps) {
+
+    // Deleted Post
+    if( !repost.user && repost.body ) {
+        return (
+            <p className="flex items-center gap-2 border-2 border-blue-100 p-4 rounded-lg">
+                <Icon icon="remove_circle_outline" />
+                {repost.body}
+            </p>
+        )
+    }
+
     return (
         <div className="flex flex-col gap-2 border-2 border-blue-100 p-4 rounded-lg">
 
@@ -18,7 +30,7 @@ export default function Repost({post, repost} : RepostProps) {
                     @{repost.user?.handle}
                 </span>
                 <span className="font-normal text-sm">
-                    {repost?.date.toDate().toDateString()}
+                    {repost?.date?.toDate().toDateString()}
                 </span>
             </h3>
 

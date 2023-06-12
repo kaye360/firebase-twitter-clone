@@ -16,7 +16,7 @@ export default function SubmitErrorMessage({...rest}) {
             {...rest}
         >
             <div className="overflow-hidden flex items-center gap-2">
-                <ValidationIcon isValid={false} />
+                <ValidationIcon isValid={false} className="translate-y-[2px]" />
                 {formContext?.formSubmitErrorMessage}
             </div>
         </div>

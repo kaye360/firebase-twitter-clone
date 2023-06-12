@@ -5,7 +5,7 @@ import { Post } from "../utils/types"
 
 
 interface UseLoadRepostProps {
-    repostId : string,
+    repostId : string | null,
 }
 
 interface UseLoadRepost {

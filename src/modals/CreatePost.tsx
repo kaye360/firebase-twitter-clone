@@ -6,7 +6,7 @@ import { auth } from "../../firebase-config";
 import { AppContext } from "../App";
 import { createPost } from "../services/PostService";
 import Avatar from "../components/Avatar";
-import { redirectTime } from "../utils/appConfig";
+import { MAX_POST_LENGTH, REDIRECT_TIME } from "../utils/appConfig";
 import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm";
 import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea";
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage";
@@ -54,13 +54,14 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
             rules={{auth : true}}
             id="create-post-form" // For dev use. Used to insert dummy text
         >
-            <div className="flex flex-col gap-4">
+            <div className="grid gap-4">
+
                 <h2>Create a Post</h2>
 
                 <div className="flex justify-between">
                     <label htmlFor="create-post-postBody">Posting as {appContext?.userHandle}</label>
-                    <span className={postBody.length > 200 ? 'text-red-400 font-bold' : ''}>
-                        {postBody.length} / 200
+                    <span className={postBody.length > MAX_POST_LENGTH ? 'text-red-400 font-bold' : ''}>
+                        {postBody.length} / {MAX_POST_LENGTH}
                     </span>
                 </div>
 
@@ -70,7 +71,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                     setValue={setPostBody}
                     rules={{
                         required  : true,
-                        maxLength : 200,
+                        maxLength : MAX_POST_LENGTH,
                     }}
                 />
 
@@ -168,7 +169,7 @@ function useCreatePost({postBody, targetUserId =  null, repostId = null} : UseCr
         setTimeout( () => {
             appContext?.closeModal()
             navigate(to)
-        }, redirectTime)
+        }, REDIRECT_TIME)
     }
 
 

@@ -23,7 +23,7 @@ export default function useValidatedElement({title, value, setValue, rules} : Va
      */
     let defaultFormStateErrorMessage: string | null
     
-    if( rules.required ) {
+    if( rules.required && !value ) {
         defaultFormStateErrorMessage = `${title} is required.`
 
     } else if( rules.minLength && value.length < rules.minLength ) {
