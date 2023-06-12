@@ -22,16 +22,19 @@ interface CreatePostProps {
 
 export default function CreatePost({targetUserId = null, repostId = null} : CreatePostProps) {
 
-
+    // Textarea value state
     const [postBody, setPostBody] = useState<string>('')
 
 
+    // Form onSubmit handling logic
     const { appContext, handleFormSubmit } = useCreatePost({postBody, targetUserId, repostId})
 
 
+    // Load repost if repostId is given
     const { repost } = useLoadRepost({repostId})
 
 
+    // Extract hashtags logic
     const { hashtags, hasHashtags } = useExtractHashtags({string : postBody})
 
 
@@ -143,7 +146,7 @@ interface UseCreatePostProps extends CreatePostProps {
 
 function useCreatePost({postBody, targetUserId =  null, repostId = null} : UseCreatePostProps) {
 
-    
+
     const appContext = useContext(AppContext)
     const navigate   = useNavigate()
 

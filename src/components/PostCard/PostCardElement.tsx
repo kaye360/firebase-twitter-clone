@@ -35,7 +35,7 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
             <div className="flex flex-col gap-4 p-4 rounded-xl bg-white">
                 <PostCardHeader post={post as Post} isLoaded={isLoaded} />
 
-                <div className="mt-2">
+                <div className="mt-2 whitespace-pre-line">
                     {bodyWithHashtags}
                 </div>
 

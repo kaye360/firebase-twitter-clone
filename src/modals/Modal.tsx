@@ -38,7 +38,7 @@ export default function Modal({content} : ModalProps) : JSX.Element {
                             animate={{ opacity : 1, scale : 1, rotate :  '0deg' }}
                             exit={{ opacity : 0, scale : 0, rotate : '12.5deg'}}
                             transition={{ duration : 0.3 }}
-                            className="relative z-[9999] max-w-[95vw] md:max-w-2xl w-full max-h-[90vh] overflow-y-scroll bg-gradient-to-r from-blue-50 via-fuchsia-50 to-blue-100 m-4 drop-shadow-lg opacity-100 p-4 pb-6 rounded-2xl aanimate-bounce-up-in"
+                            className="relative z-[9999] max-w-[95vw] md:max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-gradient-to-r from-blue-50 via-fuchsia-50 to-blue-100 m-4 drop-shadow-lg opacity-100 p-4 pb-6 rounded-2xl aanimate-bounce-up-in"
                         >
                             <div className="flex justify-end">
                                 <button 

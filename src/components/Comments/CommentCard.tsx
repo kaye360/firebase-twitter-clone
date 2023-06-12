@@ -40,7 +40,7 @@ export default function CommentCard({ comment, user }: CommentCardProps) {
                     )}
                 </h3>
 
-                <p>
+                <p className="whitespace-pre-line">
                     {comment.comment}
                 </p>
 
