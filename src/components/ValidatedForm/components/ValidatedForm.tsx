@@ -26,7 +26,7 @@ export const ValidatedFormContext  = createContext<UseValidatedFormContext | nul
 /**
  * @description
  * Form component with automatic validation.
- * Create a state for each field and pass into each <ValidatedInput /> or <ValidatedTextarea />
+ * Create a state for each field and pass into each <ValidatedField />
  * Set the title to the name that appears in the error message.
  * 
  * @param handleSubmit (function) Form onSubmit handler. This is the action to be taken on 
@@ -48,8 +48,8 @@ export const ValidatedFormContext  = createContext<UseValidatedFormContext | nul
  * 
  * <label>
  *   Field One Name
- *   <ValidatedInput 
- *     type="text" 
+ *   <ValidatedField 
+ *     type="text | textarea | ..." 
  *     title="Field One Name" 
  *     value={field1} 
  *     setValue={setField1}

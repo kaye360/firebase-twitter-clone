@@ -72,7 +72,6 @@ function usePostCardElement({ post } : UsePostCardElement) {
 
     const [repost, setRepost] = useState<Post | null>(null)
 
-    console.log(repost)
 
     useEffect( () => {( async function loadRepost() {
 

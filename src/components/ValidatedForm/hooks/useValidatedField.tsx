@@ -1,18 +1,29 @@
-import { useContext, useState, SyntheticEvent, useEffect, ChangeEventHandler } from "react"
+import { useContext, useState, SyntheticEvent, useEffect, ChangeEventHandler, Dispatch, InputHTMLAttributes } from "react"
 import { ValidatedFormContext } from "../components/ValidatedForm"
-import ValidatorRules from "../utils/ValidatorRules"
+import ValidatorRules, { Rules } from "../utils/ValidatorRules"
 import { FormState } from "./useValidatedFormContext"
-import { ValidatedInputProps } from "../components/ValidatedInput"
 
 
 
-interface UseValidatedElement { 
+interface UseValidatedFieldProps extends InputHTMLAttributes<HTMLElement> {
+    title    : string,
+    value    : string,
+    setValue : Dispatch<React.SetStateAction<string>>,
+    rules    : Rules,
+}
+
+interface UseValidatedField { 
     hasUserTyped   : boolean, 
     errorMessage   : string, 
     handleOnChange : ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
 }
 
-export default function useValidatedElement({title, value, setValue, rules} : ValidatedInputProps) : UseValidatedElement {
+export default function useValidatedField({
+    title, 
+    value, 
+    setValue, 
+    rules
+} : UseValidatedFieldProps) : UseValidatedField {
     
 
     const validatedFormContext = useContext(ValidatedFormContext)

@@ -8,11 +8,11 @@ import { createPost } from "../services/PostService";
 import Avatar from "../components/Avatar";
 import { MAX_POST_LENGTH, REDIRECT_TIME } from "../utils/appConfig";
 import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm";
-import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea";
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage";
 import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage";
 import useLoadRepost from "../hooks/useLoadRepost";
 import useExtractHashtags from "../hooks/useExtractHashtags";
+import ValidatedField from "../components/ValidatedForm/components/ValidatedField";
 
 
 interface CreatePostProps {
@@ -65,7 +65,8 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                     </span>
                 </div>
 
-                <ValidatedTextarea 
+                <ValidatedField
+                    type="textarea"
                     title="Post"    
                     value={postBody}
                     setValue={setPostBody}

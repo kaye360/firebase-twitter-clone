@@ -5,11 +5,11 @@ import { AppContext } from "../App"
 import Button from "../components/Button"
 import useExtractHashtags from "../hooks/useExtractHashtags"
 import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm"
-import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea"
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage"
 import useLoadRepost from "../hooks/useLoadRepost"
 import Avatar from "../components/Avatar"
+import ValidatedField from "../components/ValidatedForm/components/ValidatedField"
 
 
 interface EditPostProps {
@@ -57,7 +57,8 @@ export default function EditPost({postId, defaultPostBody = '', repostId = null}
                     </span>
                 </div>
 
-                <ValidatedTextarea 
+                <ValidatedField
+                    type="textarea"
                     title="Post"
                     value={postBody}
                     setValue={setPostBody}
