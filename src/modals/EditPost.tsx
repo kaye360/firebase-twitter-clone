@@ -149,7 +149,7 @@ function useEditPost({postId} : EditPostProps) {
 
     
     useEffect( () => {
-        const newHashtags = extractHashtags({body})
+        const newHashtags = extractHashtags({string : body})
         setHashtags(newHashtags || [])
     }, [body])
 

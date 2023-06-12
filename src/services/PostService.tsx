@@ -57,7 +57,7 @@ interface CreatePostProps {
 export async function createPost({body, repostId = null, targetUserId = null, userHandle = null} : CreatePostProps) : Promise<ResponseSuccess> {
     try {
 
-        const hashtags = extractHashtags({body})
+        const hashtags = extractHashtags({string: body})
         
         const post = await addDoc(postCollectionRef,  {
             body,
@@ -139,7 +139,7 @@ export async function updatePostBody(id : string, body : string) : Promise<Respo
             throw 'You must be logged in to post'
         }
 
-        const hashtags = extractHashtags({body})
+        const hashtags = extractHashtags({string : body})
 
         const postDocToEdit = doc(db, "posts", id)
         await updateDoc(postDocToEdit, {body, hashtags})

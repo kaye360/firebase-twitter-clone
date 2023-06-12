@@ -1,87 +1,15 @@
-import { useContext, useState } from "react"
 import QuarkLogo from "../components/QuarkSvgLogo"
-import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm"
-import ValidatedInput from "../components/ValidatedForm/components/ValidatedInput"
-import ValidatorRules from "../components/ValidatedForm/utils/ValidatorRules"
-import { AppContext } from "../App"
-import Button from "../components/Button"
-import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
-import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea"
-import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage"
+
+
 
 export default function Home() {
 
-    const [field1, setField1] = useState<string>('')
-    const [field2, setField2] = useState<string>('')
-    const [field3, setField3] = useState<string>('')
-
-    const appContext = useContext(AppContext)
-    const [currentUser] = useState(appContext?.userHandle)
-
-    const handles = ['one', 'two', 'three', 'four', ]
-
-    function handleSubmit() {
-        console.log('submitted successfully')
-    }
 
     return(
-    <>
-
-        <ValidatedForm 
-            handleSubmit={handleSubmit}
-            rules={{auth : true}}
-            config={{successMessage : 'Post created successfully.'}}
-        >
-
-            <label>
-                <div>Field 1</div>
-                <ValidatedTextarea
-                    type="text"
-                    title="Field1"
-                    value={field1}
-                    setValue={setField1}
-                    rules={{required : true, maxLength : 200}}
-                />
-            </label>
-
-
-            <label>
-                <div>Field 3</div>
-                <ValidatedInput
-                    type="text"
-                    title="Field3"
-                    value={field3}
-                    setValue={setField3}
-                    rules={{
-                        maxLength : 10,
-                        required : true,
-                        allowableChars : {
-                            regex : ValidatorRules.regexUserHandle,
-                            chars : 'letters, numbers, - _',
-                        },
-                        unique : {
-                            all : handles,
-                            current : currentUser as string
-                        }
-                    }}
-                />
-            </label>
-
-            <SubmitErrorMessage />
-
-            <SubmitSuccessMessage />
-
-            <Button type="submit">
-                Submit
-            </Button>
-
-        </ValidatedForm>
-
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         <div className="animate-bounce-up-in pb-12">
-            <h1 className="relative block py-12 md:py-24 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left overflow-hidden text-blue-700">
+            <h1 className="relative block py-12 md:py-20 px-4 border-0 rounded-xl bg-gradient-to-r from-blue-100 to-emerald-100 text-center md:text-left overflow-hidden text-blue-700">
 
-                <p className="relative z-10">
+                <p className="relative z-10 my-4">
                     Exchange your ideas with <span className="inline-block px-4 py-2 rounded-xl font-bold bg-gradient-to-r from-rose-300 to-orange-300 text-white">Quark</span>
                 </p>
 
@@ -131,7 +59,6 @@ export default function Home() {
             </ul>
 
         </div>
-    </>
     )
 }
 

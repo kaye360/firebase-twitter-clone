@@ -2,7 +2,7 @@
 export const hashtagRegex = /(#+[a-zA-Z0-9-]{1,})/g
 
 interface ExtractHashtagsProps {
-    body : string,
+    string : string,
 }
 
 /**
@@ -11,9 +11,11 @@ interface ExtractHashtagsProps {
  * This function extracts hashtags from a text string and returns them as an array
  * All hashtags are stored as lowercase
  */
-export function extractHashtags({body} : ExtractHashtagsProps) : string[] {
+export function extractHashtags({string} : ExtractHashtagsProps) : string[] {
 
-    const hashtags = body.match(hashtagRegex)
+    if( typeof string !== 'string') throw 'Invalid string argument in extractHashtags()'
+
+    const hashtags = string.match(hashtagRegex)
     if(!hashtags) return []
 
     const hashtagsLowercase = hashtags.map(tag => tag.toLowerCase() ) as RegExpMatchArray

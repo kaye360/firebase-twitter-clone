@@ -1,11 +1,11 @@
-import { SyntheticEvent, createContext, useContext } from "react";
+import { FormHTMLAttributes, SyntheticEvent, createContext, useContext } from "react";
 import useValidatedFormContext, { UseValidatedFormContext } from "../hooks/useValidatedFormContext";
 import ValidatorRules, { Rules } from "../utils/ValidatorRules";
 
 
 
 
-interface ValidatedFormProps {
+interface ValidatedFormProps extends FormHTMLAttributes<HTMLFormElement> {
     handleSubmit : Function,
     rules        : Rules,
     config       : {
@@ -31,6 +31,11 @@ export const ValidatedFormContext  = createContext<UseValidatedFormContext | nul
  * 
  * @param handleSubmit (function) Form onSubmit handler. This is the action to be taken on 
  * form submit after successful validation. No need for e.preventDefault().
+ * 
+ * @param config (object) 
+ * 
+ * @property successMessage 
+ * Message shown on successfull form submit
  * 
  * @param rules (object Rules) Rules object to be checked on form submission. Other form elements
  * will also automatically be checke first.
@@ -58,7 +63,7 @@ export const ValidatedFormContext  = createContext<UseValidatedFormContext | nul
  * <button type="submit">Submit</button>
  * 
  */
-export default function ValidatedForm({ handleSubmit, rules = {}, config, children } : ValidatedFormProps) {
+export default function ValidatedForm({ handleSubmit, rules = {}, config, children, ...rest } : ValidatedFormProps) {
 
 
     const validatedFormContext = useValidatedFormContext()
@@ -66,7 +71,7 @@ export default function ValidatedForm({ handleSubmit, rules = {}, config, childr
 
     return (
         <ValidatedFormContext.Provider value={validatedFormContext}>
-            <ValidatedFormElement handleSubmit={handleSubmit} rules={rules} config={config}>
+            <ValidatedFormElement handleSubmit={handleSubmit} rules={rules} config={config} {...rest}>
                 {children}
             </ValidatedFormElement>
         </ValidatedFormContext.Provider>
@@ -77,11 +82,11 @@ export default function ValidatedForm({ handleSubmit, rules = {}, config, childr
 
 
 
-function ValidatedFormElement({ handleSubmit, rules, config, children } : ValidatedFormProps) {
+function ValidatedFormElement({ handleSubmit, rules, config, children, ...rest } : ValidatedFormProps) {
 
     const formContext = useContext(ValidatedFormContext)
 
-    function handleFormSubmit(e: SyntheticEvent) {
+    async function handleFormSubmit(e: SyntheticEvent) {
         e.preventDefault()
 
         try {
@@ -89,7 +94,7 @@ function ValidatedFormElement({ handleSubmit, rules, config, children } : Valida
             if( typeof config !== 'object') throw 'Config object not set.'
             if( typeof config.successMessage !== 'string') throw 'onSubmit success message not set in config object.'
             validateOnSubmit()
-            handleSubmit()
+            await handleSubmit()
             formContext?.setFormSubmitSuccessMessage(config.successMessage)
             
         } catch (error) {
@@ -120,7 +125,11 @@ function ValidatedFormElement({ handleSubmit, rules, config, children } : Valida
 
 
     return (
-        <form onSubmit={handleFormSubmit} onChange={() => formContext?.setFormSubmitErrorMessage('')}>
+        <form 
+            onSubmit={handleFormSubmit} 
+            onChange={() => formContext?.setFormSubmitErrorMessage('')}
+            {...rest}
+        >
             {children}
         </form>
     )  

@@ -1,16 +1,18 @@
-import { SyntheticEvent, useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../components/Button";
-import ValidationError from "../components/Validation/ValidationError";
 import { useNavigate } from "react-router-dom";
 import Icon from "../components/Icon";
 import { auth } from "../../firebase-config";
 import { AppContext } from "../App";
-import { Post } from "../utils/types";
-import { extractHashtags } from "../utils/hashtags";
-import PostValidator from "../utils/validators/PostValidator";
-import { createPost, getPost } from "../services/PostService";
+import { createPost } from "../services/PostService";
 import Avatar from "../components/Avatar";
 import { redirectTime } from "../utils/appConfig";
+import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm";
+import ValidatedTextarea from "../components/ValidatedForm/components/ValidatedTextarea";
+import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage";
+import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage";
+import useLoadRepost from "../hooks/useLoadRepost";
+import useExtractHashtags from "../hooks/useExtractHashtags";
 
 
 interface CreatePostProps {
@@ -20,18 +22,17 @@ interface CreatePostProps {
 
 export default function CreatePost({targetUserId = null, repostId = null} : CreatePostProps) {
 
-    const { 
-        appContext, 
-        handleFormSubmit, 
-        handleOnChange,
-        body, 
-        setBody, 
-        repost, 
-        hashtags, 
-        hasHashtags, 
-        formSubmitMessage,
-        errorMessage,
-    } = useCreatePost({targetUserId, repostId})
+
+    const [postBody, setPostBody] = useState<string>('')
+
+
+    const { appContext, handleFormSubmit } = useCreatePost({postBody, targetUserId, repostId})
+
+
+    const { repost } = useLoadRepost({repostId})
+
+
+    const { hashtags, hasHashtags } = useExtractHashtags({string : postBody})
 
 
     if( !auth.currentUser ) {
@@ -44,25 +45,31 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
     }
 
     return (
-        <form onSubmit={ handleFormSubmit }>
+        <ValidatedForm 
+            handleSubmit={ handleFormSubmit } 
+            config={{successMessage : 'Post created successfully'}}
+            rules={{auth : true}}
+            id="create-post-form" // For dev use. Used to insert dummy text
+        >
             <div className="flex flex-col gap-4">
                 <h2>Create a Post</h2>
 
                 <div className="flex justify-between">
-                    <label htmlFor="create-post-body">Posting as {appContext?.userHandle}</label>
-                    <span className={body.length > 200 ? 'text-red-400 font-bold' : ''}>
-                        {body.length} / 200
+                    <label htmlFor="create-post-postBody">Posting as {appContext?.userHandle}</label>
+                    <span className={postBody.length > 200 ? 'text-red-400 font-bold' : ''}>
+                        {postBody.length} / 200
                     </span>
                 </div>
 
-                <ValidationError message={errorMessage} />
-
-                <textarea
-                    id="create-post-body"
-                    value={body}
-                    onChange={ handleOnChange}
-                    className="p-4 rounded-lg border w-full h-36"
-                ></textarea>
+                <ValidatedTextarea 
+                    title="Post"    
+                    value={postBody}
+                    setValue={setPostBody}
+                    rules={{
+                        required  : true,
+                        maxLength : 200,
+                    }}
+                />
 
                 { repostId && 
                     <div className="bg-blue-100 border border-blue-200 w-full rounded-lg p-4">
@@ -105,98 +112,53 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                         Create
                     </Button>
 
+                    <SubmitErrorMessage />
+                    <SubmitSuccessMessage />
 
-                    {formSubmitMessage}
                 </div>
 
-                {/* For development and testing */}
-                <Button onClick={(e) => { e.preventDefault(); setBody('Lorem ipsum #dolor sit amet consectetur #adipisicing elit. Asperiores aliquid #illum dicta excepturi labore, hic #cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.') }}>
+                {/* For development and testing 
+
+                    The dispatchEvent is needed to trigger an onChange event, which
+                    then triggers the useEffect hook */}
+                <Button onClick={(e) => { 
+                    e.preventDefault() 
+                    setPostBody('Lorem ipsum #dolor sit amet consectetur #adipisicing elit. Asperiores aliquid #illum dicta excepturi labore, hic #cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.')
+                    document.getElementById('create-post-form')?.dispatchEvent(new Event('change'))
+                 }}>
                     Insert dummy text
                 </Button>
 
             </div>
-        </form>
+        </ValidatedForm>
     )
 }
 
 
 
 
-function useCreatePost({targetUserId =  null, repostId = null} : CreatePostProps) {
+interface UseCreatePostProps extends CreatePostProps {
+    postBody : string,
+}
 
+function useCreatePost({postBody, targetUserId =  null, repostId = null} : UseCreatePostProps) {
+
+    
     const appContext = useContext(AppContext)
     const navigate   = useNavigate()
 
 
-    const [body, setBody]                 = useState<string>('')
-    const [formSubmitMessage, setFormSubmitMessage] = useState<string | null>(null)
-    const [errorMessage, setErrorMessage] = useState<string>('')
-    const [repost, setRepost]             = useState<Post | null>(null)
-    const [hasUserTyped, setHasUserTyped] = useState<boolean>(false)
-    const [hashtags, setHashtags]         = useState<string[]>([])
-    const hasHashtags                     = hashtags.length !== 0
+    async function handleFormSubmit() {
 
+        const res = await createPost({
+            body: postBody,
+            repostId,
+            targetUserId,
+            userHandle : appContext?.userHandle as string,
+        })
 
-    async function handleFormSubmit(e: SyntheticEvent) {
-        e.preventDefault()
-        
-        try {
-            PostValidator.onSubmit({postBody : body})
-            setFormSubmitMessage('Posting...')
-    
-            const res = await createPost({
-                body,
-                repostId,
-                targetUserId,
-                userHandle : appContext?.userHandle as string,
-            })
-    
-            setFormSubmitMessage(res.message)
-            
-            if( res.success && res.content) exitModal({to : '/post/' + res.content})
-            
-
-        } catch (error) {
-
-            if( typeof error === 'string') {
-                setFormSubmitMessage(error)
-            }
-        }
-        
+        if( res.success && res.content) exitModal({to : '/post/' + res.content})
     }
-
-
-    function handleOnChange(e: SyntheticEvent) {
-        if( !(e.target instanceof HTMLTextAreaElement)) return
-        setBody(e.target.value)
-        setHasUserTyped(true)
-    }
-
-
-    useEffect( () => {
-        ( async function loadRepost() {
-            if( !repostId ) return
-            const loadRepost = await getPost(repostId)
-            setRepost(loadRepost)
-        })()
-    }, [])
-
-
-    useEffect( () => {
-        if(!hasUserTyped) return 
-        
-        try {
-            PostValidator.onChange({postBody : body})
-            setErrorMessage('')
-        } catch (error) {
-            if( typeof error === 'string') {
-                setErrorMessage(error)
-            }
-        }
-
-        const newHashtags = extractHashtags({body})
-        setHashtags(newHashtags || [])
-    }, [body])
 
 
     function exitModal({to} : {to : string}) {
@@ -207,6 +169,6 @@ function useCreatePost({targetUserId =  null, repostId = null} : CreatePostProps
     }
 
 
-    return { appContext, handleOnChange, handleFormSubmit, body, setBody, repost, hashtags, hasHashtags, formSubmitMessage, errorMessage }
+    return { appContext, handleFormSubmit }
 
 }
