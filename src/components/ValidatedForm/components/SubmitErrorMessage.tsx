@@ -12,7 +12,7 @@ export default function SubmitErrorMessage({...rest}) {
 
     return (
         <div 
-            className={` ${formContext?.formSubmitErrorMessage ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500 py-2`}
+            className={` ${formContext?.formSubmitErrorMessage ? 'grid grid-rows-[1fr] py-2' : 'grid grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500`}
             {...rest}
         >
             <div className="overflow-hidden flex items-center gap-2">

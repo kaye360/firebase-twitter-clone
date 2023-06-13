@@ -17,3 +17,13 @@ export const MAX_POST_LENGTH = 200
  * Max Comment length in chars
  */
 export const MAX_COMMENT_LENGTH = 200
+
+/**
+ * Max User Handle length
+ */
+export const MAX_USER_HANDLE_LENGTH = 15
+
+/**
+ * Min User Handle length
+ */
+export const MIN_USER_HANDLE_LENGTH = 5

@@ -1,9 +1,9 @@
-import { useContext, useState, Dispatch, SetStateAction } from "react"
+import { useContext, useState } from "react"
 import { AppContext } from "../../App"
 import { createComment } from "../../services/CommentService"
 import Button from "../Layout/Button"
-import { MAX_COMMENT_LENGTH, REDIRECT_TIME } from "../../utils/appConfig"
-import ValidatedForm, { ValidatedFormContext } from "../ValidatedForm/components/ValidatedForm"
+import { MAX_COMMENT_LENGTH } from "../../utils/appConfig"
+import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
 import ValidatedField from "../ValidatedForm/components/ValidatedField"
 import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
@@ -16,7 +16,7 @@ interface CommentFormProps {
 
 export default function CommentForm({ postId, targetUserId } : CommentFormProps) {
 
-    const [commentBody, setCommentBody] = useState<string>('')
+    const [commentBody, setCommentBody]    = useState<string>('')
     const { appContext, handleFormSubmit } = useCommentForm({ postId, targetUserId, commentBody })
 
 
@@ -38,7 +38,7 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
                 rules={{auth : true}}
             >
 
-                <div className="flex justify-between">
+                <div className="flex justify-between mb-2">
                     <label htmlFor="comment-body">Posting as { appContext?.userHandle }: </label>
                     <span className={ commentBody.length > MAX_COMMENT_LENGTH ? 'text-red-500' : ''}>
                         {commentBody.length} / {MAX_COMMENT_LENGTH}
@@ -48,6 +48,7 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
                 <ValidatedField
                     type="textarea" 
                     title={"Comment"} 
+                    id="comment-body"
                     value={commentBody}
                     setValue={setCommentBody} 
                     rules={{

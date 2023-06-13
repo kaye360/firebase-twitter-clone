@@ -1,60 +1,137 @@
-import useUpdateUserHandle from "../../hooks/useUpdateUserHandle"
+import { MouseEventHandler, useContext, useState, SyntheticEvent, useEffect, SetStateAction, Dispatch } from "react"
+import { AppContext } from "../../App"
+import { getAllUserHandles, updateUser } from "../../services/UserServices"
 import Icon from "../Layout/Icon"
+import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
+import { MAX_USER_HANDLE_LENGTH, MIN_USER_HANDLE_LENGTH } from "../../utils/appConfig"
+import ValidatedField from "../ValidatedForm/components/ValidatedField"
+import Button from "../Layout/Button"
+import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
+import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
+import ValidatorRules from "../ValidatedForm/utils/ValidatorRules"
 
 
 
 export default function UpdateUserHandleForm() {
 
-    const userHandle = useUpdateUserHandle()
+
+    const [userHandle, setUserHandle] = useState<string>('')
+    const { handleReset, handleFormSubmit, allUserHandles } = useUpdateUserHandle({userHandle, setUserHandle})
     
+
     return (
-        <form onSubmit={ userHandle.handleUpdate }>
+        <ValidatedForm 
+            handleSubmit={handleFormSubmit} 
+            rules={{auth : true}} 
+            config={{successMessage: "User handle updated."}} 
+        >
 
-            <div className="grid grid-cols-[1ch_1fr_20px] items-center gap-4">
-                <label htmlFor="user-handle" className="text-xl">@</label>
-                <input
-                    type="text"
-                    value={ userHandle.userHandle } 
-                    onChange={ userHandle.handleChange }
-                    className="border-blue-200"
-                    id="user-handle"
-                />
+            <div className="grid grid-cols-[1ch_1fr] items-end gap-4">
+
+                <label htmlFor="user-handle" className="text-xl font-bold -translate-y-2">@</label>
+
                 <div>
-                    { userHandle.isValidated ? (
-                        <Icon icon="check_circle" className="text-emerald-400" />
-                    ) : (
-                        <Icon icon="error_outline" className="text-rose-400" />
-                    )}
+                    <ValidatedField 
+                        title={"User Handle"} 
+                        value={userHandle} 
+                        setValue={setUserHandle} 
+                        type={"text"} 
+                        id="user-handle"
+                        rules={{
+                            required : true,
+                            minLength : MIN_USER_HANDLE_LENGTH,
+                            maxLength : MAX_USER_HANDLE_LENGTH,
+                            unique : {
+                                current : '',
+                                all : allUserHandles
+                            },
+                            allowableChars : {
+                                regex : ValidatorRules.regexUserHandle,
+                                chars : 'letters, numbers, periods, underscores, and hyphens'
+                            }
+                        }}
+                    />
                 </div>
+
             </div>
 
+            <SubmitErrorMessage />
+            <SubmitSuccessMessage />
 
-            <div className={` ${userHandle.errorMessage ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 text-rose-500 py-2`}>
-                <div className="overflow-hidden">
-                    { userHandle.errorMessage }
-                </div>
-            </div>
-
-            <div className="flex items-center gap-4 mt-4">
-                <button
-                    type="submit"
-                    disabled={ !userHandle.isValidated }
-                    className={`inline-flex items-center gap-2 bg-blue-100 hover:bg-fuchsia-100 px-4 py-2 rounded-lg ${ userHandle.isValidated ? '' : 'opacity-40 cursor-not-allowed'}`}
-                >
+            <div className="flex items-center gap-4 mt-2">
+                <Button type="submit" className="bg-blue-100 hover:bg-fuchsia-50">
                     <Icon icon="save" /> Save
-                </button>
+                </Button>
 
-                <button onClick={ userHandle.handleReset } className="bg-blue-50 hover:bg-fuchsia-50 bg-opacity-50 px-4 py-2 rounded-lg">
+                <Button type="reset" onClick={ handleReset } className="border border-blue-300 hover:border-fuchsia-300">
                     Reset
-                </button>
-
-                <div>
-                    { userHandle.successMessage }
-                </div>
+                </Button>
             </div>
 
-        </form>
+
+        </ValidatedForm>
     )
 }
 
 
+
+
+
+interface UseUpdateUserHandleProps {
+    userHandle    : string,
+    setUserHandle : Dispatch<SetStateAction<string>>,
+}
+
+interface UseUpdateUserHandle { 
+    handleReset      : MouseEventHandler<HTMLButtonElement>, 
+    handleFormSubmit : Function, 
+    allUserHandles   : string[] 
+}
+
+function useUpdateUserHandle({userHandle, setUserHandle} : UseUpdateUserHandleProps) : UseUpdateUserHandle {
+
+
+    const appContext                          = useContext(AppContext)
+    const [allUserHandles, setAllUserHandles] = useState<string[]>([''])
+
+
+    useEffect( () => {
+        ( async function loadAllUserHandles() {
+
+            let handlesList = await getAllUserHandles()
+            if( !Array.isArray(handlesList) ) return
+
+            handlesList = handlesList?.filter( handle => handle !== appContext?.userHandle)
+            setAllUserHandles(handlesList)
+        })();
+    }, [])
+
+
+    useEffect( () => {
+        ( function setInputToCurrentUserHandle () {
+            if(appContext?.userHandle) setUserHandle(appContext?.userHandle)
+        })()
+    }, [appContext?.userHandle])
+
+
+    async function handleFormSubmit() {
+
+        const update = await updateUser({
+            userId   : appContext?.firebaseAuth?.uid as string,
+            newField : { handle : userHandle }
+        })
+
+        if( update.success ) {
+            appContext?.setUserHandle(userHandle)
+        }
+    }
+
+
+    function handleReset(e: SyntheticEvent) {
+        e.preventDefault()
+        setUserHandle(appContext?.userHandle as string)
+    }
+
+
+    return { handleReset, handleFormSubmit, allUserHandles }
+}

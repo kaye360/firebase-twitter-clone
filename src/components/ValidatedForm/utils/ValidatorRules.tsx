@@ -28,9 +28,23 @@ export default class ValidatorRules {
      * Reusable regular expressions
      */
 
-    public static regexHashTag      = /^[a-zA-Z0-9-]+$/
+    /**
+     * Hashtag regex. Letters, number, and -
+     */
+    public static regexHashTag = /^[a-zA-Z0-9-]+$/
+
+    /**
+     * User handle regex. Letters, Numbers, ., _, and -
+     */
     public static regexUserHandle   = /^[a-zA-Z0-9._-]+$/
+    
+    /**
+     * User Location regex. Letters, numbers, space, ., -, and ,
+     */
     public static regexUserLocation = /^[a-zA-Z0-9 .,-]+$/
+
+
+
 
     /**
      * Validation rule methods
@@ -59,6 +73,8 @@ export default class ValidatorRules {
     public static isLoggedIn() : boolean {
         return !!auth.currentUser
     }
+
+
 
 
     /**
