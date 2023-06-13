@@ -37,7 +37,7 @@ export default function ValidatedField({
                     value={value}
                     onChange={handleOnChange}
                     {...rest}
-                />
+                ></textarea>
 
             ) : (
 

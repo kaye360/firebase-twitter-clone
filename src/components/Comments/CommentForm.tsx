@@ -2,8 +2,8 @@ import { useContext, FormEvent, SyntheticEvent } from "react"
 import { AppContext } from "../../App"
 import { createComment } from "../../services/CommentService"
 import ValidationError from "../Validation/ValidationError"
-import useValidateComment from "../../hooks/useValidateComment"
 import Button from "../Layout/Button"
+import useValidateComment from "../../hooks/useValidateComment"
 
 interface CommentFormProps {
     postId : string,

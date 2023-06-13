@@ -37,7 +37,7 @@ export default class ValidatorRules {
      */
 
     public static isEmpty(string: string) : boolean {
-        return ( !string || string.length === 0 )
+        return ( !string || string.trim().length === 0 )
     }
 
     public static isTooShort(string: string, minLength: number) : boolean {

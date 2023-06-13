@@ -56,6 +56,8 @@ export default function useValidatedField({
         ) ) return
         setValue(e.target.value)
         setHasUserTyped(true)
+        validatedFormContext?.setFormSubmitErrorMessage('')
+        validatedFormContext?.setFormSubmitSuccessMessage('')
     }
 
 

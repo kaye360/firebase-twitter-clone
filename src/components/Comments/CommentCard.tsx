@@ -4,9 +4,9 @@ import { PostComment, User } from "../../utils/types"
 import Avatar from "../Layout/Avatar"
 import { AppContext } from "../../App"
 import { Link } from "react-router-dom"
-import EditCommentForm from "../../modals/EditCommentForm"
 import Button from "../Layout/Button"
 import Icon from "../Layout/Icon"
+import EditComment from "../../modals/EditComment"
 
 interface CommentCardProps {
     comment: PostComment,
@@ -34,7 +34,7 @@ export default function CommentCard({ comment, user }: CommentCardProps) {
                     </Link>
 
                     { comment.userId === auth.currentUser?.uid && (
-                        <Button onClick={ () => appContext?.setModal(<EditCommentForm comment={comment} />) } >
+                        <Button onClick={ () => appContext?.setModal(<EditComment comment={comment} />) } >
                             <Icon icon="more_vert" className="text-blue-500 hover:text-orange-500" />
                         </Button>
                     )}

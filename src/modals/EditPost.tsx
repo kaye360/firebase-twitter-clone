@@ -44,7 +44,7 @@ export default function EditPost({postId, defaultPostBody = '', repostId = null}
     return (
         <ValidatedForm 
             handleSubmit={handleFormSubmit}
-            config={{ successMessage : 'Post update successfully. Closing...' }}
+            config={{ successMessage : 'Post updated successfully. Closing...' }}
             rules={{ auth : true }}
         >
             <div className="grid gap-4">
