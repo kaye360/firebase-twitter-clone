@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Icon from "./Icon";
 import Button from "./Button";
 import ValidatedForm from "../ValidatedForm/components/ValidatedForm";
@@ -13,7 +13,7 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
 
     const [searchPhrase, setSearchPhrase] = useState<string>(defaultSearchPhrase);
 
-    const { handleSearch  } = useSearchBar({defaultSearchPhrase, searchPhrase, setSearchPhrase})
+    const { handleSearch } = useSearchBar({defaultSearchPhrase, searchPhrase, setSearchPhrase})
 
     return (
         <ValidatedForm 
@@ -22,23 +22,25 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
             rules={{}}
         >
 
+            <h2 className="mt-4 mb-2">Search Tags</h2>
+
             <div className="grid grid-cols-[1fr_50px_50px] items-center pl-4 rounded-xl border border-blue-300">
 
-                    <ValidatedField 
-                        type={"search"} 
-                        title={"Search"} 
-                        value={searchPhrase} 
-                        setValue={setSearchPhrase} 
-                        showError={false}
-                        className="border-0 hover:outline-none focus-visible:outline-none"
-                        rules={{
-                            required : true,
-                            allowableChars : {
-                                regex : ValidatorRules.regexHashTag,
-                                chars : 'letters, numbers, and hyphens (-)'
-                            }
-                        }} 
-                    />
+                <ValidatedField 
+                    type={"search"} 
+                    title={"Search"} 
+                    value={searchPhrase} 
+                    setValue={setSearchPhrase} 
+                    showError={false}
+                    className="border-0 hover:outline-none focus-visible:outline-none"
+                    rules={{
+                        required : true,
+                        allowableChars : {
+                            regex : ValidatorRules.regexHashTag,
+                            chars : 'letters, numbers, and hyphens (-)'
+                        }
+                    }} 
+                />
 
                 <Button type="submit">
                     <Icon icon="search" />
@@ -70,7 +72,7 @@ function useSearchBar({defaultSearchPhrase = '', searchPhrase, setSearchPhrase} 
     const navigate = useNavigate();
 
 
-    function handleSearch(e: SyntheticEvent) {
+    function handleSearch() {
             navigate(`/tag/${searchPhrase}`);
     }
 
