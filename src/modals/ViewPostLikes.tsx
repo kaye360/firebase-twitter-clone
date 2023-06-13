@@ -13,9 +13,10 @@ interface ViewPostLikesProps {
 
 export default function ViewPostLikes({likes} : ViewPostLikesProps) {
 
-    const appContext = useContext(AppContext)
 
+    const appContext        = useContext(AppContext)
     const [users, setUsers] = useState< Users | null>(null)
+
 
     useEffect( () => {
         ( async function loadUserHandles() {

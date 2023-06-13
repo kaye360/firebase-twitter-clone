@@ -15,8 +15,27 @@ export interface ValidatedFieldProps extends InputHTMLAttributes<HTMLElement> {
 }
 
 
+/**
+ * @param title
+ * (string) The name of the field as shown to the user
+ * 
+ * @param value
+ * (string) Field value state
+ * 
+ * @param setValue
+ * (setState function) Field value state setter
+ * 
+ * @param type
+ * (string) Type of input. Ex: text, search, textarea etc.
+ * 
+ * @param showError
+ * (boolean) Whether or not to show errors in realtime
+ * 
+ * @param rules
+ * (interface Rule) Validation rules
+ */
 export default function ValidatedField({
-    title, value, setValue, type, showError, rules = {}, ...rest
+    title, value, setValue, type, showError = true, rules = {}, ...rest
 } : ValidatedFieldProps) {
 
 

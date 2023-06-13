@@ -15,9 +15,9 @@ interface EditCommentProps {
 
 export default function EditComment({comment} : EditCommentProps) {
 
-    const [commentBody, setCommentBody] = useState<string>(comment.comment)
 
-    const { handleFormSubmit } = useEditComment({comment, commentBody})
+    const [commentBody, setCommentBody] = useState<string>(comment.comment)
+    const { handleFormSubmit }          = useEditComment({comment, commentBody})
 
 
     return (
