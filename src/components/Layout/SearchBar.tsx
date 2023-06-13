@@ -1,34 +1,46 @@
 import { useNavigate } from "react-router-dom";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from "react";
 import Icon from "./Icon";
 import Button from "./Button";
-import SearchValidator from "../../utils/validators/SearchValidator";
+import ValidatedForm from "../ValidatedForm/components/ValidatedForm";
+import ValidatorRules from "../ValidatedForm/utils/ValidatorRules";
+import ValidatedField from "../ValidatedForm/components/ValidatedField";
+import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage";
 
 
 
 export function SearchBar({ defaultSearchPhrase = '' }) {
 
-    const { 
-        searchPhrase, 
-        setSearchPhrase, 
-        handleChange, 
-        handleSearch, 
-        errorMessage,
-    } = useSearchBar({defaultSearchPhrase})
+    const [searchPhrase, setSearchPhrase] = useState<string>(defaultSearchPhrase);
+
+    const { handleSearch  } = useSearchBar({defaultSearchPhrase, searchPhrase, setSearchPhrase})
 
     return (
-        <form onSubmit={handleSearch}>
+        <ValidatedForm 
+            handleSubmit={handleSearch}
+            config={{successMessage : ''}}
+            rules={{}}
+        >
 
             <div className="grid grid-cols-[1fr_50px_50px] items-center pl-4 rounded-xl border border-blue-300">
 
-                <input
-                    type="text"
-                    className="border-none outline-none focus-visible:outline-none bg-transparent"
-                    value={searchPhrase}
-                    onChange={handleChange} 
-                />
+                    <ValidatedField 
+                        type={"search"} 
+                        title={"Search"} 
+                        value={searchPhrase} 
+                        setValue={setSearchPhrase} 
+                        showError={false}
+                        className="border-0 hover:outline-none focus-visible:outline-none"
+                        rules={{
+                            required : true,
+                            allowableChars : {
+                                regex : ValidatorRules.regexHashTag,
+                                chars : 'letters, numbers, and hyphens (-)'
+                            }
+                        }} 
+                    />
 
-                <Button>
+                <Button type="submit">
                     <Icon icon="search" />
                 </Button>
 
@@ -38,42 +50,28 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
 
             </div>
 
-            {/* <ValidationError message={errorMessage} /> */}
+            <SubmitErrorMessage />
 
-        </form>
+        </ValidatedForm>
     );
 
 }
 
 
 
+interface UseSearchBarProps {
+    defaultSearchPhrase : string,
+    searchPhrase        : string,
+    setSearchPhrase     : Dispatch<SetStateAction<string>>
+}
 
-function useSearchBar({defaultSearchPhrase = ''}) {
+function useSearchBar({defaultSearchPhrase = '', searchPhrase, setSearchPhrase} : UseSearchBarProps) {
 
     const navigate = useNavigate();
 
-    const [searchPhrase, setSearchPhrase] = useState<string>(defaultSearchPhrase);
-    const [errorMessage, setErrorMessage] = useState<string>('');
 
     function handleSearch(e: SyntheticEvent) {
-        e.preventDefault();
-
-        try {
-            SearchValidator.onSubmit({searchPhrase})
-    
-            setErrorMessage('');
             navigate(`/tag/${searchPhrase}`);
-
-        } catch (error : any) {
-            setErrorMessage(error)
-        }
-    }
-
-
-    function handleChange(e: SyntheticEvent) {
-        if (!(e.target instanceof HTMLInputElement)) return;
-        setErrorMessage('');
-        setSearchPhrase(e.target.value);
     }
 
 
@@ -82,5 +80,5 @@ function useSearchBar({defaultSearchPhrase = ''}) {
     }, [defaultSearchPhrase])
 
 
-    return { handleChange, handleSearch, searchPhrase, setSearchPhrase, errorMessage }
+    return { handleSearch }
 }

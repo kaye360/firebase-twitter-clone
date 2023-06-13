@@ -6,17 +6,17 @@ import useValidatedField from "../hooks/useValidatedField"
 
 
 export interface ValidatedFieldProps extends InputHTMLAttributes<HTMLElement> {
-    title    : string,
-    value    : string,
-    setValue : Dispatch<React.SetStateAction<string>>,
-    rules    : Rules,
-    type     : 'text' | 'email' | 'number' | 'search' | 'tel' | 'url' | 'textarea',
-    ref?     : MutableRefObject<any>
+    title      : string,
+    value      : string,
+    setValue   : Dispatch<React.SetStateAction<string>>,
+    type       : 'text' | 'email' | 'number' | 'search' | 'tel' | 'url' | 'textarea',
+    showError? : boolean,
+    rules      : Rules,
 }
 
 
 export default function ValidatedField({
-    title, value, setValue, type, rules = {}, ...rest
+    title, value, setValue, type, showError, rules = {}, ...rest
 } : ValidatedFieldProps) {
 
 
@@ -29,7 +29,9 @@ export default function ValidatedField({
 
     return (
         <>
-            <ValidationError message={hasUserTyped ? errorMessage : ''} />
+            { showError &&
+                <ValidationError message={hasUserTyped ? errorMessage : ''} />
+            }
 
             { type === 'textarea' ? (
 
