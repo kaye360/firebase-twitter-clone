@@ -1,6 +1,6 @@
-import { UseGetPosts } from "../hooks/useGetPosts"
-import Button from "./Button"
-import Icon from "./Icon"
+import { UseGetPosts } from "../../hooks/useGetPosts"
+import Button from "../Layout/Button"
+import Icon from "../Layout/Icon"
 import PostCard from "./PostCard"
 
 

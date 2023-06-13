@@ -1,8 +1,8 @@
 import { ErrorBoundary } from "react-error-boundary"
 import { AppContext } from "../App"
 import { SyntheticEvent, useContext, useEffect } from "react"
-import Icon from "../components/Icon"
 import { AnimatePresence, motion } from "framer-motion"
+import Icon from "../components/Layout/Icon"
 
 interface ModalProps {
     content : JSX.Element | null | undefined

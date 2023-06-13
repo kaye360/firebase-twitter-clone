@@ -1,4 +1,4 @@
-import Icon, { IconProps } from "../../Icon";
+import Icon, { IconProps } from "../../Layout/Icon"
 
 interface ValidationIconProps extends IconProps {
     isValid : boolean,

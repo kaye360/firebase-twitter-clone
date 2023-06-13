@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import Avatar from '../Avatar'
-import Icon from '../Icon'
+import Avatar from '../../Layout/Avatar'
 import { useContext } from 'react'
-import { AppContext } from '../../App'
-import EditPost from '../../modals/EditPost'
-import { Post } from '../../utils/types'
+import { AppContext } from '../../../App'
+import EditPost from '../../../modals/EditPost'
+import { Post } from '../../../utils/types'
+import Icon from '../../Layout/Icon'
 
 interface PostCardHeaderProps {
     post     : Post,

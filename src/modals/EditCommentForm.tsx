@@ -1,9 +1,9 @@
 import { SyntheticEvent } from "react"
 import { PostComment } from "../utils/types"
-import Button from "../components/Button"
 import useValidateComment from "../hooks/useValidateComment"
 import ValidationError from "../components/Validation/ValidationError"
 import { editComment } from "../services/CommentService"
+import Button from "../components/Layout/Button"
 
 interface EditCommentProps {
     comment : PostComment,

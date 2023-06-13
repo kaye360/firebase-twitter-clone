@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import Avatar from "../Avatar";
-import { Post } from "../../utils/types";
-import Icon from "../Icon";
+import Avatar from "../../Layout/Avatar";
+import { Post } from "../../../utils/types";
+import Icon from "../../Layout/Icon";
 
 
 interface RepostProps {

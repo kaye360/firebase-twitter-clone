@@ -1,12 +1,12 @@
  import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { getPost } from "../../services/PostService"
+import { getPost } from "../../../services/PostService"
 import { PostCardProps } from "../PostCard"
 import Repost from "./Repost"
 import PostCardHeader from "./PostCardHeader"
 import PostCardActions from "./PostCardActions"
-import { Post } from "../../utils/types"
-import { hashtagRegex } from "../../utils/hashtags"
+import { Post } from "../../../utils/types"
+import { hashtagRegex } from "../../../utils/hashtags"
 import reactStringReplace from "react-string-replace"
 import { motion } from "framer-motion"
 
@@ -24,8 +24,6 @@ export default function PostCardElement({ post, isLoaded, isShowingViewPostBtn }
         bodyWithHashtags, 
         repost 
     } = usePostCardElement({ post })
-
-    console.log(repost)
 
     
     return (

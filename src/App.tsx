@@ -1,7 +1,7 @@
-import Layout from "./components/Layout"
 import { createContext } from "react"
 import useAppContext, { UseAppContext } from "./hooks/useAppContext"
-import AppRouter from "./components/AppRouter"
+import AppRouter from "./components/Routing/AppRouter"
+import Layout from "./components/Layout/Layout"
 
 
 export const AppContext = createContext<UseAppContext | null>(null)

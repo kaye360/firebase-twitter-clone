@@ -1,11 +1,8 @@
-import { useContext, useState } from "react";
-import Button from "../components/Button";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Icon from "../components/Icon";
 import { auth } from "../../firebase-config";
 import { AppContext } from "../App";
 import { createPost } from "../services/PostService";
-import Avatar from "../components/Avatar";
 import { MAX_POST_LENGTH, REDIRECT_TIME } from "../utils/appConfig";
 import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm";
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage";
@@ -13,6 +10,10 @@ import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitS
 import useLoadRepost from "../hooks/useLoadRepost";
 import useExtractHashtags from "../hooks/useExtractHashtags";
 import ValidatedField from "../components/ValidatedForm/components/ValidatedField";
+import RepostPreview from "../components/Posts/RepostPreview";
+import HashtagsPreview from "../components/Posts/HashtagsPreview";
+import Button from "../components/Layout/Button";
+import Icon from "../components/Layout/Icon";
 
 
 interface CreatePostProps {
@@ -59,7 +60,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                 <h2>Create a Post</h2>
 
                 <div className="flex justify-between">
-                    <label htmlFor="create-post-postBody">Posting as {appContext?.userHandle}</label>
+                    <label htmlFor="postBody">Posting as {appContext?.userHandle}</label>
                     <span className={postBody.length > MAX_POST_LENGTH ? 'text-red-400 font-bold' : ''}>
                         {postBody.length} / {MAX_POST_LENGTH}
                     </span>
@@ -67,6 +68,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
 
                 <ValidatedField
                     type="textarea"
+                    id="postBody"
                     title="Post"    
                     value={postBody}
                     setValue={setPostBody}
@@ -76,41 +78,9 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                     }}
                 />
 
-                { repostId && 
-                    <div className="bg-blue-100 border border-blue-200 w-full rounded-lg p-4">
-                        <h3 className="font-bold mb-4 border-b border-slate-300">Reposting:</h3>
+                { repostId && <RepostPreview repost={repost} /> }
 
-                        { repost ? (
-                            <div>
-                                <h4 className="flex items-center gap-2 mb-2 font-bold text-blue-700">
-                                    <Avatar src={repost.user?.avatar} className="w-8 h-8" />
-                                    {repost?.user?.handle}
-                                </h4>
-                                {repost.body}
-                            </div>
-                        ) : (
-                            <p>Post could not be loaded</p>
-                        )}
-                    </div>
-                }
-
-                <div 
-                    className={` ${ hasHashtags ? 'grid grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-200 py-2`}
-                >
-                    <div className="overflow-hidden flex items-center flex-wrap gap-2">
-
-                        {hasHashtags &&
-                            <span className="font-bold">Hashtags:</span>
-                        }
-
-                        {hashtags.map( (tag, index) => (
-                            <span className="px-3 py-1 border rounded-lg" key={index}>
-                                {tag}
-                            </span>
-                        ))}
-
-                    </div>
-                </div>                
+                <HashtagsPreview hashtags={hashtags} hasHashtags={hasHashtags} />
 
                 <div className="flex items-center gap-4">
                     <Button type="submit" className="bg-blue-200 hover:bg-rose-200">
@@ -129,7 +99,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                 <Button onClick={(e) => { 
                     e.preventDefault() 
                     setPostBody('Lorem ipsum #dolor sit amet consectetur #adipisicing elit. Asperiores aliquid #illum dicta excepturi labore, hic #cupiditate consequatur qui eius obcaecati aperiam necessitatibus pariatur expedita.')
-                    document.getElementById('create-post-form')?.dispatchEvent(new Event('change'))
+                    document.getElementById('postBody')?.dispatchEvent(new KeyboardEvent('change'))
                  }}>
                     Insert dummy text
                 </Button>

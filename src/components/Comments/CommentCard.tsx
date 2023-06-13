@@ -1,12 +1,12 @@
 import { useContext } from "react"
 import { auth } from "../../../firebase-config"
 import { PostComment, User } from "../../utils/types"
-import Avatar from "../Avatar"
-import Button from "../Button"
+import Avatar from "../Layout/Avatar"
 import { AppContext } from "../../App"
-import Icon from "../Icon"
 import { Link } from "react-router-dom"
 import EditCommentForm from "../../modals/EditCommentForm"
+import Button from "../Layout/Button"
+import Icon from "../Layout/Icon"
 
 interface CommentCardProps {
     comment: PostComment,

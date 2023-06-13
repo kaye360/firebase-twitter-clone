@@ -1,13 +1,13 @@
 import { ReactElement, useContext } from "react"
-import { signInWithGoogle } from "../services/UserServices"
-import { AppContext } from "../App"
-import Modal from "../modals/Modal"
-import Avatar from "./Avatar"
 import { ErrorBoundary } from "react-error-boundary"
 import NavLinks from "./NavLinks"
 import { Link } from "react-router-dom"
 import Button from "./Button"
 import QuarkSvgLogo from "./QuarkSvgLogo"
+import { AppContext } from "../../App"
+import Modal from "../../modals/Modal"
+import { signInWithGoogle } from "../../services/UserServices"
+import Avatar from "./Avatar"
 
 
 interface LayoutProps {

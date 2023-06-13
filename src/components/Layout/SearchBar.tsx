@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { SyntheticEvent, useEffect, useState } from "react";
 import Icon from "./Icon";
 import Button from "./Button";
-import ValidationError from "./Validation/ValidationError";
-import SearchValidator from "../utils/validators/SearchValidator";
+import SearchValidator from "../../utils/validators/SearchValidator";
 
 
 
@@ -39,7 +38,7 @@ export function SearchBar({ defaultSearchPhrase = '' }) {
 
             </div>
 
-            <ValidationError message={errorMessage} />
+            {/* <ValidationError message={errorMessage} /> */}
 
         </form>
     );

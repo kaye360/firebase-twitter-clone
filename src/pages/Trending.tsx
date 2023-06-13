@@ -2,8 +2,8 @@ import { getAllRecentHashtags } from "../services/HashtagService"
 import { useEffect, useState } from "react"
 import { RecentHashtags } from "../utils/types"
 import { Link } from "react-router-dom"
-import { SearchBar } from "../components/SearchBar"
-import Icon from "../components/Icon"
+import Icon from "../components/Layout/Icon"
+import { SearchBar } from "../components/Layout/SearchBar"
 
 
 

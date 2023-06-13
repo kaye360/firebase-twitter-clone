@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import Button from "../Button";
-import Icon from "../Icon";
-import { toggleLikePost } from "../../services/PostService";
+import { toggleLikePost } from "../../../services/PostService";
 import { useContext } from "react";
-import { AppContext } from "../../App";
-import { Post } from "../../utils/types";
-import ViewPostLikes from "../../modals/ViewPostLikes";
-import CreatePost from "../../modals/CreatePost";
+import { AppContext } from "../../../App";
+import { Post } from "../../../utils/types";
+import ViewPostLikes from "../../../modals/ViewPostLikes";
+import CreatePost from "../../../modals/CreatePost";
+import Button from "../../Layout/Button";
+import Icon from "../../Layout/Icon";
 
 interface PostCardActionsProps {
     post : Post

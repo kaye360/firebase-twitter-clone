@@ -1,11 +1,11 @@
 import { Suspense, lazy } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { Link } from "react-router-dom"
-import { PostCardLoader } from "../components/PostCard/PostCardLoader"
-import Icon from "../components/Icon"
+import { PostCardLoader } from "../components/Posts/PostCard/PostCardLoader"
 import useGetPosts from "../hooks/useGetPosts"
+import Icon from "../components/Layout/Icon"
 
-const PostList = lazy( () => import("../components/PostList") )
+const PostList = lazy( () => import("../components/Posts/PostList") )
 
 export default function Explore() {
 

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { getUsers } from "../services/UserServices"
 import { Users } from "../utils/types"
 import { Link } from "react-router-dom"
-import Avatar from "../components/Avatar"
+import Avatar from "../components/Layout/Avatar"
 import { AppContext } from "../App"
 
 

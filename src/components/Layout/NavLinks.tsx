@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { AppContext } from "../App"
 import Icon from "./Icon"
 import Button from "./Button"
-import CreatePost from "../modals/CreatePost"
 import { onSnapshot, DocumentReference, DocumentData, doc } from "firebase/firestore"
-import { auth, db } from "../../firebase-config"
-import { User } from "../utils/types"
+import { auth, db } from "../../../firebase-config"
+import { AppContext } from "../../App"
+import CreatePost from "../../modals/CreatePost"
+import { User } from "../../utils/types"
 
 
 

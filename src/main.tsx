@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { BrowserRouter } from "react-router-dom"
-import ScrollToTop from './components/ScrollToTop.tsx'
+import ScrollToTopOnPathChange from './components/Layout/ScrollToTopOnPathChange.tsx'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<ScrollToTop />
+			<ScrollToTopOnPathChange />
 			<App />
 		</BrowserRouter>
 	</React.StrictMode>,

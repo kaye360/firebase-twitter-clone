@@ -74,8 +74,10 @@ export default function useValidatedField({
      * Validation as user types
      */
     useEffect( () => {
-
-        if( !hasUserTyped ) return
+        if( !hasUserTyped ) {
+            setHasUserTyped(true)
+            return
+        }
         const prev = {...validatedFormContext?.formState} as FormState
 
         try {

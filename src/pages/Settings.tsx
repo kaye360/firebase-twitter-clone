@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import Icon from "../components/Icon";
 import UpdateUserBioForm from "../components/Settings/UpdateUserBioForm";
 import UpdateUserHandleForm from "../components/Settings/UpdateUserHandleForm";
 import { getUser, signOutOfGoogle } from "../services/UserServices";
 import { AppContext } from "../App";
 import UpdateUserLocationForm from "../components/Settings/UpdateUserLocationForm";
 import { User } from "../utils/types";
-import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/Layout/Button";
+import Icon from "../components/Layout/Icon";
 
 
 export default function Settings() {

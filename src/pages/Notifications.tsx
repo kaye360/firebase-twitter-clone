@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import Icon from "../components/Icon";
 import { UserNotification } from "../utils/types";
 import { AppContext } from "../App";
 import { getUser } from "../services/UserServices";
 import { Link } from "react-router-dom";
-import Button from "../components/Button";
 import { markNotifcationsAsRead } from "../services/NotificationService";
 import { motion } from "framer-motion";
 import { auth } from "../../firebase-config";
+import Button from "../components/Layout/Button";
+import Icon from "../components/Layout/Icon";
 
 
 

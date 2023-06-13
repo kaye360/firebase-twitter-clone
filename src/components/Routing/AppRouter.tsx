@@ -1,14 +1,14 @@
 import { Route, Routes } from 'react-router-dom'
-import Home from '../pages/Home'
-import Explore from '../pages/Explore'
-import SinglePost from '../pages/SinglePost'
-import Notifications from '../pages/Notifications'
-import Profile from '../pages/Profile'
-import Settings from '../pages/Settings'
+import Home from '../../pages/Home'
+import Explore from '../../pages/Explore'
+import SinglePost from '../../pages/SinglePost'
+import Notifications from '../../pages/Notifications'
+import Profile from '../../pages/Profile'
+import Settings from '../../pages/Settings'
 import PrivateRoutes from './PrivateRoutes'
-import Unauthorized from '../pages/Unauthorized'
-import Trending from '../pages/Trending'
-import Tag from '../pages/Tag'
+import Unauthorized from '../../pages/Unauthorized'
+import Trending from '../../pages/Trending'
+import Tag from '../../pages/Tag'
 
 export default function AppRouter() {
     return (

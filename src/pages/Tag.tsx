@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom"
 import useGetPosts from "../hooks/useGetPosts"
-import PostList from "../components/PostList"
-import { SearchBar } from "../components/SearchBar"
+import PostList from "../components/Posts/PostList"
 import { useEffect, useState } from "react"
-import BackBtn from "../components/BackBtn"
+import BackBtn from "../components/Layout/BackBtn"
+import { SearchBar } from "../components/Layout/SearchBar"
 
 export default function Tag() {
 

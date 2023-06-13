@@ -1,4 +1,4 @@
-import { Dispatch, InputHTMLAttributes } from "react"
+import { Dispatch, InputHTMLAttributes, MutableRefObject } from "react"
 import ValidationError from "./ValidationError"
 import { Rules } from "../utils/ValidatorRules"
 import useValidatedField from "../hooks/useValidatedField"
@@ -10,16 +10,13 @@ export interface ValidatedFieldProps extends InputHTMLAttributes<HTMLElement> {
     value    : string,
     setValue : Dispatch<React.SetStateAction<string>>,
     rules    : Rules,
-    type     : 'text' | 'email' | 'number' | 'search' | 'tel' | 'url' | 'textarea'
+    type     : 'text' | 'email' | 'number' | 'search' | 'tel' | 'url' | 'textarea',
+    ref?     : MutableRefObject<any>
 }
 
+
 export default function ValidatedField({
-    title, 
-    value, 
-    setValue, 
-    type,
-    rules = {}, 
-    ...rest
+    title, value, setValue, type, rules = {}, ...rest
 } : ValidatedFieldProps) {
 
 

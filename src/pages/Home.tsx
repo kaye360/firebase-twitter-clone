@@ -1,4 +1,4 @@
-import QuarkLogo from "../components/QuarkSvgLogo"
+import QuarkSvgLogo from "../components/Layout/QuarkSvgLogo"
 
 
 
@@ -17,9 +17,9 @@ export default function Home() {
                     Microblogging Redefined, One Quantum Leap at a Time
                 </p>
 
-                <QuarkLogo className='absolute top-1/2 left-3/4 z-0 -translate-y-1/2 scale-[10] blur-[0.4px] opacity-10' />
-                <QuarkLogo className='absolute top-4 left-12 z-0 -translate-y-1/2 scale-[2] blur-[0.4px] opacity-10' />
-                <QuarkLogo className='absolute bottom-4 left-[15%] z-0 -translate-y-1/2 scale-[4] blur-[0.4px] opacity-10' />
+                <QuarkSvgLogo className='absolute top-1/2 left-3/4 z-0 -translate-y-1/2 scale-[10] blur-[0.4px] opacity-10' />
+                <QuarkSvgLogo className='absolute top-4 left-12 z-0 -translate-y-1/2 scale-[2] blur-[0.4px] opacity-10' />
+                <QuarkSvgLogo className='absolute bottom-4 left-[15%] z-0 -translate-y-1/2 scale-[4] blur-[0.4px] opacity-10' />
             </h1>
 
             <SectionHeading>What is <AppName>Quark?</AppName></SectionHeading>

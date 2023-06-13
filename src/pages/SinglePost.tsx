@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom"
 import useGetSinglePost from "../hooks/useGetSinglePost"
-import PostCard from "../components/PostCard"
+import PostCard from "../components/Posts/PostCard"
 import CommentForm from "../components/Comments/CommentForm"
 import CommentList from "../components/Comments/CommentList"
 import { PostComment } from "../utils/types"
-import BackBtn from "../components/BackBtn"
+import BackBtn from "../components/Layout/BackBtn"
 
 export default function SinglePost() {
 

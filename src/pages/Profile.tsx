@@ -1,15 +1,14 @@
-
 import { Suspense, useState, useEffect, useContext } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
-import PostList from '../components/PostList'
-import { PostCardLoader } from '../components/PostCard/PostCardLoader'
+import PostList from '../components/Posts/PostList'
+import { PostCardLoader } from '../components/Posts/PostCard/PostCardLoader'
 import { PostListError } from './Explore'
-import Icon from '../components/Icon'
 import { getUser } from '../services/UserServices'
 import { AppContext } from '../App'
 import { User } from '../utils/types'
 import useGetPosts from '../hooks/useGetPosts'
+import Icon from '../components/Layout/Icon'
 
 export default function Profile() {
 
