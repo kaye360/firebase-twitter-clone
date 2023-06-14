@@ -123,7 +123,7 @@ function GuestAvatar() : JSX.Element {
 
     const appContext = useContext(AppContext)
 
-    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true)
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
 
     async function signIn() {
