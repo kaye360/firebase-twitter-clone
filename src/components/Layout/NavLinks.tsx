@@ -125,7 +125,9 @@ function NotifcationBubble() {
 
             onSnapshot( userRef as DocumentReference<DocumentData>, snap => {
                 const user = snap.data() as User
-                setNotificationCount( user.notificationsNew.length )
+                if( typeof user === 'object' && 'notificationsNew' in user ) {
+                    setNotificationCount( user.notificationsNew.length )
+                }
             })
         })()
     }, [auth.currentUser])
@@ -139,5 +141,7 @@ function NotifcationBubble() {
         )
     }
 
+    
+    // Spacer for no 0 notifications
     return <div className="px-3 py-2 md:px-2 md:py-[3px]"></div>
 }

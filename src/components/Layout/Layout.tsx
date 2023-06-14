@@ -1,4 +1,4 @@
-import { ReactElement, useContext } from "react"
+import { ReactElement, useContext, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import NavLinks from "./NavLinks"
 import { Link } from "react-router-dom"
@@ -6,8 +6,9 @@ import Button from "./Button"
 import QuarkSvgLogo from "./QuarkSvgLogo"
 import { AppContext } from "../../App"
 import Modal from "../../modals/Modal"
-import { signInWithGoogle } from "../../services/UserServices"
+import { signInAsGuest, signInWithGoogle } from "../../services/UserServices"
 import Avatar from "./Avatar"
+import Icon from "./Icon"
 
 
 interface LayoutProps {
@@ -103,9 +104,7 @@ function UserAvatar() : JSX.Element {
     return(
         <div className="absolute top-[8px] right-4 md:static flex items-center flex-row-reverse md:flex-row gap-2 mt-auto">
 
-            { appContext?.firebaseAuth?.photoURL &&
-                <Avatar src={appContext?.firebaseAuth?.photoURL} />
-            }
+            <Avatar src={appContext?.firebaseAuth?.photoURL || null} />
 
             <div className="font-bold text-blue-600">
                 <Link to="/profile" className="hover:underline hover:text-rose-500">
@@ -124,21 +123,59 @@ function GuestAvatar() : JSX.Element {
 
     const appContext = useContext(AppContext)
 
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true)
+
+
     async function signIn() {
+
         const user = await signInWithGoogle()
-
         if( !user ) return
-
         appContext?.setUserHandle(user.handle)
     }
 
+    
+    async function handleSignInAsGuest() {
+
+        const user = await signInAsGuest()
+        if( !user ) return
+        appContext?.setUserHandle(user.handle)
+    }
+
+
     return (
-        <Button 
-            onClick={signIn} 
-            className="absolute top-[8px] right-4 md:static bg-blue-200 hover:bg-rose-200 mt-auto justify-center"
-        >
-            Sign In
-        </Button>
+        <div className="absolute top-[8px] right-4 z-50 md:static mt-auto">
+        
+            <Button onClick={() => setIsMenuOpen(!isMenuOpen)} className="mb-2 bg-blue-100 bg-opacity-60 w-full justify-end md:justify-between">
+                Sign in
+                <Icon icon="expand_less" className={` ${isMenuOpen ? 'rotate-0 md:rotate-[540deg]' :  'rotate-[540deg] md:rotate-0'} transition-all duration-1000 `} />
+            </Button>
+
+            <div className={` 
+                ${isMenuOpen ? 'grid grid-rows-[1fr]' : 'grid grid-rows-[0fr]'} 
+                transition-[grid-template-rows] duration-200
+            `}>
+
+                <div className="overflow-hidden grid gap-2">
+
+                    <Button 
+                        onClick={signIn} 
+                        className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-none ${!isMenuOpen ? '-translate-y-8 md:translate-y-8' : ''} `}
+                    >
+                        Google Account
+                    </Button>
+
+                    <Button 
+                        onClick={handleSignInAsGuest}
+                        className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-none ${!isMenuOpen ? '-translate-y-16 md:translate-y-16' : ''} `}
+                    >
+                        Guest Account
+                    </Button>
+
+                </div>
+
+            </div>
+
+        </div>
     )
 }
 

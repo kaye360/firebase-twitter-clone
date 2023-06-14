@@ -1,4 +1,4 @@
-import { signInWithPopup, signOut } from "firebase/auth"
+import { getAuth, signInAnonymously, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../../firebase-config"
 import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "firebase/firestore"
 import { ResponseSuccess, User, Users } from "../utils/types"
@@ -26,6 +26,45 @@ export async function signInWithGoogle() : Promise<User | null>  {
 			user = {
 				handle			 : signIn.user.email?.split('@')[0].substring(0,15) as string,
 				avatar			 : signIn.user.photoURL as string, 
+				bio 			 : 'Hi! I\'m new to this app.',
+				location 		 : 'Earth',
+				notificationsNew : [],
+				notificationsOld : [],
+			}
+            await setDoc(userRef, user)
+        }
+
+		return user as User
+
+	} catch (error) {
+		return null
+	}
+}
+
+
+
+
+export async function signInAsGuest() : Promise<User | null>  {
+	try {
+		const signIn = getAuth()
+		await signInAnonymously(signIn)
+
+		if(!signIn || !signIn.currentUser ) return null
+
+        const userId : string | null = signIn.currentUser.uid
+        const userRef  				 = doc(db, "users", userId)
+        const userSnap 				 = await getDoc(userRef)
+		let user 	   				 = userSnap.data() as User
+
+        if( !userSnap.exists() ) {
+
+			const randomChars: string = crypto.randomUUID().slice(0,5)
+			const handle: string = 'guest_' + randomChars
+			
+			// Create a new user in users collection if not already created
+			user = {
+				handle,
+				avatar			 : null, 
 				bio 			 : 'Hi! I\'m new to this app.',
 				location 		 : 'Earth',
 				notificationsNew : [],

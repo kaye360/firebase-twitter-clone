@@ -2,7 +2,7 @@ import { SyntheticEvent } from "react"
 
 
 interface AvatarProps {
-    src? : string,
+    src?       : string | null,
     className? : string
 }
 
