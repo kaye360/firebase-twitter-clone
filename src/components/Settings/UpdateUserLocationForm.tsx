@@ -1,10 +1,15 @@
-import Validator from "../../utils/validators/Validator"
-import ValidationIcon from "../Validation/ValidationIcon"
-import ValidationError from "../Validation/ValidationError"
-import useUpdateUserLocation from "../../hooks/useUpdateUserLocation"
 import { User } from "../../utils/types"
 import Button from "../Layout/Button"
 import Icon from "../Layout/Icon"
+import { MouseEventHandler, useContext, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction } from "react"
+import { AppContext } from "../../App"
+import { updateUser } from "../../services/UserServices"
+import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
+import { MAX_USER_LOCATION_LENGTH } from "../../utils/appConfig"
+import ValidatedField from "../ValidatedForm/components/ValidatedField"
+import ValidatorRules from "../ValidatedForm/utils/ValidatorRules"
+import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
+import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
 
 
 interface UpdateUserLocationFormProps {
@@ -13,53 +18,107 @@ interface UpdateUserLocationFormProps {
 
 export default function UpdateUserLocationForm({user} : UpdateUserLocationFormProps) {
 
-    const userLocation = useUpdateUserLocation({user})
+
+    const [userLocation, setUserLocation]   = useState<string>('')
+    const { handleFormSubmit, handleReset } = useUpdateUserLocation({ user, userLocation, setUserLocation })
+
     
     return (
-        <form onSubmit={ userLocation.handleUpdate }>
+        <ValidatedForm
+            handleSubmit={handleFormSubmit}
+            config={{successMessage : 'Location updated.'}}
+            rules={{}}
+        >
 
-            <div className="relative grid grid-cols-[1fr_20px] items-center gap-4">
+            <h2 className="flex justify-between my-2">
+                Location:
+                <span className={`font-normal ${userLocation.length > MAX_USER_LOCATION_LENGTH ? 'text-red-400' : ''}`}>
+                    {userLocation.length} / {MAX_USER_LOCATION_LENGTH}
+                </span>
+            </h2>
 
-                <div className="absolute right-[30px] top-[-2rem]">
-                    <span className={Validator.isTooLong(userLocation.userLocation, 30) ? 'text-red-400' : ''}>
-                        {userLocation.userLocation.length} / 30
-                    </span>
-                </div>
+            <ValidatedField 
+                title={"Location"} 
+                value={userLocation} 
+                setValue={setUserLocation} 
+                type={"text"} 
+                rules={{
+                    maxLength : MAX_USER_LOCATION_LENGTH,
+                    allowableChars : {
+                        regex : ValidatorRules.regexUserLocation,
+                        chars : 'letters, numbers, spaces, and .-, characters'
+                    }
+                }}                
+            />
 
-                <input
-                    value={ userLocation.userLocation } 
-                    onChange={ userLocation.handleChange }
-                    className="border-blue-200"
-                    id="user-location"
-                />
 
-                <ValidationIcon isValid={userLocation.isValidated} />
+            <SubmitErrorMessage />
+            <SubmitSuccessMessage />
 
-            </div>
+            <div className="flex items-center gap-4 mt-2">
 
-            <ValidationError message={userLocation.errorMessage} />
-
-            <div className="flex items-center gap-4">
                 <Button
                     type="submit"
-                    disabled={ !userLocation.isValidated }
                     className="bg-blue-100 hover:bg-fuchsia-100"
                 >
                     <Icon icon="save" /> Save
                 </Button>
 
                 <Button 
-                    onClick={ userLocation.handleReset } 
-                    className="border border-blue-200 hover:border-fuchsia-400 font-medium"
+                    onClick={ handleReset } 
+                    className="border border-blue-200 hover:border-fuchsia-400"
                 >
                     Reset
                 </Button>
 
-                <div>
-                    { userLocation.successMessage }
-                </div>
             </div>
 
-        </form>
+        </ValidatedForm>
     )
+}
+
+
+
+
+
+interface UseUpdateUserLocation { 
+    handleFormSubmit : Function, 
+    handleReset      : MouseEventHandler<HTMLButtonElement>,
+}
+
+interface UseUpdateUserBioProps { 
+    user : User,
+    userLocation : string, 
+    setUserLocation : Dispatch<SetStateAction<string>>,
+}
+
+function useUpdateUserLocation({ user, userLocation, setUserLocation } : UseUpdateUserBioProps) : UseUpdateUserLocation {
+
+
+    const appContext = useContext(AppContext)
+
+
+    useEffect( () => {
+        ( function loadCurrentUserLocation() {
+            if(user?.location) setUserLocation(user.location)
+        })()
+    }, [user])
+
+
+    async function handleFormSubmit() {
+
+        await updateUser({
+            userId   : appContext?.firebaseAuth?.uid as string,
+            newField : { location : userLocation }
+        })
+    }
+
+
+    function handleReset(e: SyntheticEvent) {
+        e.preventDefault()
+        setUserLocation(user.location)
+    }
+
+
+    return { handleFormSubmit, handleReset }
 }

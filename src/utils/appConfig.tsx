@@ -25,5 +25,15 @@ export const MAX_USER_HANDLE_LENGTH = 15
 
 /**
  * Min User Handle length
- */
+*/
 export const MIN_USER_HANDLE_LENGTH = 5
+
+/**
+ * Max User Bio length
+ */
+export const MAX_USER_BIO_LENGTH = 150
+
+/**
+ * Max User Location length
+ */
+export const MAX_USER_LOCATION_LENGTH = 50

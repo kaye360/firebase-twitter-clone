@@ -1,10 +1,14 @@
-import useUpdateUserBio from "../../hooks/useUpdateUserBio"
-import Validator from "../../utils/validators/Validator"
-import ValidationIcon from "../Validation/ValidationIcon"
-import ValidationError from "../Validation/ValidationError"
 import { User } from "../../utils/types"
 import Button from "../Layout/Button"
 import Icon from "../Layout/Icon"
+import { MouseEventHandler, useContext, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction } from "react"
+import { AppContext } from "../../App"
+import { updateUser } from "../../services/UserServices"
+import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
+import ValidatedField from "../ValidatedForm/components/ValidatedField"
+import { MAX_USER_BIO_LENGTH } from "../../utils/appConfig"
+import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
+import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
 
 
 interface UpdateUserBioFormProps {
@@ -13,53 +17,98 @@ interface UpdateUserBioFormProps {
 
 export default function UpdateUserBioForm({user} : UpdateUserBioFormProps) {
 
-    const userBio = useUpdateUserBio({user})
+    const [userBio, setUserBio] = useState<string>('')
+    const { handleFormSubmit, handleReset } = useUpdateUserBio({ user, userBio, setUserBio })
     
+
     return (
-        <form onSubmit={ userBio.handleUpdate }>
+        <ValidatedForm 
+            handleSubmit={handleFormSubmit}
+            rules={{auth : true}}
+            config={{successMessage : 'Bio updated.'}}
+        >
 
-            <div className="relative grid grid-cols-[1fr_20px] items-center gap-4">
+            <h2 className="flex justify-between my-2">
+                Bio:
+                <span className={userBio.length > MAX_USER_BIO_LENGTH ? 'text-red-400' : ''}>
+                    {userBio.length} / {MAX_USER_BIO_LENGTH}
+                </span>
+            </h2>
 
-                <div className="absolute right-[30px] top-[-2rem]">
-                    <span className={Validator.isTooLong(userBio.userBio, 200) ? 'text-red-400' : ''}>
-                        {userBio.userBio.length} / 200
-                    </span>
-                </div>
+            <ValidatedField
+                title="User Bio"
+                type="textarea"
+                value={userBio}
+                setValue={setUserBio}
+                rules={{maxLength : MAX_USER_BIO_LENGTH}}
+            />
 
-                <textarea
-                    value={ userBio.userBio } 
-                    onChange={ userBio.handleChange }
-                    className="border-blue-200 h-24"
-                    id="user-bio"
-                ></textarea>
-
-                <ValidationIcon isValid={userBio.isValidated} />
-
-            </div>
-
-            <ValidationError message={userBio.errorMessage} />
+            <SubmitErrorMessage />
+            <SubmitSuccessMessage />
 
             <div className="flex items-center gap-4">
                 <Button
                     type="submit"
-                    disabled={ !userBio.isValidated }
                     className="bg-blue-100 hover:bg-fuchsia-100"
                 >
                     <Icon icon="save" /> Save
                 </Button>
 
                 <Button 
-                    onClick={ userBio.handleReset } 
+                    onClick={ handleReset } 
                     className="border border-blue-200 hover:border-fuchsia-400 font-medium"
                 >
                     Reset
                 </Button>
 
-                <div>
-                    { userBio.successMessage }
-                </div>
             </div>
 
-        </form>
+        </ValidatedForm>
     )
+}
+
+
+
+
+interface UseUpdateUserBio { 
+    handleFormSubmit : Function, 
+    handleReset      : MouseEventHandler<HTMLButtonElement>,
+}
+
+interface UseUpdateUserBioProps { 
+    user       : User,
+    userBio    : string,
+    setUserBio : Dispatch<SetStateAction<string>>,
+}
+
+function useUpdateUserBio({ user, userBio, setUserBio } : UseUpdateUserBioProps) : UseUpdateUserBio {
+
+
+    const appContext = useContext(AppContext)
+
+
+    useEffect( () => {
+        ( function loadCurrentUserBio() {
+            if(user?.bio) setUserBio(user.bio)
+        })()
+    }, [user])
+
+
+
+    async function handleFormSubmit() {
+
+        await updateUser({
+            userId   : appContext?.firebaseAuth?.uid as string,
+            newField : { bio : userBio }
+        })
+    }
+
+
+    function handleReset(e: SyntheticEvent) {
+        e.preventDefault()
+        setUserBio(user.bio)
+    }
+
+
+    return { handleFormSubmit, handleReset }
 }

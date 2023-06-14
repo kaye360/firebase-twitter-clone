@@ -48,7 +48,7 @@ export default function Layout({children }: LayoutProps) {
 
             </div>
 
-            <footer className="bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900 text-white pb-32 md:pb-0 py-16">
+            <footer className="bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-sky-800 to-indigo-900 text-white pt-16 pb-32 md:pb-16">
 
                 <div className="flex items-start justify-center gap-12 mx-auto">
 

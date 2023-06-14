@@ -9,6 +9,7 @@ import Button from "../Layout/Button"
 import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
 import ValidatorRules from "../ValidatedForm/utils/ValidatorRules"
+import { UseAppContext } from "../../hooks/useAppContext"
 
 
 
@@ -16,7 +17,7 @@ export default function UpdateUserHandleForm() {
 
 
     const [userHandle, setUserHandle] = useState<string>('')
-    const { handleReset, handleFormSubmit, allUserHandles } = useUpdateUserHandle({userHandle, setUserHandle})
+    const { handleReset, handleFormSubmit, allUserHandles, appContext } = useUpdateUserHandle({userHandle, setUserHandle})
     
 
     return (
@@ -25,6 +26,13 @@ export default function UpdateUserHandleForm() {
             rules={{auth : true}} 
             config={{successMessage: "User handle updated."}} 
         >
+
+            <h2 className="flex justify-between my-2">
+                Handle:
+                <span className={`font-normal ${userHandle.length > MAX_USER_HANDLE_LENGTH || userHandle.length < MIN_USER_HANDLE_LENGTH ? 'text-red-400' : ''}`}>
+                    {userHandle.length} / {MAX_USER_HANDLE_LENGTH}
+                </span>
+            </h2>
 
             <div className="grid grid-cols-[1ch_1fr] items-end gap-4">
 
@@ -42,8 +50,8 @@ export default function UpdateUserHandleForm() {
                             minLength : MIN_USER_HANDLE_LENGTH,
                             maxLength : MAX_USER_HANDLE_LENGTH,
                             unique : {
-                                current : '',
-                                all : allUserHandles
+                                current : appContext?.userHandle as string,
+                                all     : allUserHandles
                             },
                             allowableChars : {
                                 regex : ValidatorRules.regexUserHandle,
@@ -85,7 +93,8 @@ interface UseUpdateUserHandleProps {
 interface UseUpdateUserHandle { 
     handleReset      : MouseEventHandler<HTMLButtonElement>, 
     handleFormSubmit : Function, 
-    allUserHandles   : string[] 
+    allUserHandles   : string[],
+    appContext       : UseAppContext | null,
 }
 
 function useUpdateUserHandle({userHandle, setUserHandle} : UseUpdateUserHandleProps) : UseUpdateUserHandle {
@@ -101,10 +110,10 @@ function useUpdateUserHandle({userHandle, setUserHandle} : UseUpdateUserHandlePr
             let handlesList = await getAllUserHandles()
             if( !Array.isArray(handlesList) ) return
 
-            handlesList = handlesList?.filter( handle => handle !== appContext?.userHandle)
+            // handlesList = handlesList?.filter( handle => handle !== appContext?.userHandle)
             setAllUserHandles(handlesList)
         })();
-    }, [])
+    }, [appContext?.userHandle])
 
 
     useEffect( () => {
@@ -133,5 +142,5 @@ function useUpdateUserHandle({userHandle, setUserHandle} : UseUpdateUserHandlePr
     }
 
 
-    return { handleReset, handleFormSubmit, allUserHandles }
+    return { handleReset, handleFormSubmit, allUserHandles, appContext }
 }

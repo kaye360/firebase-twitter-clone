@@ -12,6 +12,7 @@ import Icon from "../components/Layout/Icon";
 
 export default function Settings() {
     
+    
     const appContext      = useContext(AppContext)
     const navigate        = useNavigate()
     const [user, setUser] = useState<User | null>(null)
@@ -37,25 +38,24 @@ export default function Settings() {
         <div>
             <h1><Icon icon="settings" /> Settings</h1>
 
-            <div className="flex flex-col gap-12 my-8">
+            <div className="grid gap-12 my-8">
                 
-                <Setting heading="Handle" htmlFor="user-handle">
-                    <UpdateUserHandleForm />
-                </Setting>
+                <UpdateUserHandleForm />
 
-                <Setting heading="Bio" htmlFor="user-bio">
-                    <UpdateUserBioForm user={user as User} />
-                </Setting>
+                <UpdateUserBioForm user={user as User} />
 
-                <Setting heading="Location" htmlFor="user-location">
-                    <UpdateUserLocationForm user={user as User} />
-                </Setting>
+                <UpdateUserLocationForm user={user as User} />
 
-                <Setting heading="Sign out of your account">
-                    <Button onClick={signOut} className="text-blue-700 border border-blue-700 hover:border-rose-600 hover:text-rose-700">
+                <div>
+                    <h2 className="mb-2">
+                        Sign out of your account:
+                    </h2>
+
+                    <Button onClick={signOut} className="bg-blue-100 hover:bg-fuchsia-100">
+                        <Icon icon="logout" />
                         Sign out
                     </Button>
-                </Setting>
+                </div>
 
             </div>
 
@@ -65,22 +65,3 @@ export default function Settings() {
 
 
 
-interface SettingProps {
-    heading    : string,
-    htmlFor?   : string,
-    children?  : any
-}
-
-function Setting({htmlFor, heading, children} : SettingProps) {
-    return (
-        <div>
-            <h2 className="mb-2"> 
-                <label htmlFor={htmlFor}>
-                    {heading}:
-                </label>
-            </h2>    
-
-            {children}
-        </div>
-    )
-}
