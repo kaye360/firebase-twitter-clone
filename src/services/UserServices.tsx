@@ -1,7 +1,8 @@
 import { getAuth, signInAnonymously, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../../firebase-config"
 import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "firebase/firestore"
-import { ResponseSuccess, User, Users } from "../utils/types"
+import { AsynchronousResponse, User, Users } from "../utils/types"
+import { AsyncResponse } from "../utils/AsyncResponse"
 
 
 
@@ -155,15 +156,15 @@ export interface UpdateUserProps {
 
 
 
-export async function updateUser({ userId, newField } : UpdateUserProps) : Promise<ResponseSuccess> {
+export async function updateUser({ userId, newField } : UpdateUserProps) : Promise<AsynchronousResponse> {
 	try {
 		const docRef = doc(db, "users", userId)
 
 		await updateDoc(docRef, newField)
 		
-		return { success : true, message : 'Update successful' } as ResponseSuccess
+		return AsyncResponse.success({message : 'Update successful.'})
 
 	} catch (error) {
-		return { success : false, message : 'Something went wrong...' } as ResponseSuccess
+		return AsyncResponse.success({message : 'Something went wrong.'})
 	}
 }

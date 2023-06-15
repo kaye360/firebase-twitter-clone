@@ -1,8 +1,9 @@
 import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, updateDoc, increment } from "firebase/firestore"
 import { auth, db } from "../../firebase-config"
-import { Post, ResponseSuccess } from "../utils/types"
+import { Post, AsynchronousResponse } from "../utils/types"
 import { sendNotification } from "./NotificationService"
 import { extractHashtags } from "../utils/hashtags"
+import { AsyncResponse } from "../utils/AsyncResponse"
 
 
 
@@ -54,7 +55,7 @@ interface CreatePostProps {
     userHandle?   : string | null,
 }
 
-export async function createPost({body, repostId = null, targetUserId = null, userHandle = null} : CreatePostProps) : Promise<ResponseSuccess> {
+export async function createPost({body, repostId = null, targetUserId = null, userHandle = null} : CreatePostProps) : Promise<AsynchronousResponse> {
     try {
 
         const hashtags = extractHashtags({string: body})
@@ -88,18 +89,10 @@ export async function createPost({body, repostId = null, targetUserId = null, us
             })
         }
 
-        return { 
-            success : true, 
-            message : 'Post created! Redirecting...',
-            content : post.id
-        } as ResponseSuccess
+        return AsyncResponse.success({message : 'Post created. Redirecting...', content : post.id})
 
     } catch (error: any) {
-        
-        return { 
-            success : false, 
-            message : error.toString()
-        } as ResponseSuccess
+        return AsyncResponse.error({message : error.toString()})
     }
 
 }
@@ -107,54 +100,33 @@ export async function createPost({body, repostId = null, targetUserId = null, us
 
 
 
-export async function deletePost(id : string) : Promise<ResponseSuccess> {
+export async function deletePost(id : string) : Promise<AsynchronousResponse> {
     try {
         const postToDelete = doc(db, "posts", id)
         await deleteDoc(postToDelete)
 
-        return {
-            success : true,
-            message : 'Post deleted successfully.'
-        } as ResponseSuccess
+        return AsyncResponse.success({message : 'Post deleted.'})
 
     } catch (error: any) {
-        return {
-            success : false,
-            message : error.toString()
-        } as ResponseSuccess
+        return AsyncResponse.error({message : error.toString()})
     }
 }
 
 
 
 
-export async function updatePostBody(id : string, body : string) : Promise<ResponseSuccess> {
+export async function updatePostBody(id : string, body : string) : Promise<AsynchronousResponse> {
 		
     try {
-        if( !body || body === '' || typeof body !== 'string' ) {
-            throw 'Invalid post body'
-        }
-
-        if( !auth.currentUser ) {
-            throw 'You must be logged in to post'
-        }
-
         const hashtags = extractHashtags({string : body})
 
         const postDocToEdit = doc(db, "posts", id)
         await updateDoc(postDocToEdit, {body, hashtags})
 
-
-        return {
-            success : true,
-            message : 'Post Saved!',
-        } as ResponseSuccess
+        return AsyncResponse.success({message : 'Post Saved.'})
 
     } catch (error: any) {
-        return {
-            success : false,
-            message : error.toString()
-        }
+        return AsyncResponse.error({message : error.toString()})
     }
 }
 
@@ -167,19 +139,19 @@ interface ToggleLikePostProps {
     userHandle : string,
 }
 
-export async function toggleLikePost({ postId, userId, userHandle } : ToggleLikePostProps) : Promise<ResponseSuccess> {
+export async function toggleLikePost({ postId, userId, userHandle } : ToggleLikePostProps) : Promise<AsynchronousResponse> {
     try {
         const post              = await(getPost(postId)) as Post
-        const postIsLikedByUser = post?.likes?.includes(userId)
+        const isPostLikedByUser = post?.likes?.includes(userId)
         
-        const updatedLikes: string[] = postIsLikedByUser
+        const updatedLikes: string[] = isPostLikedByUser
             ? post.likes.filter( likedId => likedId != userId )
             : [...post.likes, userId]
 
         const postDocToEdit = doc(db, "posts", postId)
         await updateDoc(postDocToEdit, {likes : updatedLikes})
         
-        if( !postIsLikedByUser ) sendNotification({
+        if( !isPostLikedByUser ) sendNotification({
             userId       : post.userId, 
             notification : {
                 message : `${userHandle} liked your post: "${post.body}`,
@@ -188,10 +160,10 @@ export async function toggleLikePost({ postId, userId, userHandle } : ToggleLike
             }
         })
         
-        return { success: true, message: '' } as ResponseSuccess
+        return AsyncResponse.success()
         
     } catch (error) {
-        return { success: false, message: '' } as ResponseSuccess
+        return AsyncResponse.error()
     }
     
 

@@ -45,9 +45,9 @@ export interface UserNotification {
 }
 
 
-export interface ResponseSuccess{
+export interface AsynchronousResponse{
     success  : boolean,
-    message  : string,
+    message? : string,
     content? : string,
 }
 

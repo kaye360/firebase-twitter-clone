@@ -1,6 +1,7 @@
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { ResponseSuccess, User, UserNotification } from "../utils/types";
+import { AsynchronousResponse, User, UserNotification } from "../utils/types";
 import { db } from "../../firebase-config";
+import { AsyncResponse } from "../utils/AsyncResponse";
 
 
 interface SendNotificationProps {
@@ -8,7 +9,7 @@ interface SendNotificationProps {
     notification : UserNotification
 }
 
-export async function sendNotification( {userId, notification} : SendNotificationProps) : Promise<ResponseSuccess> {
+export async function sendNotification( {userId, notification} : SendNotificationProps) : Promise<AsynchronousResponse> {
     try {
 
         const userRef = doc(db, "users", userId);
@@ -19,10 +20,10 @@ export async function sendNotification( {userId, notification} : SendNotificatio
             notificationsNew: arrayUnion(notification)
         });
 
-        return {success: true, message : 'Notifcation sent.'} as ResponseSuccess
+        return AsyncResponse.success({message : 'Notification sent.'})
+
     } catch (error) {
-        
-        return {success: false, message : 'Notifcation not sent.'} as ResponseSuccess
+        return AsyncResponse.error({message : 'Notification not sent.'})
     }
 }
 
@@ -33,7 +34,7 @@ interface MarkNotifcationsAsReadProps {
     userId : string
 }
 
-export async function markNotifcationsAsRead({userId} : MarkNotifcationsAsReadProps) : Promise<ResponseSuccess> {
+export async function markNotifcationsAsRead({userId} : MarkNotifcationsAsReadProps) : Promise<AsynchronousResponse> {
     try {
         const userRef  = doc(db, "users", userId);
         const userSnap = await getDoc(userRef)
@@ -48,9 +49,9 @@ export async function markNotifcationsAsRead({userId} : MarkNotifcationsAsReadPr
             notificationsOld : notificationsMarkedAsRead
         });
 
-        return { success: true, message: ''}
+        return AsyncResponse.success()
+
     } catch (error) {
-        
-        return {} as ResponseSuccess
+        return AsyncResponse.error()
     }
 }

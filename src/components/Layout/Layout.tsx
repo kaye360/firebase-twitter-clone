@@ -159,14 +159,14 @@ function GuestAvatar() : JSX.Element {
 
                     <Button 
                         onClick={signIn} 
-                        className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-none ${!isMenuOpen ? '-translate-y-8 md:translate-y-8' : ''} `}
+                        className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-transparent ${!isMenuOpen ? '-translate-y-8 md:translate-y-8' : ''} `}
                     >
                         Google Account
                     </Button>
 
                     <Button 
                         onClick={handleSignInAsGuest}
-                        className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-none ${!isMenuOpen ? '-translate-y-16 md:translate-y-16' : ''} `}
+                        className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-transparent ${!isMenuOpen ? '-translate-y-16 md:translate-y-16' : ''} `}
                     >
                         Guest Account
                     </Button>

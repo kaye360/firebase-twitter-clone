@@ -1,8 +1,9 @@
 import { DocumentData, DocumentSnapshot, doc, getDoc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase-config"
-import { Post, PostComment, ResponseSuccess } from "../utils/types"
+import { Post, PostComment, AsynchronousResponse } from "../utils/types"
 import { getPost } from "./PostService"
 import { sendNotification } from "./NotificationService"
+import { AsyncResponse } from "../utils/AsyncResponse"
 
 
 
@@ -14,7 +15,7 @@ interface CreateCommentProps {
     targetUserId : string,
 }
 
-export async function createComment({postId, userId, userHandle, comment, targetUserId} : CreateCommentProps) : Promise<ResponseSuccess> {
+export async function createComment({postId, userId, userHandle, comment, targetUserId} : CreateCommentProps) : Promise<AsynchronousResponse> {
     try {
 
         const commentPost             = await(getPost(postId)) as Post
@@ -34,10 +35,10 @@ export async function createComment({postId, userId, userHandle, comment, target
             }
         })
 
-        return { success : true, message : 'Comment created!' } as ResponseSuccess
+        return AsyncResponse.success({message : 'Comment Created!'})
     } catch (error) {
         
-        return { success : false, message : 'Something went wrong...' } as ResponseSuccess
+        return AsyncResponse.error({message : 'Something went wrong.'})
     }
 }
 
@@ -51,7 +52,7 @@ interface EditCommentProps {
     comment   : string,
 }
 
-export async function editComment({postId, userId, commentId, comment} : EditCommentProps) : Promise<ResponseSuccess> {
+export async function editComment({postId, userId, commentId, comment} : EditCommentProps) : Promise<AsynchronousResponse> {
     try {
 
         const updatedComment: PostComment = { postId, userId, commentId, comment }
@@ -61,21 +62,15 @@ export async function editComment({postId, userId, commentId, comment} : EditCom
 
         await updateDoc(postDocToEdit, {comments})
 
-        return { success : true, message : 'Comment updated!' } as ResponseSuccess
+        return AsyncResponse.success({message : 'Comment updated!'})
         
     } catch (error) {
-        return { success : false, message : 'Something went wrong...' } as ResponseSuccess
+        return AsyncResponse.error({message : 'Something went wrong.'})
     }
 }
 
 
 
-
-/**
- * @function updateCommentArray Helper function
- * 
- * Updates old comment with updated comment while preserving position in the array of comments
- */
 
 interface UpdateCommentArrayProps {
     post           : DocumentSnapshot<DocumentData>,
@@ -83,6 +78,11 @@ interface UpdateCommentArrayProps {
     updatedComment : PostComment
 }
 
+/**
+ * @function updateCommentArray Helper function
+ * 
+ * Updates old comment with updated comment while preserving position in the array of comments
+ */
 function updateCommentArray({post, commentId, updatedComment} : UpdateCommentArrayProps) : PostComment[] {
     const comments  = post.data()?.comments as PostComment[]
     const index     = comments.findIndex(comment => comment.commentId === commentId)
