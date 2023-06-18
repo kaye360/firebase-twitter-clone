@@ -1,5 +1,5 @@
 import { ErrorBoundary } from "react-error-boundary"
-import { AppContext } from "../App"
+import { ModalContext } from "../App"
 import { SyntheticEvent, useContext, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Icon from "../components/Layout/Icon"
@@ -11,19 +11,19 @@ interface ModalProps {
 export default function Modal({content} : ModalProps) : JSX.Element {
     
 
-    const appContext = useContext(AppContext)
+    const modal = useContext(ModalContext)
 
 
     function handleModalBgClick(e : SyntheticEvent ) {
         if( e.target instanceof HTMLDivElement && e.target.id === 'modal' ) {
-            appContext?.closeModal()
+            modal.close()
         }
     }
 
 
     function handleModalEsc(e : KeyboardEvent ) {
         if( e.key === 'Escape' ) {
-            appContext?.closeModal()
+            modal.close()
         }
     }
 
@@ -63,7 +63,7 @@ export default function Modal({content} : ModalProps) : JSX.Element {
                             <div className="flex justify-end">
                                 <button 
                                     className="text-sm leading-3 hover:underline"
-                                    onClick={ () => appContext?.closeModal() }
+                                    onClick={ () => modal.close() }
                                 >
                                     <Icon icon="close" />
                                 </button>
@@ -88,7 +88,7 @@ interface ModalErrorProps {
 
 function ModalError({handleModalBgClick} : ModalErrorProps) {
 
-    const appContext = useContext(AppContext)
+    const modal = useContext(ModalContext)
 
     return (
         <div
@@ -103,7 +103,7 @@ function ModalError({handleModalBgClick} : ModalErrorProps) {
                 <div className="flex justify-end">
                     <button 
                         className="text-sm leading-3 hover:underline"
-                        onClick={ () => appContext?.closeModal() }
+                        onClick={ () => modal.close() }
                     >
                         Close
                     </button>

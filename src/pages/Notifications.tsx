@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserNotification } from "../utils/types";
-import { AppContext } from "../App";
 import { getUser } from "../services/UserServices";
 import { Link } from "react-router-dom";
 import { markNotifcationsAsRead } from "../services/NotificationService";
@@ -13,14 +12,16 @@ import Icon from "../components/Layout/Icon";
 
 export default function Notifications() {
 
-    const appContext = useContext(AppContext)
     const [newNotifications, setNewNotifications] = useState<UserNotification[]>([])
     const [oldNotifications, setOldNotifications] = useState<UserNotification[]>([])
 
+
+    const userId = auth.currentUser?.uid
+
     async function loadUserNotifications() {
 
-        if( !appContext?.firebaseAuth?.uid ) return
-        const user = await getUser((appContext.firebaseAuth.uid))
+        if( !userId ) return
+        const user = await getUser((userId))
 
         if( !user ) return
         
@@ -34,8 +35,10 @@ export default function Notifications() {
 
 
     async function handleMarkAsRead() {
-        await markNotifcationsAsRead({userId: appContext?.firebaseAuth?.uid as string})
-        await loadUserNotifications()
+        if( typeof userId === 'string' ) {
+            await markNotifcationsAsRead({userId})
+            await loadUserNotifications()
+        }
     }
 
 

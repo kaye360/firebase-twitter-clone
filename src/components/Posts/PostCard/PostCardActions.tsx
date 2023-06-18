@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { toggleLikePost } from "../../../services/PostService";
 import { useContext } from "react";
-import { AppContext } from "../../../App";
 import { Post } from "../../../utils/types";
 import ViewPostLikes from "../../../modals/ViewPostLikes";
 import CreatePost from "../../../modals/CreatePost";
 import Button from "../../Layout/Button";
 import Icon from "../../Layout/Icon";
+import useUser from "../../../hooks/useUser";
+import { ModalContext } from "../../../App";
 
 interface PostCardActionsProps {
     post : Post
@@ -60,12 +61,12 @@ export default function PostCardActions({post} : PostCardActionsProps) {
 
 function usePostCardActions({post} : PostCardActionsProps) {
 
-    const appContext = useContext(AppContext)
-
+    const modal = useContext(ModalContext)
+    const user  = useUser()
 
     let isLikedByCurrentUser : boolean = 
-        Array.isArray( post?.likes ) && typeof appContext?.firebaseAuth?.uid === 'string' ? (
-            post?.likes?.includes(appContext?.firebaseAuth?.uid) as boolean
+        Array.isArray( post?.likes ) && typeof user.id === 'string' ? (
+            post?.likes?.includes(user.id)
         ) : (
             false
         )
@@ -75,16 +76,22 @@ function usePostCardActions({post} : PostCardActionsProps) {
 
 
     async function toggleLike() {
+        if( !(
+            typeof post.id === 'string' &&
+            typeof user.id === 'string' && 
+            typeof user.handle ==='string'
+        ) ) return
+
         toggleLikePost({
-            postId     : post?.id as string,
-            userId     : appContext?.firebaseAuth?.uid as string,
-            userHandle : appContext?.userHandle as string
+            postId     : post?.id,
+            userId     : user.id,
+            userHandle : user.handle
         })
     }
 
 
     function handleRepost() {
-        appContext?.setModal(
+        modal.set(
             <CreatePost 
                 repostId={post?.id} 
                 targetUserId={post.userId}
@@ -94,7 +101,7 @@ function usePostCardActions({post} : PostCardActionsProps) {
 
 
     function handleViewLikes() {
-        appContext?.setModal(<ViewPostLikes likes={post.likes} />)
+        modal.set(<ViewPostLikes likes={post.likes} />)
     }
 
     

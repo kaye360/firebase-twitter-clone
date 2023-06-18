@@ -1,8 +1,7 @@
 import { User } from "../../utils/types"
 import Button from "../Layout/Button"
 import Icon from "../Layout/Icon"
-import { MouseEventHandler, useContext, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { AppContext } from "../../App"
+import { MouseEventHandler, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { updateUser } from "../../services/UserServices"
 import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
 import { MAX_USER_LOCATION_LENGTH } from "../../utils/appConfig"
@@ -10,6 +9,7 @@ import ValidatedField from "../ValidatedForm/components/ValidatedField"
 import ValidatorRules from "../ValidatedForm/utils/ValidatorRules"
 import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
+import { auth } from "../../../firebase-config"
 
 
 interface UpdateUserLocationFormProps {
@@ -95,9 +95,6 @@ interface UseUpdateUserBioProps {
 function useUpdateUserLocation({ user, userLocation, setUserLocation } : UseUpdateUserBioProps) : UseUpdateUserLocation {
 
 
-    const appContext = useContext(AppContext)
-
-
     useEffect( () => {
         ( function loadCurrentUserLocation() {
             if(user?.location) setUserLocation(user.location)
@@ -108,7 +105,7 @@ function useUpdateUserLocation({ user, userLocation, setUserLocation } : UseUpda
     async function handleFormSubmit() {
 
         await updateUser({
-            userId   : appContext?.firebaseAuth?.uid as string,
+            userId   : auth.currentUser?.uid as string,
             newField : { location : userLocation }
         })
     }

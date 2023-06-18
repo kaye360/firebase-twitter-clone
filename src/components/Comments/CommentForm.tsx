@@ -1,5 +1,4 @@
-import { useContext, useState } from "react"
-import { AppContext } from "../../App"
+import {  useState } from "react"
 import { createComment } from "../../services/CommentService"
 import Button from "../Layout/Button"
 import { MAX_COMMENT_LENGTH } from "../../utils/appConfig"
@@ -8,6 +7,8 @@ import ValidatedField from "../ValidatedForm/components/ValidatedField"
 import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
 import { auth } from "../../../firebase-config"
+import useUser from "../../hooks/useUser"
+import { UserSlice } from "../../slices/userSlice"
 
 interface CommentFormProps {
     postId : string,
@@ -17,7 +18,7 @@ interface CommentFormProps {
 export default function CommentForm({ postId, targetUserId } : CommentFormProps) {
 
     const [commentBody, setCommentBody]    = useState<string>('')
-    const { appContext, handleFormSubmit } = useCommentForm({ postId, targetUserId, commentBody })
+    const { user, handleFormSubmit } = useCommentForm({ postId, targetUserId, commentBody })
 
 
     if( !auth.currentUser ) {
@@ -39,7 +40,7 @@ export default function CommentForm({ postId, targetUserId } : CommentFormProps)
             >
 
                 <div className="flex justify-between mb-2">
-                    <label htmlFor="comment-body">Posting as { appContext?.userHandle }: </label>
+                    <label htmlFor="comment-body">Posting as { user.handle }: </label>
                     <span className={ commentBody.length > MAX_COMMENT_LENGTH ? 'text-red-500' : ''}>
                         {commentBody.length} / {MAX_COMMENT_LENGTH}
                     </span>
@@ -81,23 +82,30 @@ interface UseCommentFormProps extends CommentFormProps {
     commentBody : string,
 }
 
-function useCommentForm({ postId, targetUserId, commentBody } : UseCommentFormProps) {
+interface UseCommentForm {
+    user             : UserSlice,
+    handleFormSubmit : Function,
+}
+
+function useCommentForm({ postId, targetUserId, commentBody } : UseCommentFormProps) : UseCommentForm {
 
 
-    const appContext  = useContext(AppContext)
+    const user = useUser()
 
 
     async function handleFormSubmit() {
+
+        if( !(typeof user.id === 'string' && typeof user.handle === 'string') ) return
            
         await createComment({
             postId,
             targetUserId, 
-            userId       : appContext?.firebaseAuth?.uid as string,
-            userHandle   : appContext?.userHandle as string,
-            comment      : commentBody,
+            userId     : user.id,
+            userHandle : user.handle,
+            comment    : commentBody,
         })
     }
 
 
-    return { appContext, handleFormSubmit }
+    return { user, handleFormSubmit }
 }

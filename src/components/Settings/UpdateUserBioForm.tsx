@@ -1,14 +1,14 @@
 import { User } from "../../utils/types"
 import Button from "../Layout/Button"
 import Icon from "../Layout/Icon"
-import { MouseEventHandler, useContext, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { AppContext } from "../../App"
+import { MouseEventHandler, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { updateUser } from "../../services/UserServices"
 import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
 import ValidatedField from "../ValidatedForm/components/ValidatedField"
 import { MAX_USER_BIO_LENGTH } from "../../utils/appConfig"
 import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
 import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
+import useUser from "../../hooks/useUser"
 
 
 interface UpdateUserBioFormProps {
@@ -84,7 +84,7 @@ interface UseUpdateUserBioProps {
 function useUpdateUserBio({ user, userBio, setUserBio } : UseUpdateUserBioProps) : UseUpdateUserBio {
 
 
-    const appContext = useContext(AppContext)
+    const userSlice = useUser()
 
 
     useEffect( () => {
@@ -97,8 +97,10 @@ function useUpdateUserBio({ user, userBio, setUserBio } : UseUpdateUserBioProps)
 
     async function handleFormSubmit() {
 
+        if( !(typeof userSlice.id === 'string') ) return
+
         await updateUser({
-            userId   : appContext?.firebaseAuth?.uid as string,
+            userId   : userSlice.id,
             newField : { bio : userBio }
         })
     }

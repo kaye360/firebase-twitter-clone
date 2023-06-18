@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import Avatar from '../../Layout/Avatar'
 import { useContext } from 'react'
-import { AppContext } from '../../../App'
 import EditPost from '../../../modals/EditPost'
 import { Post } from '../../../utils/types'
 import Icon from '../../Layout/Icon'
+import useUser from '../../../hooks/useUser'
+import { ModalContext } from '../../../App'
 
 interface PostCardHeaderProps {
     post     : Post,
@@ -14,13 +15,13 @@ interface PostCardHeaderProps {
 export default function PostCardHeader({post, isLoaded} : PostCardHeaderProps) {
 
 
-    const appContext     = useContext(AppContext)
-    const loggedInUserId = appContext?.firebaseAuth?.uid
-    const userHandle     = isLoaded && post?.user?.handle ? post.user.handle : 'deleted'
+    const modal      = useContext(ModalContext)
+    const user       = useUser()
+    const userHandle = isLoaded && post?.user?.handle ? post.user.handle : 'deleted'
 
 
     function openEditModal() {
-        appContext?.setModal(
+        modal.set(
             <EditPost 
                 postId={post?.id} 
                 defaultPostBody={post.body} 
@@ -28,7 +29,6 @@ export default function PostCardHeader({post, isLoaded} : PostCardHeaderProps) {
             />
         )
     }
-
     
 
     return (
@@ -52,7 +52,7 @@ export default function PostCardHeader({post, isLoaded} : PostCardHeaderProps) {
                 </span>
             </div>
 
-            {loggedInUserId === post?.userId &&
+            {user.id === post?.userId &&
                 <button onClick={openEditModal}>
                     <Icon icon="more_vert" className="text-blue-500 hover:text-orange-500" />
                 </button>

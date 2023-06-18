@@ -33,7 +33,7 @@ export default function Home() {
             </p>
 
             <ul className="flex gap-2 flex-wrap">
-                <ListItem>React</ListItem>
+                <ListItem>React/Redux</ListItem>
                 <ListItem>Typescript</ListItem>
                 <ListItem>Firebase</ListItem>
                 <ListItem>Tailwind</ListItem>

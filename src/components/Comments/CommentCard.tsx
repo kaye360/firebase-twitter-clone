@@ -2,11 +2,11 @@ import { useContext } from "react"
 import { auth } from "../../../firebase-config"
 import { PostComment, User } from "../../utils/types"
 import Avatar from "../Layout/Avatar"
-import { AppContext } from "../../App"
 import { Link } from "react-router-dom"
 import Button from "../Layout/Button"
 import Icon from "../Layout/Icon"
 import EditComment from "../../modals/EditComment"
+import { ModalContext } from "../../App"
 
 interface CommentCardProps {
     comment: PostComment,
@@ -16,7 +16,7 @@ interface CommentCardProps {
 export default function CommentCard({ comment, user }: CommentCardProps) {
 
 
-    const appContext = useContext(AppContext)
+    const modal = useContext(ModalContext)
 
     
     return (
@@ -34,7 +34,7 @@ export default function CommentCard({ comment, user }: CommentCardProps) {
                     </Link>
 
                     { comment.userId === auth.currentUser?.uid && (
-                        <Button onClick={ () => appContext?.setModal(<EditComment comment={comment} />) } >
+                        <Button onClick={ () => modal.set(<EditComment comment={comment} />) } >
                             <Icon icon="more_vert" className="text-blue-500 hover:text-orange-500" />
                         </Button>
                     )}

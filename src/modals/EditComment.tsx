@@ -7,7 +7,7 @@ import ValidatedField from "../components/ValidatedForm/components/ValidatedFiel
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../components/ValidatedForm/components/SubmitSuccessMessage"
 import { MAX_COMMENT_LENGTH, REDIRECT_TIME } from "../utils/appConfig"
-import { AppContext } from "../App"
+import { ModalContext } from "../App"
 
 interface EditCommentProps {
     comment : PostComment,
@@ -79,8 +79,7 @@ interface UseEditCommentProps extends EditCommentProps {
 function useEditComment({commentBody, comment} : UseEditCommentProps) {
 
 
-    const appContext = useContext(AppContext)
-
+    const modal = useContext(ModalContext)
     const { postId, userId, commentId } = comment
 
 
@@ -95,7 +94,7 @@ function useEditComment({commentBody, comment} : UseEditCommentProps) {
 
         if(res.success) {
             setTimeout( () => {
-                appContext?.closeModal()
+                modal.close()
             }, REDIRECT_TIME)
         }
     }

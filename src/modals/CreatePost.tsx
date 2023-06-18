@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase-config";
-import { AppContext } from "../App";
 import { createPost } from "../services/PostService";
 import { MAX_POST_LENGTH, REDIRECT_TIME } from "../utils/appConfig";
 import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm";
@@ -14,6 +13,8 @@ import RepostPreview from "../components/Posts/RepostPreview";
 import HashtagsPreview from "../components/Posts/HashtagsPreview";
 import Button from "../components/Layout/Button";
 import Icon from "../components/Layout/Icon";
+import { ModalContext } from "../App";
+import useUser from "../hooks/useUser";
 
 
 interface CreatePostProps {
@@ -28,7 +29,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
 
 
     // Form onSubmit handling logic
-    const { appContext, handleFormSubmit } = useCreatePost({postBody, targetUserId, repostId})
+    const { handleFormSubmit, user } = useCreatePost({postBody, targetUserId, repostId})
 
 
     // Load repost if repostId is given
@@ -60,7 +61,7 @@ export default function CreatePost({targetUserId = null, repostId = null} : Crea
                 <h2>Create a Post</h2>
 
                 <div className="flex justify-between">
-                    <label htmlFor="postBody">Posting as {appContext?.userHandle}</label>
+                    <label htmlFor="postBody">Posting as {user.handle}</label>
                     <span className={postBody.length > MAX_POST_LENGTH ? 'text-red-400 font-bold' : ''}>
                         {postBody.length} / {MAX_POST_LENGTH}
                     </span>
@@ -119,17 +120,20 @@ interface UseCreatePostProps extends CreatePostProps {
 function useCreatePost({postBody, targetUserId =  null, repostId = null} : UseCreatePostProps) {
 
 
-    const appContext = useContext(AppContext)
-    const navigate   = useNavigate()
+    const modal          = useContext(ModalContext)
+    const user = useUser()
+    const navigate       = useNavigate()
 
 
     async function handleFormSubmit() {
+
+        if( typeof user.handle !== 'string' ) return
 
         const res = await createPost({
             body: postBody,
             repostId,
             targetUserId,
-            userHandle : appContext?.userHandle as string,
+            userHandle : user.handle,
         })
 
         if( res.success && res.content) exitModal({to : '/post/' + res.content})
@@ -138,12 +142,12 @@ function useCreatePost({postBody, targetUserId =  null, repostId = null} : UseCr
 
     function exitModal({to} : {to : string}) {
         setTimeout( () => {
-            appContext?.closeModal()
+            modal.close()
             navigate(to)
         }, REDIRECT_TIME)
     }
 
 
-    return { appContext, handleFormSubmit }
+    return { handleFormSubmit, user }
 
 }

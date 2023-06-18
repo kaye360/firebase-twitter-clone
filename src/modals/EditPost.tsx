@@ -1,7 +1,6 @@
 import { SyntheticEvent, useContext, useEffect, useState } from "react"
 import { deletePost, updatePostBody } from "../services/PostService"
 import { MAX_POST_LENGTH, REDIRECT_TIME } from "../utils/appConfig"
-import { AppContext } from "../App"
 import useExtractHashtags from "../hooks/useExtractHashtags"
 import ValidatedForm from "../components/ValidatedForm/components/ValidatedForm"
 import SubmitErrorMessage from "../components/ValidatedForm/components/SubmitErrorMessage"
@@ -11,6 +10,8 @@ import ValidatedField from "../components/ValidatedForm/components/ValidatedFiel
 import RepostPreview from "../components/Posts/RepostPreview"
 import HashtagsPreview from "../components/Posts/HashtagsPreview"
 import Button from "../components/Layout/Button"
+import { ModalContext } from "../App"
+import useUser from "../hooks/useUser"
 
 
 interface EditPostProps {
@@ -24,10 +25,11 @@ export default function EditPost({postId, defaultPostBody = '', repostId = null}
 
 
     const [postBody, setPostBody] = useState<string>(defaultPostBody)
+
+    const user = useUser()
     
 
     const { 
-        appContext,
         handleFormSubmit, 
         handleDelete, 
         deleteBtnText,
@@ -52,7 +54,7 @@ export default function EditPost({postId, defaultPostBody = '', repostId = null}
                 <h2>Edit Post</h2>
 
                 <div className="flex justify-between">
-                    <label htmlFor="create-post-postBody">Posting as {appContext?.userHandle}</label>
+                    <label htmlFor="create-post-postBody">Posting as {user.handle}</label>
                     <span className={postBody.length > MAX_POST_LENGTH ? 'text-red-400 font-bold' : ''}>
                         {postBody.length} / {MAX_POST_LENGTH}
                     </span>
@@ -106,7 +108,8 @@ export default function EditPost({postId, defaultPostBody = '', repostId = null}
 function useEditPost({postBody, postId} : EditPostProps) {
 
 
-    const appContext                                  = useContext(AppContext)
+    const modal = useContext(ModalContext)
+
     const [deleteBtnText, setDeleteBtnText]           = useState<string>('Delete')
     const [hasConfirmedDelete, setHasConfirmedDelete] = useState<boolean>(false)
     const [hasDeleted, setHasDeleted]                 = useState<boolean>(false)
@@ -116,7 +119,7 @@ function useEditPost({postBody, postId} : EditPostProps) {
         const res = await updatePostBody(postId as string, postBody as string)
         
         if( res.success) {
-            setTimeout( () => appContext?.closeModal(), REDIRECT_TIME)
+            setTimeout( () => modal.close(), REDIRECT_TIME)
         }
     }
 
@@ -134,7 +137,7 @@ function useEditPost({postBody, postId} : EditPostProps) {
 
         if(res.success) {
             setHasDeleted(true)
-            setTimeout( () => appContext?.closeModal(), REDIRECT_TIME)
+            setTimeout( () => modal.close(), REDIRECT_TIME)
         }
     }
 
@@ -150,5 +153,5 @@ function useEditPost({postBody, postId} : EditPostProps) {
     }
 
     
-    return { handleFormSubmit, appContext, handleDelete, deleteBtnText, hasDeleted }
+    return { handleFormSubmit, handleDelete, deleteBtnText, hasDeleted }
 }

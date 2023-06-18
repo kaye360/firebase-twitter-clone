@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
     "autoprefixer": "^10.4.14",
     "firebase": "^9.22.0",
     "framer-motion": "^10.12.16",
@@ -20,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.4",
     "react-firebase-hooks": "^5.1.1",
+    "react-redux": "^8.1.0",
     "react-router-dom": "^6.11.2",
     "react-router-hash-link": "^2.4.3",
     "react-string-replace": "^1.1.0",

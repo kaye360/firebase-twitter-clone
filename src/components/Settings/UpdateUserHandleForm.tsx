@@ -1,5 +1,4 @@
-import { MouseEventHandler, useContext, useState, SyntheticEvent, useEffect, SetStateAction, Dispatch } from "react"
-import { AppContext } from "../../App"
+import { MouseEventHandler, useState, SyntheticEvent, useEffect, SetStateAction, Dispatch } from "react"
 import { getAllUserHandles, updateUser } from "../../services/UserServices"
 import Icon from "../Layout/Icon"
 import ValidatedForm from "../ValidatedForm/components/ValidatedForm"
@@ -9,15 +8,19 @@ import Button from "../Layout/Button"
 import SubmitErrorMessage from "../ValidatedForm/components/SubmitErrorMessage"
 import SubmitSuccessMessage from "../ValidatedForm/components/SubmitSuccessMessage"
 import ValidatorRules from "../ValidatedForm/utils/ValidatorRules"
-import { UseAppContext } from "../../hooks/useAppContext"
+import useUser, { UseUser } from "../../hooks/useUser"
+import { useDispatch } from "react-redux"
+import { setUser } from "../../slices/userSlice"
 
 
 
 export default function UpdateUserHandleForm() {
 
+    const user = useUser()
 
-    const [userHandle, setUserHandle] = useState<string>('')
-    const { handleReset, handleFormSubmit, allUserHandles, appContext } = useUpdateUserHandle({userHandle, setUserHandle})
+    const [formUserHandle, setFormUserHandle] = useState<string>('')
+
+    const { handleReset, handleFormSubmit, allUserHandles } = useUpdateUserHandle({formUserHandle, setFormUserHandle})
     
 
     return (
@@ -28,9 +31,9 @@ export default function UpdateUserHandleForm() {
         >
 
             <h2 className="flex justify-between my-2">
-                Handle:
-                <span className={`font-normal ${userHandle.length > MAX_USER_HANDLE_LENGTH || userHandle.length < MIN_USER_HANDLE_LENGTH ? 'text-red-400' : ''}`}>
-                    {userHandle.length} / {MAX_USER_HANDLE_LENGTH}
+                Handle: {formUserHandle}
+                <span className={`font-normal ${formUserHandle.length > MAX_USER_HANDLE_LENGTH || formUserHandle.length < MIN_USER_HANDLE_LENGTH ? 'text-red-400' : ''}`}>
+                    {formUserHandle.length} / {MAX_USER_HANDLE_LENGTH}
                 </span>
             </h2>
 
@@ -41,8 +44,8 @@ export default function UpdateUserHandleForm() {
                 <div>
                     <ValidatedField 
                         title={"User Handle"} 
-                        value={userHandle} 
-                        setValue={setUserHandle} 
+                        value={formUserHandle} 
+                        setValue={setFormUserHandle} 
                         type={"text"} 
                         id="user-handle"
                         rules={{
@@ -50,7 +53,7 @@ export default function UpdateUserHandleForm() {
                             minLength : MIN_USER_HANDLE_LENGTH,
                             maxLength : MAX_USER_HANDLE_LENGTH,
                             unique : {
-                                current : appContext?.userHandle as string,
+                                current : user.handle,
                                 all     : allUserHandles
                             },
                             allowableChars : {
@@ -86,61 +89,71 @@ export default function UpdateUserHandleForm() {
 
 
 interface UseUpdateUserHandleProps {
-    userHandle    : string,
-    setUserHandle : Dispatch<SetStateAction<string>>,
+    formUserHandle    : string,
+    setFormUserHandle : Dispatch<SetStateAction<string>>,
 }
 
 interface UseUpdateUserHandle { 
     handleReset      : MouseEventHandler<HTMLButtonElement>, 
     handleFormSubmit : Function, 
     allUserHandles   : string[],
-    appContext       : UseAppContext | null,
 }
 
-function useUpdateUserHandle({userHandle, setUserHandle} : UseUpdateUserHandleProps) : UseUpdateUserHandle {
+function useUpdateUserHandle({formUserHandle, setFormUserHandle} : UseUpdateUserHandleProps) : UseUpdateUserHandle {
 
 
-    const appContext                          = useContext(AppContext)
+    const user     = useUser()
+    const dispatch = useDispatch()
+
+
     const [allUserHandles, setAllUserHandles] = useState<string[]>([''])
 
 
     useEffect( () => {
-        ( async function loadAllUserHandles() {
 
+        ( async function loadAllUserHandles() {
             let handlesList = await getAllUserHandles()
             if( !Array.isArray(handlesList) ) return
-
-            // handlesList = handlesList?.filter( handle => handle !== appContext?.userHandle)
             setAllUserHandles(handlesList)
         })();
-    }, [appContext?.userHandle])
+
+    }, [user])
 
 
     useEffect( () => {
-        ( function setInputToCurrentUserHandle () {
-            if(appContext?.userHandle) setUserHandle(appContext?.userHandle)
+        
+        ( function setDefaultFormUserHandle () {
+            if(user.handle) setFormUserHandle(user.handle)
         })()
-    }, [appContext?.userHandle])
+
+    }, [user])
 
 
     async function handleFormSubmit() {
 
+        if( !(typeof user.id === 'string') ) return
+
         const update = await updateUser({
-            userId   : appContext?.firebaseAuth?.uid as string,
-            newField : { handle : userHandle }
+            userId   : user.id,
+            newField : { handle : formUserHandle }
         })
 
+        const updatedUser: UseUser = {
+            id     : user.id,
+            handle : formUserHandle
+        }
+
         if( update.success ) {
-            appContext?.setUserHandle(userHandle)
+            dispatch( setUser(updatedUser) )
         }
     }
 
 
     function handleReset(e: SyntheticEvent) {
         e.preventDefault()
-        setUserHandle(appContext?.userHandle as string)
+        setFormUserHandle(user.handle)
     }
 
 
-    return { handleReset, handleFormSubmit, allUserHandles, appContext }
+    return { handleReset, handleFormSubmit, allUserHandles }
 }

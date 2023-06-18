@@ -1,23 +1,28 @@
 import { createContext } from "react"
-import useAppContext, { UseAppContext } from "./hooks/useAppContext"
+import useModal, { UseModal, defaulModalContext } from "./hooks/useModal"
 import AppRouter from "./components/Routing/AppRouter"
 import Layout from "./components/Layout/Layout"
+import { Provider } from "react-redux"
+import {store} from "./store"
 
 
-export const AppContext = createContext<UseAppContext | null>(null)
 
+
+export const ModalContext = createContext<UseModal>( defaulModalContext )
 
 
 export default function App() {
 
-	const appContext = useAppContext()
+	const modal = useModal()
 
 	return (
-		<AppContext.Provider value={appContext}>
-			<Layout>
-				<AppRouter />
-			</Layout>
-		</AppContext.Provider>
+		<Provider store={store}>
+			<ModalContext.Provider value={modal}>
+				<Layout>
+					<AppRouter />
+				</Layout>
+			</ModalContext.Provider>
+		</Provider>
 	)
 }
 

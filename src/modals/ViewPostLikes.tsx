@@ -3,7 +3,7 @@ import { getUsers } from "../services/UserServices"
 import { Users } from "../utils/types"
 import { Link } from "react-router-dom"
 import Avatar from "../components/Layout/Avatar"
-import { AppContext } from "../App"
+import { ModalContext } from "../App"
 
 
 
@@ -13,8 +13,8 @@ interface ViewPostLikesProps {
 
 export default function ViewPostLikes({likes} : ViewPostLikesProps) {
 
+    const modal = useContext(ModalContext)
 
-    const appContext        = useContext(AppContext)
     const [users, setUsers] = useState< Users | null>(null)
 
 
@@ -36,7 +36,7 @@ export default function ViewPostLikes({likes} : ViewPostLikesProps) {
                         to={`profile/${user}`}
                         key={user}
                         className="flex items-center gap-2 pl-2 rounded-xl hover:underline hover:bg-blue-100 py-2"
-                        onClick={() => appContext?.closeModal() }
+                        onClick={() => modal.close() }
                     >
                         <Avatar src={users[user].avatar} />
 

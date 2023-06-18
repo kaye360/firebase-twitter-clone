@@ -4,9 +4,9 @@ import Icon from "./Icon"
 import Button from "./Button"
 import { onSnapshot, DocumentReference, DocumentData, doc } from "firebase/firestore"
 import { auth, db } from "../../../firebase-config"
-import { AppContext } from "../../App"
 import CreatePost from "../../modals/CreatePost"
 import { User } from "../../utils/types"
+import { ModalContext } from "../../App"
 
 
 
@@ -73,14 +73,14 @@ function NavLink({to, icon, className = '', children} :  NavLinkProps) {
 
 function CreatePostBtn() {
 
-    const appContext = useContext(AppContext)
+    const modal = useContext(ModalContext)
 
     return (
         <li className="absolute right-2 bottom-20 md:static">
             <Button 
                 className="relative mt-2 w-12 h-12 md:w-full md:h-12 bg-blue-700 md:bg-gradient-to-br from-blue-200 via-rose-200 to-blue-200  text-blue-600 font-bold rounded-full md:rounded-lg hover:bg-rose-500 transition-all duration-100"
                 onClick={ () => {
-                    appContext?.setModal(<CreatePost />)
+                    modal.set(<CreatePost />)
                 }}
             >
                 <span className="absolute inset-[2px] flex items-center gap-2 justify-center rounded-md bg-blue-700 md:bg-blue-50 hover:bg-blue-200 transition-all">

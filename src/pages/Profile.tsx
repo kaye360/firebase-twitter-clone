@@ -1,30 +1,31 @@
-import { Suspense, useState, useEffect, useContext } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import PostList from '../components/Posts/PostList'
 import { PostCardLoader } from '../components/Posts/PostCard/PostCardLoader'
 import { PostListError } from './Explore'
 import { getUser } from '../services/UserServices'
-import { AppContext } from '../App'
 import { User } from '../utils/types'
 import useGetPosts from '../hooks/useGetPosts'
 import Icon from '../components/Layout/Icon'
+import { auth } from '../../firebase-config'
 
 export default function Profile() {
 
-    const appContext      = useContext(AppContext)
     const { id }          = useParams()
     const [user, setUser] = useState<User | null>(null)
     
-    let userId  = id ? id : appContext?.firebaseAuth?.uid
+    let userId  = id ? id : auth.currentUser?.uid
     const posts = useGetPosts({userId})
 
     
     useEffect( () => {
+
         ( async function loadUserData () {
             const userData = await getUser(userId) as User
             setUser(userData)
         })()
+        
     }, [id])
 
     

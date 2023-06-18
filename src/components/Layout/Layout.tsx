@@ -4,11 +4,14 @@ import NavLinks from "./NavLinks"
 import { Link } from "react-router-dom"
 import Button from "./Button"
 import QuarkSvgLogo from "./QuarkSvgLogo"
-import { AppContext } from "../../App"
 import Modal from "../../modals/Modal"
 import { signInAsGuest, signInWithGoogle } from "../../services/UserServices"
 import Avatar from "./Avatar"
 import Icon from "./Icon"
+import { auth } from "../../../firebase-config"
+import useUser from "../../hooks/useUser"
+import useUpdateUser from "../../hooks/useUpdateUser"
+import { ModalContext } from "../../App"
 
 
 interface LayoutProps {
@@ -17,7 +20,10 @@ interface LayoutProps {
 
 export default function Layout({children }: LayoutProps) {
 
-    const appContext = useContext(AppContext)
+    const modal = useContext(ModalContext)
+
+    useUpdateUser()
+
 
     return (
         <>
@@ -32,7 +38,7 @@ export default function Layout({children }: LayoutProps) {
                     <NavLinks />
 
                     <ErrorBoundary fallback={<div>Something went wrong...</div>}>
-                        {appContext?.firebaseAuth ? (
+                        {auth.currentUser ? (
                             <UserAvatar />
                         ) : (
                             <GuestAvatar />
@@ -74,7 +80,7 @@ export default function Layout({children }: LayoutProps) {
 
             </footer>
 
-            <Modal content={appContext?.modal} />
+            <Modal content={modal.content} />
         </>
     )
 }
@@ -99,16 +105,17 @@ function Logo() : JSX.Element {
 
 function UserAvatar() : JSX.Element {
 
-    const appContext = useContext(AppContext)
+    const user = useUser()
+
 
     return(
         <div className="absolute top-[8px] right-4 md:static flex items-center flex-row-reverse md:flex-row gap-2 mt-auto">
 
-            <Avatar src={appContext?.firebaseAuth?.photoURL || null} />
+            <Avatar src={auth.currentUser?.photoURL} />
 
             <div className="font-bold text-blue-600">
                 <Link to="/profile" className="hover:underline hover:text-rose-500">
-                    @{appContext?.userHandle}
+                    @{user.handle}
                 </Link>
             </div>
 
@@ -121,25 +128,8 @@ function UserAvatar() : JSX.Element {
 
 function GuestAvatar() : JSX.Element {
 
-    const appContext = useContext(AppContext)
 
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
-
-
-    async function signIn() {
-
-        const user = await signInWithGoogle()
-        if( !user ) return
-        appContext?.setUserHandle(user.handle)
-    }
-
-    
-    async function handleSignInAsGuest() {
-
-        const user = await signInAsGuest()
-        if( !user ) return
-        appContext?.setUserHandle(user.handle)
-    }
 
 
     return (
@@ -158,14 +148,14 @@ function GuestAvatar() : JSX.Element {
                 <div className="overflow-hidden grid gap-2">
 
                     <Button 
-                        onClick={signIn} 
+                        onClick={signInWithGoogle} 
                         className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-transparent ${!isMenuOpen ? '-translate-y-8 md:translate-y-8' : ''} `}
                     >
                         Google Account
                     </Button>
 
                     <Button 
-                        onClick={handleSignInAsGuest}
+                        onClick={signInAsGuest}
                         className={`font-normal py-2 justify-end md:justify-start border border-blue-200 transition-all duration-[750ms] bg-blue-50 md:bg-transparent ${!isMenuOpen ? '-translate-y-16 md:translate-y-16' : ''} `}
                     >
                         Guest Account

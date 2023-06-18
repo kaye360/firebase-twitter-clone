@@ -10,35 +10,12 @@ import { AsyncResponse } from "../utils/AsyncResponse"
 export const userCollectionRef = collection(db, "users")
 
 
-export async function signInWithGoogle() : Promise<User | null>  {
+export async function signInWithGoogle() : Promise<void>  {
 	try {
-		let signIn = await signInWithPopup(auth, googleProvider)	
-
-		if( !signIn ) throw 'Error signing in to Google.'
-
-        const userId : string | null = signIn.user.uid
-        const userRef  				 = doc(db, "users", userId)
-        const userSnap 				 = await getDoc(userRef)
-		let user 	   				 = userSnap.data() as User
-
-        if( !userSnap.exists() ) {
-			
-			// Create a new user in users collection if not already created
-			user = {
-				handle			 : signIn.user.email?.split('@')[0].substring(0,15) as string,
-				avatar			 : signIn.user.photoURL as string, 
-				bio 			 : 'Hi! I\'m new to this app.',
-				location 		 : 'Earth',
-				notificationsNew : [],
-				notificationsOld : [],
-			}
-            await setDoc(userRef, user)
-        }
-
-		return user as User
+		await signInWithPopup(auth, googleProvider)	
 
 	} catch (error) {
-		return null
+		// return null
 	}
 }
 
@@ -84,7 +61,7 @@ export async function signInAsGuest() : Promise<User | null>  {
 
 
 
-export async function signOutOfGoogle() : Promise<void> {
+export async function signOutUser() : Promise<void> {
 	await signOut(auth)
 }
 

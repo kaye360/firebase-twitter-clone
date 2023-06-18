@@ -1,34 +1,38 @@
 import { useContext, useEffect, useState } from "react";
 import UpdateUserBioForm from "../components/Settings/UpdateUserBioForm";
 import UpdateUserHandleForm from "../components/Settings/UpdateUserHandleForm";
-import { getUser, signOutOfGoogle } from "../services/UserServices";
-import { AppContext } from "../App";
+import { getUser, signOutUser } from "../services/UserServices";
 import UpdateUserLocationForm from "../components/Settings/UpdateUserLocationForm";
 import { User } from "../utils/types";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Layout/Button";
 import Icon from "../components/Layout/Icon";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../slices/userSlice";
+import { auth } from "../../firebase-config";
 
 
 export default function Settings() {
     
     
-    const appContext      = useContext(AppContext)
     const navigate        = useNavigate()
+    const dispatch        = useDispatch()
     const [user, setUser] = useState<User | null>(null)
 
 
     useEffect( () => {
+
         ( async function loadCurrentUser() {
-            const currentUser = await getUser(appContext?.firebaseAuth?.uid)
+            const currentUser = await getUser(auth.currentUser?.uid)
             setUser(currentUser)
         })()
+        
     }, [])
 
 
-    function signOut() : void {
-        signOutOfGoogle()
-        appContext?.signOutUser()
+    async function signOut() : Promise<void> {
+        await signOutUser()
+        dispatch( clearUser() )
         navigate('/')
     }
 
