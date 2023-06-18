@@ -10,8 +10,8 @@ import Avatar from "./Avatar"
 import Icon from "./Icon"
 import { auth } from "../../../firebase-config"
 import useUser from "../../hooks/useUser"
-import useUpdateUser from "../../hooks/useUpdateUser"
 import { ModalContext } from "../../App"
+import useAuth from "../../hooks/useAuth"
 
 
 interface LayoutProps {
@@ -20,9 +20,9 @@ interface LayoutProps {
 
 export default function Layout({children }: LayoutProps) {
 
-    const modal = useContext(ModalContext)
+    useAuth()
 
-    useUpdateUser()
+    const modal = useContext(ModalContext)
 
 
     return (

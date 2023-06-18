@@ -10,59 +10,30 @@ import { AsyncResponse } from "../utils/AsyncResponse"
 export const userCollectionRef = collection(db, "users")
 
 
-export async function signInWithGoogle() : Promise<void>  {
-	try {
-		await signInWithPopup(auth, googleProvider)	
 
-	} catch (error) {
-		// return null
-	}
+
+export async function signInWithGoogle() : Promise<void>  {
+
+	await signInWithPopup(auth, googleProvider)	
+
 }
 
 
 
 
-export async function signInAsGuest() : Promise<User | null>  {
-	try {
-		const signIn = getAuth()
-		await signInAnonymously(signIn)
+export async function signInAsGuest()  : Promise<void>  {
 
-		if(!signIn || !signIn.currentUser ) return null
+	await signInAnonymously(auth)
 
-        const userId : string | null = signIn.currentUser.uid
-        const userRef  				 = doc(db, "users", userId)
-        const userSnap 				 = await getDoc(userRef)
-		let user 	   				 = userSnap.data() as User
-
-        if( !userSnap.exists() ) {
-
-			const randomChars: string = crypto.randomUUID().slice(0,5)
-			const handle: string = 'guest_' + randomChars
-			
-			// Create a new user in users collection if not already created
-			user = {
-				handle,
-				avatar			 : null, 
-				bio 			 : 'Hi! I\'m new to this app.',
-				location 		 : 'Earth',
-				notificationsNew : [],
-				notificationsOld : [],
-			}
-            await setDoc(userRef, user)
-        }
-
-		return user as User
-
-	} catch (error) {
-		return null
-	}
 }
 
 
 
 
 export async function signOutUser() : Promise<void> {
+
 	await signOut(auth)
+
 }
 
 
